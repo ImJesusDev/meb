@@ -1,0 +1,46 @@
+tags:
+  name: User API
+  description: Api to manage Users. 
+    
+
+
+
+paths:
+  /api/users/current-user:
+    get:
+      summary: Retrieves the current user
+      tags: [User API]
+      parameters:
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentUser'
+
+components:
+  schemas:
+    CurrentUser:
+      properties:
+        id:
+          type: string
+          description: The user's id
+          example: 6099adc0529118036031f046
+        email:
+          type: string
+          description: The user's email
+          example: demo@mail.com
+        role:
+          type: string
+          description: The user's role
+          example: user
+        status:
+          type: string
+          description: The user's status
+          example: active
+
+
+  

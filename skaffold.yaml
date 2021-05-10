@@ -16,6 +16,8 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+          - src: 'src/**/*.yaml'
+            dest: .
     - image: jdiaz740/meb-clients
       context: clients
       docker:

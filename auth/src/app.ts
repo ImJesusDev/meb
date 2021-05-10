@@ -2,6 +2,8 @@ import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec, cssOptions } from './docs/swagger-spec';
 
 /* Routers */
 import { currentUserRouter } from './routes/current-user';
@@ -23,6 +25,12 @@ app.use(
   })
 );
 
+/* Docs */
+app.use(
+  '/api/users/docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, cssOptions)
+);
 /* Current User */
 app.use(currentUserRouter);
 /* Login User */

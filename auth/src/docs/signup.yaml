@@ -1,0 +1,85 @@
+tags:
+  name: User API
+  description: API to handle user resources.
+
+paths:
+  /api/users/signup:
+    post:
+      summary: Creates a new user account
+      tags: [User API]
+      requestBody:
+        description: Required parameters to create a new `User`
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/CreateUserRequest'
+      responses:
+        "201":
+          description: User created
+          headers:
+            Set-Cookie:
+              description: >
+                Contains the session cookie named `express:sess`.
+                Pass this cookie back in subsequent requests.
+              schema: 
+                type: string
+                example: express:sess=eyJqd3QiOiJleUpoYkdja....; Path=/; Secure; HttpOnly;
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+components:
+  schemas:
+    User:
+      properties:
+        id:
+          type: string
+          description: The user's id
+          example: 6099adc0529118036031f046
+        email:
+          type: string
+          description: The user's email
+          example: demo@mail.com
+        firstName:
+          type: string
+          description: The user's first name
+          example: Jesús
+        lastName:
+          type: string
+          description: The user's last name
+          example: Díaz
+        version:
+          type: number
+          description: Version of the database record
+          example: 0
+        role:
+          type: string
+          description: The user's role
+          example: user
+        status:
+          type: string
+          description: The user's status
+          example: active
+    CreateUserRequest:
+      properties:
+        email:
+          type: string
+          description: The user's email
+          example: demo@mail.com
+        firstName:
+          type: string
+          description: The user's first name
+          example: Jesús
+        lastName:
+          type: string
+          description: The user's last name
+          example: Díaz
+        password:
+          type: string
+          description: The user's password
+          example: s3cr3t
+
+
+  
