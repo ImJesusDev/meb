@@ -1,7 +1,12 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 /* Commons */
-import { BadRequestError, validateRequest } from '@movers/common';
+import {
+  validateRequest,
+  UserStatus,
+  UserRole,
+  BadRequestError,
+} from '@movers/common';
 /* Models */
 import { User } from '../models/user';
 /* JWT */
@@ -17,6 +22,8 @@ router.post(
   '/api/users/signup',
   [
     body('email').isEmail().withMessage('Invalid email'),
+    body('firstName').not().isEmpty().withMessage('First name is required'),
+    body('lastName').not().isEmpty().withMessage('Last name is required'),
     body('password')
       .trim()
       .isLength({ min: 4, max: 20 })
@@ -24,7 +31,7 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password } = req.body;
+    const { email, password, firstName, lastName } = req.body;
 
     const existingUser = await User.findOne({ email });
 
@@ -32,7 +39,14 @@ router.post(
       throw new BadRequestError('Email in use');
     }
 
-    const user = User.build({ email, password });
+    const user = User.build({
+      email,
+      password,
+      firstName,
+      lastName,
+      role: UserRole.User,
+      status: UserStatus.Active,
+    });
     await user.save();
 
     await new UserCreatedPublisher(natsClient.client).publish({
@@ -45,6 +59,8 @@ router.post(
       {
         id: user.id,
         email: user.email,
+        role: user.role,
+        status: user.status,
       },
       process.env.JWT_KEY!
     );

@@ -8,6 +8,7 @@ import { currentUserRouter } from './routes/current-user';
 import { signinRouter } from './routes/signin';
 import { signoutRouter } from './routes/signout';
 import { signupRouter } from './routes/signup';
+import { updateUserRouter } from './routes/update';
 
 /* Commons */
 import { errorHandler, NotFoundError } from '@movers/common';
@@ -30,6 +31,8 @@ app.use(signinRouter);
 app.use(signoutRouter);
 /* Register User */
 app.use(signupRouter);
+/* Update User */
+app.use(updateUserRouter);
 /* Not found error handler */
 app.get('*', async () => {
   throw new NotFoundError();

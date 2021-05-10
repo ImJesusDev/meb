@@ -1,9 +1,14 @@
 import { User } from '../user';
+import { UserStatus, UserRole } from '@movers/common';
 
 it('implements version control', async (done) => {
   const user = User.build({
     email: 'test@mail.com',
     password: '123',
+    role: UserRole.User,
+    status: UserStatus.Unverified,
+    firstName: 'Regular',
+    lastName: 'User',
   });
   await user.save();
 
@@ -29,6 +34,10 @@ it('increments version number on multiple saves', async () => {
   const user = User.build({
     email: 'test@mail.com',
     password: '123',
+    firstName: 'Regular',
+    lastName: 'User',
+    role: UserRole.User,
+    status: UserStatus.Unverified,
   });
   await user.save();
   expect(user.version).toEqual(0);

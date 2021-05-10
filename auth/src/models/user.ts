@@ -1,7 +1,8 @@
-import mongoose from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
-/* Password Service */
 import { Password } from '../services/password';
+import mongoose from 'mongoose';
+import { UserRole, UserStatus } from '@movers/common';
+
 /*
  *   Interface that describes the properties
  *   that are required to create a new User
@@ -9,6 +10,24 @@ import { Password } from '../services/password';
 interface UserAttrs {
   email: string;
   password: string;
+  firstName: string;
+  lastName: string;
+  status: UserStatus;
+  role: UserRole;
+}
+
+/*
+ *   Interface that describes the properties
+ *   that a User Document has
+ */
+interface UserDoc extends mongoose.Document {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  status: UserStatus;
+  role: UserRole;
+  version: number;
 }
 
 /*
@@ -19,18 +38,16 @@ interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
 }
 
-/*
- *   Interface that describes the properties
- *   that a User Document has
- */
-interface UserDoc extends mongoose.Document {
-  email: string;
-  password: string;
-  version: number;
-}
-
 const userSchema = new mongoose.Schema(
   {
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
@@ -38,6 +55,18 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+    },
+    status: {
+      type: String,
+      required: true,
+      enum: Object.values(UserStatus),
+      default: UserStatus.Unverified,
+    },
+    role: {
+      type: String,
+      required: true,
+      enum: Object.values(UserRole),
+      default: UserRole.User,
     },
   },
   {
