@@ -13,6 +13,9 @@ const setup = async () => {
     version: 0,
     id: new mongoose.Types.ObjectId().toHexString(),
     email: 'test@mail.com',
+    firstName: 'Regular',
+    lastName: 'User',
+    activationCode: 123456,
   };
   // Create a fake message event
   // @ts-ignore
