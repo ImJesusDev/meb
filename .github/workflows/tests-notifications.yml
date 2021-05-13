@@ -1,6 +1,9 @@
 name: tests-notifications
 
-on: pull_request
+on:
+  pull_request:
+    paths:
+      - 'notifications/**'
 
 jobs:
   build:
