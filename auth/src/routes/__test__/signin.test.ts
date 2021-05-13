@@ -40,12 +40,10 @@ it('responds with a cookie when given valid credentials', async () => {
     })
     .expect(201);
 
-  const response = await request(app)
-    .post('/api/users/signin')
-    .send({
-      email: 'test@test.com',
-      password: 'password',
-    })
-    .expect(200);
+  const response = await request(app).post('/api/users/signin').send({
+    email: 'test@test.com',
+    password: 'password',
+  });
+  expect(response.status).toEqual(200);
   expect(response.get('Set-Cookie')).toBeDefined();
 });

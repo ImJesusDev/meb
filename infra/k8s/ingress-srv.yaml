@@ -24,3 +24,10 @@ spec:
                 name: clients-srv
                 port:
                   number: 3000
+          - path: /api/notifications/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: notifications-srv
+                port:
+                  number: 3000

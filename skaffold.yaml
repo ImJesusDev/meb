@@ -26,3 +26,13 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: jdiaz740/meb-notifications
+      context: notifications
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+          - src: 'src/**/*.hbs'
+            dest: .

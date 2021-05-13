@@ -12,6 +12,7 @@ interface UserAttrs {
   password: string;
   firstName: string;
   lastName: string;
+  activationCode: number;
   status: UserStatus;
   role: UserRole;
 }
@@ -25,6 +26,7 @@ interface UserDoc extends mongoose.Document {
   password: string;
   firstName: string;
   lastName: string;
+  activationCode: number;
   status: UserStatus;
   role: UserRole;
   version: number;
@@ -36,6 +38,7 @@ interface UserDoc extends mongoose.Document {
  */
 interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
+  generateActivationCode(): number;
 }
 
 const userSchema = new mongoose.Schema(
@@ -46,6 +49,10 @@ const userSchema = new mongoose.Schema(
     },
     lastName: {
       type: String,
+      required: true,
+    },
+    activationCode: {
+      type: Number,
       required: true,
     },
     email: {
@@ -92,6 +99,9 @@ userSchema.set('versionKey', 'version');
 userSchema.plugin(updateIfCurrentPlugin);
 userSchema.statics.build = (attrs: UserAttrs) => {
   return new User(attrs);
+};
+userSchema.statics.generateActivationCode = () => {
+  return Math.floor(100000 + Math.random() * 900000);
 };
 
 const User = mongoose.model<UserDoc, UserModel>('User', userSchema);

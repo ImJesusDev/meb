@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post(
   '/api/clients',
-  requireAuth,
+  requireAuth(),
   [
     body('name').not().isEmpty().withMessage('Name is required'),
     body('address').not().isEmpty().withMessage('Address is required'),

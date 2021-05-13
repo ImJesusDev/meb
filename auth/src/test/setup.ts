@@ -2,6 +2,8 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import request from 'supertest';
 import { app } from '../app';
+import { User } from '../models/user';
+import { UserStatus } from '@movers/common';
 
 declare global {
   namespace NodeJS {
@@ -42,10 +44,25 @@ global.signin = async () => {
   const firstName = 'Regular';
   const lastName = 'User';
 
-  const response = await request(app)
+  // Create user
+  await request(app)
     .post('/api/users/signup')
     .send({ email, password, firstName, lastName })
     .expect(201);
+  // Activate user
+  const user = await User.findOne({ email: 'test@mail.com' });
+  if (user) {
+    user.set({
+      status: UserStatus.Active,
+    });
+    await user.save();
+  }
+  // Sign in
+  const response = await request(app)
+    .post('/api/users/signin')
+    .send({ email, password })
+    .expect(200);
   const cookie = response.get('Set-Cookie');
+
   return cookie;
 };

@@ -8,6 +8,7 @@ it('implements version control', async (done) => {
     role: UserRole.User,
     status: UserStatus.Unverified,
     firstName: 'Regular',
+    activationCode: Math.floor(100000 + Math.random() * 900000),
     lastName: 'User',
   });
   await user.save();
@@ -36,6 +37,7 @@ it('increments version number on multiple saves', async () => {
     password: '123',
     firstName: 'Regular',
     lastName: 'User',
+    activationCode: Math.floor(100000 + Math.random() * 900000),
     role: UserRole.User,
     status: UserStatus.Unverified,
   });

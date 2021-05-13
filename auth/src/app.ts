@@ -11,6 +11,7 @@ import { signinRouter } from './routes/signin';
 import { signoutRouter } from './routes/signout';
 import { signupRouter } from './routes/signup';
 import { updateUserRouter } from './routes/update';
+import { activateUserRouter } from './routes/activate';
 
 /* Commons */
 import { errorHandler, NotFoundError } from '@movers/common';
@@ -41,6 +42,9 @@ app.use(signoutRouter);
 app.use(signupRouter);
 /* Update User */
 app.use(updateUserRouter);
+/* Activate User */
+app.use(activateUserRouter);
+
 /* Not found error handler */
 app.get('*', async () => {
   throw new NotFoundError();

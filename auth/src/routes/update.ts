@@ -26,7 +26,7 @@ router.put(
   ],
   validateRequest,
   currentUser,
-  requireAuth,
+  requireAuth(),
   async (req: Request, res: Response) => {
     const { password, firstName, lastName } = req.body;
 

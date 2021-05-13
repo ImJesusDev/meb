@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: clients-mongo-depl
+  name: notifications-mongo-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: clients-mongo
+      app: notifications-mongo
   template:
     metadata:
       labels:
-        app: clients-mongo
+        app: notifications-mongo
     spec:
       volumes:
         - name: mongo-storage
           persistentVolumeClaim:
-              claimName: clients-mongo-pvc
+              claimName: notifications-mongo-pvc
       containers:
-        - name: clients-mongo
+        - name: notifications-mongo
           image: mongo
           volumeMounts:
           - name: mongo-storage
@@ -27,10 +27,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: clients-mongo-srv
+  name: notifications-mongo-srv
 spec:
   selector:
-    app: clients-mongo
+    app: notifications-mongo
   ports:
     - name: db
       protocol: TCP
@@ -40,7 +40,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: clients-mongo-pvc
+  name: notifications-mongo-pvc
 spec:
   accessModes:
     - ReadWriteOnce

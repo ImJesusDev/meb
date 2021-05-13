@@ -38,21 +38,26 @@ router.post(
     if (existingUser) {
       throw new BadRequestError('Email in use');
     }
+    const activationCode = 112233;
 
     const user = User.build({
       email,
       password,
       firstName,
       lastName,
+      activationCode,
       role: UserRole.User,
-      status: UserStatus.Active,
+      status: UserStatus.Unverified,
     });
     await user.save();
 
     await new UserCreatedPublisher(natsClient.client).publish({
       id: user.id,
       email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
       version: user.version,
+      activationCode: user.activationCode,
     });
 
     const userJwt = jwt.sign(
