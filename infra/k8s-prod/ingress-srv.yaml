@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: ingress-service
@@ -19,21 +19,49 @@ spec:
           - path: /api/users/?(.*)
             pathType: Prefix
             backend:
-              service:
-                name: auth-srv
-                port:
-                  number: 3000
+              serviceName: auth-srv
+              servicePort: 3000
           - path: /api/clients/?(.*)
             pathType: Prefix
             backend:
-              service:
-                name: clients-srv
-                port:
-                  number: 3000
+              serviceName: clients-srv
+              servicePort: 3000
           - path: /api/notifications/?(.*)
             pathType: Prefix
             backend:
-              service:
-                name: notifications-srv
-                port:
-                  number: 3000
+              serviceName: notifications-srv
+              servicePort: 3000
+---
+# Source: ingress-nginx/templates/controller-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: 'true'
+    service.beta.kubernetes.io/do-loadbalancer-hostname: "workaround.moversapp.co"
+
+  labels:
+    helm.sh/chart: ingress-nginx-3.30.0
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: 0.46.0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: https
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/component: controller
