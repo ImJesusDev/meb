@@ -4,6 +4,9 @@ import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 /* Routers */
 import { newCountryRouter } from './routes/new-country';
+import { indexCountryRouter } from './routes/country-index';
+import { newCityRouter } from './routes/new-city';
+import { newGeometryRouter } from './routes/new-geometry';
 /* Commons */
 import { errorHandler, NotFoundError, currentUser } from '@movers/common';
 
@@ -23,6 +26,12 @@ app.use(currentUser);
 
 /* New Country Route */
 app.use(newCountryRouter);
+/* List countries */
+app.use(indexCountryRouter);
+/* New City Route */
+app.use(newCityRouter);
+/* New Geometry Route */
+app.use(newGeometryRouter);
 
 /* Not found error handler */
 app.get('*', async () => {
