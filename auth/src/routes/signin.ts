@@ -40,6 +40,8 @@ router.post(
       {
         id: existingUser.id,
         email: existingUser.email,
+        role: existingUser.role,
+        status: existingUser.status,
       },
       process.env.JWT_KEY!
     );

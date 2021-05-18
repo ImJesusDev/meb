@@ -19,6 +19,8 @@ router.put(
   [
     body('firstName').not().isEmpty().withMessage('First name is required'),
     body('lastName').not().isEmpty().withMessage('Last name is required'),
+    body('city').not().isEmpty().withMessage('City is required'),
+    body('country').not().isEmpty().withMessage('Country is required'),
     body('password')
       .trim()
       .isLength({ min: 4, max: 20 })
@@ -28,7 +30,7 @@ router.put(
   currentUser,
   requireAuth(),
   async (req: Request, res: Response) => {
-    const { password, firstName, lastName } = req.body;
+    const { password, firstName, lastName, city, country } = req.body;
 
     const currentUser = req.currentUser;
 
@@ -42,6 +44,8 @@ router.put(
       password,
       firstName,
       lastName,
+      city,
+      country,
     });
 
     await user.save();

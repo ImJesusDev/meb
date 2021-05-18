@@ -34,6 +34,7 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
+  await mongoose.disconnect();
   await mongo.stop();
   await mongoose.connection.close();
 });
@@ -43,14 +44,17 @@ global.signin = async () => {
   const password = 'password';
   const firstName = 'Regular';
   const lastName = 'User';
+  const city = 'Bogota';
+  const country = 'Colombia';
 
   // Create user
-  await request(app)
+  const response1 = await request(app)
     .post('/api/users/signup')
-    .send({ email, password, firstName, lastName })
+    .send({ email, password, firstName, lastName, city, country })
     .expect(201);
   // Activate user
-  const user = await User.findOne({ email: 'test@mail.com' });
+  const user = await User.findOne({ email: 'test@test.com' });
+
   if (user) {
     user.set({
       status: UserStatus.Active,

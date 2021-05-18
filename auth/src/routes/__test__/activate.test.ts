@@ -36,6 +36,8 @@ it('activates the user when correct params are provided', async () => {
     firstName: 'firstName',
     lastName: 'lastName',
     activationCode: 123321,
+    city: 'Bogota',
+    country: 'Colombia',
     role: UserRole.User,
     status: UserStatus.Unverified,
   });

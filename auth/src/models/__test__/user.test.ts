@@ -10,6 +10,8 @@ it('implements version control', async (done) => {
     firstName: 'Regular',
     activationCode: Math.floor(100000 + Math.random() * 900000),
     lastName: 'User',
+    city: 'Bogota',
+    country: 'Colombia',
   });
   await user.save();
 
@@ -40,6 +42,8 @@ it('increments version number on multiple saves', async () => {
     activationCode: Math.floor(100000 + Math.random() * 900000),
     role: UserRole.User,
     status: UserStatus.Unverified,
+    city: 'Bogota',
+    country: 'Colombia',
   });
   await user.save();
   expect(user.version).toEqual(0);
