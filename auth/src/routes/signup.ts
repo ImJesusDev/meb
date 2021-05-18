@@ -9,8 +9,6 @@ import {
 } from '@movers/common';
 /* Models */
 import { User } from '../models/user';
-/* JWT */
-import jwt from 'jsonwebtoken';
 /* Publishers */
 import { UserCreatedPublisher } from '../events/publishers/user-created-publisher';
 /* NATS Client */
@@ -23,6 +21,8 @@ router.post(
   [
     body('email').isEmail().withMessage('Invalid email'),
     body('firstName').not().isEmpty().withMessage('First name is required'),
+    body('city').not().isEmpty().withMessage('City name is required'),
+    body('country').not().isEmpty().withMessage('Country name is required'),
     body('lastName').not().isEmpty().withMessage('Last name is required'),
     body('password')
       .trim()
@@ -31,7 +31,7 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password, firstName, lastName } = req.body;
+    const { email, password, firstName, lastName, city, country } = req.body;
 
     const existingUser = await User.findOne({ email });
 
@@ -45,6 +45,8 @@ router.post(
       password,
       firstName,
       lastName,
+      city,
+      country,
       activationCode,
       role: UserRole.User,
       status: UserStatus.Unverified,
@@ -59,20 +61,6 @@ router.post(
       version: user.version,
       activationCode: user.activationCode,
     });
-
-    const userJwt = jwt.sign(
-      {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        status: user.status,
-      },
-      process.env.JWT_KEY!
-    );
-
-    req.session = {
-      jwt: userJwt,
-    };
 
     res.status(201).send(user);
   }

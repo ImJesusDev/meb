@@ -9,6 +9,8 @@ it('clears cookie after signing out', async () => {
       password: 'password',
       firstName: 'Regular',
       lastName: 'User',
+      city: 'Bogota',
+      country: 'Colombia',
     })
     .expect(201);
 

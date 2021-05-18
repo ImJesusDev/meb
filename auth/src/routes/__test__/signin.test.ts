@@ -18,6 +18,8 @@ it('fails with an incorrect password', async () => {
       password: 'password',
       firstName: 'Regular',
       lastName: 'User',
+      city: 'Bogota',
+      country: 'Colombia',
     })
     .expect(201);
 
@@ -37,6 +39,8 @@ it('responds with a cookie when given valid credentials', async () => {
       password: 'password',
       firstName: 'Regular',
       lastName: 'User',
+      city: 'Bogota',
+      country: 'Colombia',
     })
     .expect(201);
 

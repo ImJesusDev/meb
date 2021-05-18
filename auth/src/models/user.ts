@@ -12,6 +12,8 @@ interface UserAttrs {
   password: string;
   firstName: string;
   lastName: string;
+  city: string;
+  country: string;
   activationCode: number;
   status: UserStatus;
   role: UserRole;
@@ -26,6 +28,8 @@ interface UserDoc extends mongoose.Document {
   password: string;
   firstName: string;
   lastName: string;
+  city: string;
+  country: string;
   activationCode: number;
   status: UserStatus;
   role: UserRole;
@@ -48,6 +52,14 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     lastName: {
+      type: String,
+      required: true,
+    },
+    city: {
+      type: String,
+      required: true,
+    },
+    country: {
       type: String,
       required: true,
     },
