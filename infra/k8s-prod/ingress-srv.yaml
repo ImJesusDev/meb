@@ -31,6 +31,11 @@ spec:
             backend:
               serviceName: notifications-srv
               servicePort: 3000
+          - path: /api/locations/?(.*)
+            pathType: Prefix
+            backend:
+              serviceName: locations-srv
+              servicePort: 3000
 ---
 # Source: ingress-nginx/templates/controller-service.yaml
 apiVersion: v1

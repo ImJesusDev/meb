@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locations-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: locations-mongo
+  template:
+    metadata:
+      labels:
+        app: locations-mongo
+    spec:
+      volumes:
+        - name: mongo-storage
+          persistentVolumeClaim:
+              claimName: locations-mongo-pvc
+      containers:
+        - name: locations-mongo
+          image: mongo
+          volumeMounts:
+          - name: mongo-storage
+            mountPath: /data/db
+            subPath: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: locations-mongo-srv
+spec:
+  selector:
+    app: locations-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: locations-mongo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi

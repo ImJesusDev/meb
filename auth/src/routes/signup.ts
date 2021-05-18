@@ -38,7 +38,7 @@ router.post(
     if (existingUser) {
       throw new BadRequestError('Email in use');
     }
-    const activationCode = 112233;
+    const activationCode = User.generateActivationCode();
 
     const user = User.build({
       email,
