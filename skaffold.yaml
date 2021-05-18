@@ -27,6 +27,14 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: jdiaz740/meb-locations
+      context: locations
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
     - image: jdiaz740/meb-notifications
       context: notifications
       docker:

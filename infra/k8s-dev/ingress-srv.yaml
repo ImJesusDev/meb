@@ -31,3 +31,10 @@ spec:
                 name: notifications-srv
                 port:
                   number: 3000
+          - path: /api/locations/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: locations-srv
+                port:
+                  number: 3000
