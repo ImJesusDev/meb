@@ -46,11 +46,26 @@ global.signin = async () => {
   const lastName = 'User';
   const city = 'Bogota';
   const country = 'Colombia';
+  const mainTransportationMethod = 'Carro';
+  const secondaryTransportationMethod = 'Moto';
+  const termsDate = true;
+  const comodatoDate = true;
 
   // Create user
   const response1 = await request(app)
     .post('/api/users/signup')
-    .send({ email, password, firstName, lastName, city, country })
+    .send({
+      email,
+      password,
+      firstName,
+      lastName,
+      city,
+      country,
+      mainTransportationMethod,
+      secondaryTransportationMethod,
+      termsDate,
+      comodatoDate,
+    })
     .expect(201);
   // Activate user
   const user = await User.findOne({ email: 'test@test.com' });

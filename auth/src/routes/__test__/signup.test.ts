@@ -10,6 +10,10 @@ it('returns a 201 on successful signup', async (done) => {
     lastName: 'User',
     city: 'Bogota',
     country: 'Colombia',
+    mainTransportationMethod: 'Carro',
+    secondaryTransportationMethod: 'Moto',
+    termsDate: true,
+    comodatoDate: true,
   });
   expect(response.status).toEqual(201);
 
@@ -24,6 +28,10 @@ it('publishes and event when a new user is created', async (done) => {
     lastName: 'User',
     city: 'Bogota',
     country: 'Colombia',
+    mainTransportationMethod: 'Carro',
+    secondaryTransportationMethod: 'Moto',
+    termsDate: true,
+    comodatoDate: true,
   });
   expect(response.status).toEqual(201);
   expect(natsClient.client.publish).toHaveBeenCalled();
@@ -39,6 +47,10 @@ it('returns a 400 with an invalid email', async (done) => {
     lastName: 'User',
     city: 'Bogota',
     country: 'Colombia',
+    mainTransportationMethod: 'Carro',
+    secondaryTransportationMethod: 'Moto',
+    termsDate: true,
+    comodatoDate: true,
   });
 
   expect(response.status).toEqual(400);
@@ -53,6 +65,10 @@ it('returns a 400 with an invalid password', async (done) => {
     lastName: 'User',
     city: 'Bogota',
     country: 'Colombia',
+    mainTransportationMethod: 'Carro',
+    secondaryTransportationMethod: 'Moto',
+    termsDate: true,
+    comodatoDate: true,
   });
   expect(response.status).toEqual(400);
   return done();
@@ -66,6 +82,10 @@ it('returns a 400 with an invalid firstName', async (done) => {
     lastName: 'User',
     city: 'Bogota',
     country: 'Colombia',
+    mainTransportationMethod: 'Carro',
+    secondaryTransportationMethod: 'Moto',
+    termsDate: true,
+    comodatoDate: true,
   });
   expect(response.status).toEqual(400);
   return done();
@@ -79,6 +99,10 @@ it('returns a 400 with an invalid lastName', async (done) => {
     lastName: '',
     city: 'Bogota',
     country: 'Colombia',
+    mainTransportationMethod: 'Carro',
+    secondaryTransportationMethod: 'Moto',
+    termsDate: true,
+    comodatoDate: true,
   });
   expect(response.status).toEqual(400);
   return done();
@@ -92,6 +116,10 @@ it('disallows duplicate email', async (done) => {
     lastName: 'User',
     city: 'Bogota',
     country: 'Colombia',
+    mainTransportationMethod: 'Carro',
+    secondaryTransportationMethod: 'Moto',
+    termsDate: true,
+    comodatoDate: true,
   });
   expect(response.status).toEqual(201);
 
@@ -102,6 +130,10 @@ it('disallows duplicate email', async (done) => {
     lastName: 'User',
     city: 'Bogota',
     country: 'Colombia',
+    mainTransportationMethod: 'Carro',
+    secondaryTransportationMethod: 'Moto',
+    termsDate: true,
+    comodatoDate: true,
   });
   expect(response.status).toEqual(400);
 

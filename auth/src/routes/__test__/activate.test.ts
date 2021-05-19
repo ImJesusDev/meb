@@ -40,6 +40,8 @@ it('activates the user when correct params are provided', async () => {
     country: 'Colombia',
     role: UserRole.User,
     status: UserStatus.Unverified,
+    mainTransportationMethod: 'Carro',
+    secondaryTransportationMethod: 'Moto',
   });
   await user.save();
   await request(app)

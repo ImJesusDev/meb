@@ -24,6 +24,18 @@ router.post(
     body('city').not().isEmpty().withMessage('City name is required'),
     body('country').not().isEmpty().withMessage('Country name is required'),
     body('lastName').not().isEmpty().withMessage('Last name is required'),
+    body('termsDate').isBoolean().withMessage('Must accept terms of service'),
+    body('comodatoDate')
+      .isBoolean()
+      .withMessage('Must accept Comodato contract'),
+    body('mainTransportationMethod')
+      .not()
+      .isEmpty()
+      .withMessage('Main transportation is required'),
+    body('secondaryTransportationMethod')
+      .not()
+      .isEmpty()
+      .withMessage('Secondary transportation is required'),
     body('password')
       .trim()
       .isLength({ min: 4, max: 20 })
@@ -31,7 +43,16 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password, firstName, lastName, city, country } = req.body;
+    const {
+      email,
+      password,
+      firstName,
+      lastName,
+      city,
+      country,
+      mainTransportationMethod,
+      secondaryTransportationMethod,
+    } = req.body;
 
     const existingUser = await User.findOne({ email });
 
@@ -50,6 +71,8 @@ router.post(
       activationCode,
       role: UserRole.User,
       status: UserStatus.Unverified,
+      mainTransportationMethod,
+      secondaryTransportationMethod,
     });
     await user.save();
 

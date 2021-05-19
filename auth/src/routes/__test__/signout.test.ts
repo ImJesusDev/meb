@@ -11,6 +11,10 @@ it('clears cookie after signing out', async () => {
       lastName: 'User',
       city: 'Bogota',
       country: 'Colombia',
+      mainTransportationMethod: 'Carro',
+      secondaryTransportationMethod: 'Moto',
+      termsDate: true,
+      comodatoDate: true,
     })
     .expect(201);
 

@@ -20,6 +20,10 @@ it('fails with an incorrect password', async () => {
       lastName: 'User',
       city: 'Bogota',
       country: 'Colombia',
+      mainTransportationMethod: 'Carro',
+      secondaryTransportationMethod: 'Moto',
+      termsDate: true,
+      comodatoDate: true,
     })
     .expect(201);
 
@@ -41,6 +45,10 @@ it('responds with a cookie when given valid credentials', async () => {
       lastName: 'User',
       city: 'Bogota',
       country: 'Colombia',
+      mainTransportationMethod: 'Carro',
+      secondaryTransportationMethod: 'Moto',
+      termsDate: true,
+      comodatoDate: true,
     })
     .expect(201);
 
