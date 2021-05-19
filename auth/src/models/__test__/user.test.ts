@@ -12,6 +12,8 @@ it('implements version control', async (done) => {
     lastName: 'User',
     city: 'Bogota',
     country: 'Colombia',
+    mainTransportationMethod: 'Carro',
+    secondaryTransportationMethod: 'Moto',
   });
   await user.save();
 
@@ -44,6 +46,8 @@ it('increments version number on multiple saves', async () => {
     status: UserStatus.Unverified,
     city: 'Bogota',
     country: 'Colombia',
+    mainTransportationMethod: 'Carro',
+    secondaryTransportationMethod: 'Moto',
   });
   await user.save();
   expect(user.version).toEqual(0);

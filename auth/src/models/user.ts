@@ -12,6 +12,8 @@ interface UserAttrs {
   password: string;
   firstName: string;
   lastName: string;
+  mainTransportationMethod: string;
+  secondaryTransportationMethod: string;
   city: string;
   country: string;
   activationCode: number;
@@ -28,6 +30,8 @@ interface UserDoc extends mongoose.Document {
   password: string;
   firstName: string;
   lastName: string;
+  mainTransportationMethod: string;
+  secondaryTransportationMethod: string;
   city: string;
   country: string;
   activationCode: number;
@@ -63,9 +67,25 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    mainTransportationMethod: {
+      type: String,
+      required: true,
+    },
+    secondaryTransportationMethod: {
+      type: String,
+      required: true,
+    },
     activationCode: {
       type: Number,
       required: true,
+    },
+    termsDate: {
+      type: mongoose.Schema.Types.Date,
+      default: new Date(),
+    },
+    comodatoDate: {
+      type: mongoose.Schema.Types.Date,
+      default: new Date(),
     },
     email: {
       type: String,
