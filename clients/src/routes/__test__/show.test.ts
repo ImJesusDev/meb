@@ -9,7 +9,7 @@ it('returns 404 if client is not found', async () => {
 
 it('returns the client if client is found', async () => {
   const name = 'Banco de Bogota';
-  const address = 'Calle 100';
+  const nit = 'NITCLIENTE';
   const logo = 'https://img.com/logo.png';
 
   const response = await request(app)
@@ -17,7 +17,7 @@ it('returns the client if client is found', async () => {
     .set('Cookie', global.signin())
     .send({
       name,
-      address,
+      nit,
       logo,
     })
     .expect(201);
@@ -27,6 +27,6 @@ it('returns the client if client is found', async () => {
     .expect(200);
 
   expect(clientResponse.body.name).toEqual(name);
-  expect(clientResponse.body.address).toEqual(address);
+  expect(clientResponse.body.nit).toEqual(nit);
   expect(clientResponse.body.logo).toEqual(logo);
 });

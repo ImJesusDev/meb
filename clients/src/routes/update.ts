@@ -12,7 +12,7 @@ router.put(
   requireAuth(),
   [
     body('name').not().isEmpty().withMessage('Name is required'),
-    body('address').not().isEmpty().withMessage('Address is required'),
+    body('nit').not().isEmpty().withMessage('Nit is required'),
     body('logo').not().isEmpty().withMessage('Logo is required'),
   ],
   validateRequest,
@@ -21,10 +21,10 @@ router.put(
     if (!client) {
       throw new NotFoundError();
     }
-    const { name, address, logo } = req.body;
+    const { name, nit, logo } = req.body;
     client.set({
       name,
-      address,
+      nit,
       logo,
     });
     await client.save();

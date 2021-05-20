@@ -2,13 +2,13 @@ import mongoose, { mongo } from 'mongoose';
 
 interface ClientAttrs {
   name: string;
-  address: string;
+  nit: string;
   logo: string;
 }
 
 interface ClientDoc extends mongoose.Document {
   name: string;
-  address: string;
+  nit: string;
   logo: string;
 }
 interface ClientModel extends mongoose.Model<ClientDoc> {
@@ -21,7 +21,7 @@ const clientSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    address: {
+    nit: {
       type: String,
       required: true,
     },

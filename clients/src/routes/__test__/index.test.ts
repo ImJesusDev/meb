@@ -3,14 +3,14 @@ import { app } from '../../app';
 
 it('it can fetch a list of clients', async () => {
   const name = 'Banco de Bogota';
-  const address = 'Calle 100';
+  const nit = 'NITCLIENTE';
   const logo = 'https://img.com/logo.png';
   await request(app)
     .post('/api/clients')
     .set('Cookie', global.signin())
     .send({
       name,
-      address,
+      nit,
       logo,
     })
     .expect(201);
