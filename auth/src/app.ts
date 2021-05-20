@@ -4,7 +4,7 @@ import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec, cssOptions } from './docs/swagger-spec';
-
+const cors = require('cors');
 /* Routers */
 import { currentUserRouter } from './routes/current-user';
 import { signinRouter } from './routes/signin';
@@ -19,6 +19,7 @@ import { errorHandler, NotFoundError } from '@movers/common';
 const app = express();
 app.set('trust proxy', true);
 app.use(json());
+app.use(cors());
 app.use(
   cookieSession({
     signed: false,
