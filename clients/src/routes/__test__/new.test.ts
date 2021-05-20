@@ -25,7 +25,7 @@ it('returns an error with invalid params', async () => {
     .set('Cookie', global.signin())
     .send({
       name: '',
-      address: 'Calle 100',
+      nit: 'NITCLIENTE',
       logo: 'https://img.com/logo.png',
     })
     .expect(400);
@@ -34,7 +34,7 @@ it('returns an error with invalid params', async () => {
     .set('Cookie', global.signin())
     .send({
       name: 'Banco de Bogota',
-      address: '',
+      nit: '',
       logo: 'https://img.com/logo.png',
     })
     .expect(400);
@@ -43,7 +43,7 @@ it('returns an error with invalid params', async () => {
     .set('Cookie', global.signin())
     .send({
       name: 'Banco de Bogota',
-      address: 'Calle 100',
+      nit: 'NITCLIENTE',
       logo: '',
     })
     .expect(400);
@@ -52,20 +52,20 @@ it('creates a client with valid params', async () => {
   let clients = await Client.find({});
   expect(clients.length).toEqual(0);
   const name = 'Banco de Bogota';
-  const address = 'Calle 100';
+  const nit = 'NITCLIENTE';
   const logo = 'https://img.com/logo.png';
   await request(app)
     .post('/api/clients')
     .set('Cookie', global.signin())
     .send({
       name,
-      address,
+      nit,
       logo,
     })
     .expect(201);
   clients = await Client.find({});
   expect(clients.length).toEqual(1);
   expect(clients[0].name).toEqual(name);
-  expect(clients[0].address).toEqual(address);
+  expect(clients[0].nit).toEqual(nit);
   expect(clients[0].logo).toEqual(logo);
 });

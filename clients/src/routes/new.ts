@@ -11,16 +11,16 @@ router.post(
   requireAuth(),
   [
     body('name').not().isEmpty().withMessage('Name is required'),
-    body('address').not().isEmpty().withMessage('Address is required'),
+    body('nit').not().isEmpty().withMessage('Nit is required'),
     body('logo').not().isEmpty().withMessage('Logo is required'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { name, address, logo } = req.body;
+    const { name, nit, logo } = req.body;
 
     const client = Client.build({
       name,
-      address,
+      nit,
       logo,
     });
     await client.save();
