@@ -2,6 +2,7 @@ import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
+const cors = require('cors');
 /* Routers */
 import { newCountryRouter } from './routes/new-country';
 import { indexCountryRouter } from './routes/country-index';
@@ -14,6 +15,7 @@ import { errorHandler, NotFoundError, currentUser } from '@movers/common';
 
 const app = express();
 app.set('trust proxy', true);
+app.use(cors);
 app.use(json());
 app.use(
   cookieSession({
