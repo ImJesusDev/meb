@@ -35,18 +35,18 @@ app.use(
 app.use(currentUser);
 /* New Client */
 app.use(newClientRouter);
-/* Show Client */
-app.use(showClientRouter);
 /* List Clients */
 app.use(indexClientRouter);
 /* Update Client */
 app.use(updateClientRouter);
 /* k8s Liveness / Readiness probes */
-app.get('/clients/users/healthz', (req, res) => {
+app.get('/api/clients/healthz', (req, res) => {
   res.status(200).send({
     message: `I'm just fine...`,
   });
 });
+/* Show Client */
+app.use(showClientRouter);
 /* Not found error handler */
 app.get('*', async () => {
   throw new NotFoundError();
