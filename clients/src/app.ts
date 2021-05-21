@@ -41,7 +41,12 @@ app.use(showClientRouter);
 app.use(indexClientRouter);
 /* Update Client */
 app.use(updateClientRouter);
-
+/* k8s Liveness / Readiness probes */
+app.get('/clients/users/healthz', (req, res) => {
+  res.status(200).send({
+    message: `I'm just fine...`,
+  });
+});
 /* Not found error handler */
 app.get('*', async () => {
   throw new NotFoundError();
