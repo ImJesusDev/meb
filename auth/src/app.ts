@@ -36,6 +36,8 @@ app.use(
   cookieSession({
     signed: false,
     secure: process.env.NODE_ENV !== 'test',
+    domain: '.moversapp.co',
+    httpOnly: false,
   })
 );
 

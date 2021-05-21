@@ -11,10 +11,20 @@ import { newClientRouter } from './routes/new';
 import { showClientRouter } from './routes/show';
 import { indexClientRouter } from './routes/index';
 import { updateClientRouter } from './routes/update';
-
+/* Cors configuration */
+const corsOptions = {
+  origin: ['https://meb-admin.moversapp.co'],
+  methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
+  preflightContinue: false,
+  credentials: true,
+  optionsSuccessStatus: 204,
+  allowedHeaders: [
+    'Access-Control-Allow-Headers,X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept',
+  ],
+};
 const app = express();
 app.set('trust proxy', true);
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(json());
 app.use(
   cookieSession({
