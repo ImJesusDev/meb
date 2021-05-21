@@ -43,7 +43,12 @@ app.use(indexCountryRouter);
 app.use(newCityRouter);
 /* New Geometry Route */
 app.use(newGeometryRouter);
-
+/* k8s Liveness / Readiness probes */
+app.get('/api/locations/healthz', (req, res) => {
+  res.status(200).send({
+    message: `I'm just fine...`,
+  });
+});
 /* Not found error handler */
 app.get('*', async () => {
   throw new NotFoundError();

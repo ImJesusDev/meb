@@ -59,7 +59,12 @@ app.use(signupRouter);
 app.use(updateUserRouter);
 /* Activate User */
 app.use(activateUserRouter);
-
+/* k8s Liveness / Readiness probes */
+app.get('/api/users/healthz', (req, res) => {
+  res.status(200).send({
+    message: `I'm just fine...`,
+  });
+});
 /* Not found error handler */
 app.get('*', async () => {
   throw new NotFoundError();
