@@ -1,9 +1,10 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 /* Commons */
-import { requireAuth, validateRequest } from '@movers/common';
+import { requireAuth, validateRequest, BadRequestError } from '@movers/common';
 /* Models */
 import { Client } from '../models/client';
+import { User } from '../models/user';
 const router = express.Router();
 
 router.post(
@@ -23,6 +24,15 @@ router.post(
   async (req: Request, res: Response) => {
     const { name, nit, logo, mebAdmin, superAdminClient } = req.body;
 
+    const existingMebAdmin = await User.findById(mebAdmin);
+    if (!existingMebAdmin) {
+      throw new BadRequestError('El administrador Mejor en Bici no existe');
+    }
+    const existingSuperAdminClient = await User.findById(superAdminClient);
+    if (!existingSuperAdminClient) {
+      throw new BadRequestError('El super administrador del cliente');
+    }
+
     const client = Client.build({
       name,
       nit,
@@ -32,7 +42,12 @@ router.post(
     });
     await client.save();
 
-    res.status(201).send(client);
+    const populatedClient = await Client.findById(client.id).populate([
+      'meb_admin',
+      'super_admin_client',
+    ]);
+
+    res.status(201).send(populatedClient);
   }
 );
 

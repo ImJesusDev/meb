@@ -6,7 +6,10 @@ import { NotFoundError } from '@movers/common';
 const router = express.Router();
 
 router.get('/api/clients/:id', async (req: Request, res: Response) => {
-  const client = await Client.findById(req.params.id);
+  const client = await Client.findById(req.params.id).populate([
+    'meb_admin',
+    'super_admin_client',
+  ]);
   if (!client) {
     throw new NotFoundError();
   }
