@@ -11,7 +11,7 @@ it('returns the client if client is found', async () => {
   const name = 'Banco de Bogota';
   const nit = 'NITCLIENTE';
   const logo = 'https://img.com/logo.png';
-
+  const mebAdmin = new mongoose.Types.ObjectId().toHexString();
   const response = await request(app)
     .post('/api/clients')
     .set('Cookie', global.signin())
@@ -19,6 +19,8 @@ it('returns the client if client is found', async () => {
       name,
       nit,
       logo,
+      mebAdmin,
+      superAdminClient: mebAdmin,
     })
     .expect(201);
   const clientResponse = await request(app)

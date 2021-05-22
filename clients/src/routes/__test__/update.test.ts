@@ -10,6 +10,8 @@ it('returns 404 if client is not found', async () => {
       name: 'Nutresa',
       nit: 'NITCLIENTE',
       logo: 'https://myimg.com/logo.png',
+      mebAdmin: id,
+      superAdminClient: id,
     })
     .expect(404);
 });
@@ -21,10 +23,13 @@ it('returns 401 if the user is not signed in', async () => {
       name: 'Nutresa',
       nit: 'NITCLIENTE',
       logo: 'https://myimg.com/logo.png',
+      mebAdmin: id,
+      superAdminClient: id,
     })
     .expect(401);
 });
 it('returns 400 if the user provides invalid params', async () => {
+  const mebAdmin = new mongoose.Types.ObjectId().toHexString();
   const name = 'Banco de Bogota';
   const nit = 'Calle 100';
   const logo = 'https://img.com/logo.png';
@@ -35,6 +40,8 @@ it('returns 400 if the user provides invalid params', async () => {
       name,
       nit,
       logo,
+      mebAdmin,
+      superAdminClient: mebAdmin,
     })
     .expect(201);
   await request(app)
@@ -44,10 +51,13 @@ it('returns 400 if the user provides invalid params', async () => {
       name: '',
       nit,
       logo,
+      mebAdmin,
+      superAdminClient: mebAdmin,
     })
     .expect(400);
 });
 it('updates the ticked with valid params', async () => {
+  const mebAdmin = new mongoose.Types.ObjectId().toHexString();
   const name = 'Banco de Bogota';
   const nit = 'Calle 100';
   const logo = 'https://img.com/logo.png';
@@ -58,6 +68,8 @@ it('updates the ticked with valid params', async () => {
       name,
       nit,
       logo,
+      mebAdmin,
+      superAdminClient: mebAdmin,
     })
     .expect(201);
   await request(app)
@@ -67,6 +79,8 @@ it('updates the ticked with valid params', async () => {
       name: 'New name',
       nit,
       logo,
+      mebAdmin,
+      superAdminClient: mebAdmin,
     })
     .expect(200);
   const updateResponse = await request(app)

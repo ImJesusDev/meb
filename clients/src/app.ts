@@ -13,7 +13,7 @@ import { indexClientRouter } from './routes/index';
 import { updateClientRouter } from './routes/update';
 /* Cors configuration */
 const corsOptions = {
-  origin: ['https://meb-admin.moversapp.co'],
+  origin: ['https://meb-admin.moversapp.co', 'https://admin.meb.dev:4200'],
   methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
   preflightContinue: false,
   credentials: true,
@@ -25,7 +25,7 @@ const corsOptions = {
 const app = express();
 app.set('trust proxy', true);
 app.use(cors(corsOptions));
-app.use(json());
+app.use(json({ limit: '2mb' }));
 app.use(
   cookieSession({
     signed: false,

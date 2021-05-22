@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "@movers/common": "^1.0.18",
+    "@movers/common": "^1.0.19",
     "@types/express": "^4.17.11",
     "@types/nodemailer": "^6.4.1",
     "@types/nodemailer-express-handlebars": "^4.0.0",

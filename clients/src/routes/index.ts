@@ -5,7 +5,10 @@ import { Client } from '../models/client';
 const router = express.Router();
 
 router.get('/api/clients', async (req: Request, res: Response) => {
-  const clients = await Client.find({});
+  const clients = await Client.find({}).populate([
+    'meb_admin',
+    'super_admin_client',
+  ]);
   res.send(clients);
 });
 

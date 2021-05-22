@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import { Client } from '../../models/client';
+import mongoose from 'mongoose';
 
 it('has a POST route handler for /api/clients ', async () => {
   const response = await request(app).post('/api/clients').send({});
@@ -20,6 +21,7 @@ it('returns a status other than 401 if the user is signed in', async () => {
 });
 
 it('returns an error with invalid params', async () => {
+  const mebAdmin = new mongoose.Types.ObjectId().toHexString();
   await request(app)
     .post('/api/clients')
     .set('Cookie', global.signin())
@@ -27,6 +29,8 @@ it('returns an error with invalid params', async () => {
       name: '',
       nit: 'NITCLIENTE',
       logo: 'https://img.com/logo.png',
+      mebAdmin,
+      superAdminClient: mebAdmin,
     })
     .expect(400);
   await request(app)
@@ -36,6 +40,8 @@ it('returns an error with invalid params', async () => {
       name: 'Banco de Bogota',
       nit: '',
       logo: 'https://img.com/logo.png',
+      mebAdmin,
+      superAdminClient: mebAdmin,
     })
     .expect(400);
   await request(app)
@@ -45,6 +51,8 @@ it('returns an error with invalid params', async () => {
       name: 'Banco de Bogota',
       nit: 'NITCLIENTE',
       logo: '',
+      mebAdmin,
+      superAdminClient: mebAdmin,
     })
     .expect(400);
 });
@@ -54,6 +62,7 @@ it('creates a client with valid params', async () => {
   const name = 'Banco de Bogota';
   const nit = 'NITCLIENTE';
   const logo = 'https://img.com/logo.png';
+  const mebAdmin = new mongoose.Types.ObjectId().toHexString();
   await request(app)
     .post('/api/clients')
     .set('Cookie', global.signin())
@@ -61,6 +70,8 @@ it('creates a client with valid params', async () => {
       name,
       nit,
       logo,
+      mebAdmin,
+      superAdminClient: mebAdmin,
     })
     .expect(201);
   clients = await Client.find({});

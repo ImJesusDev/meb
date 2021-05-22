@@ -17,27 +17,24 @@ import { natsClient } from '../nats';
 const router = express.Router();
 
 router.post(
-  '/api/users/signup',
+  '/api/users/admin/signup',
   [
     body('email').isEmail().withMessage('Email inválido'),
     body('firstName').not().isEmpty().withMessage('El nombre es requerido'),
-    body('city').not().isEmpty().withMessage('La ciudad es requerida'),
-    body('country').not().isEmpty().withMessage('El país es requerido'),
     body('lastName').not().isEmpty().withMessage('El apellido es requerido'),
-    body('termsDate')
-      .isBoolean()
-      .withMessage('Debe aceptar términos y condiciones'),
-    body('comodatoDate')
-      .isBoolean()
-      .withMessage('Debe aceptar el contrato Comodato'),
-    body('mainTransportationMethod')
+    body('documentType')
       .not()
       .isEmpty()
-      .withMessage('El medio de transporte principal es requerido'),
-    body('secondaryTransportationMethod')
+      .withMessage('El tipo de documento es requerido'),
+    body('documentNumber')
       .not()
       .isEmpty()
-      .withMessage('El medio de transporte secundario es requerido'),
+      .withMessage('El número de documento es requerido'),
+    body('phone')
+      .not()
+      .isEmpty()
+      .withMessage('El número de documento es requerido'),
+    body('role').not().isEmpty().withMessage('El rol es requerido'),
     body('password')
       .trim()
       .isLength({ min: 4, max: 20 })
@@ -50,25 +47,30 @@ router.post(
       password,
       firstName,
       lastName,
-      city,
-      country,
-      mainTransportationMethod,
-      secondaryTransportationMethod,
-      termsDate,
-      comodatoDate,
+      documentType,
+      documentNumber,
+      phone,
     } = req.body;
 
-    if (!termsDate) {
-      throw new BadRequestError('Debe aceptar términos y condiciones');
-    }
-    if (!comodatoDate) {
-      throw new BadRequestError('Debe aceptar el contrato Comodato');
-    }
+    const role = req.body.role as UserRole;
 
-    const existingUser = await User.findOne({ email });
+    // Validate existing email
+    let existingUser = await User.findOne({ email });
 
     if (existingUser) {
       throw new BadRequestError('El correo se encuentra en uso');
+    }
+    // Validate existing phone
+    existingUser = await User.findOne({ phone });
+
+    if (existingUser) {
+      throw new BadRequestError('El teléfono se encuentra en uso');
+    }
+    // Validate existing document number
+    existingUser = await User.findOne({ documentNumber });
+
+    if (existingUser) {
+      throw new BadRequestError('El número de documento se encuentra en uso');
     }
     const activationCode = User.generateActivationCode();
 
@@ -77,14 +79,14 @@ router.post(
       password,
       firstName,
       lastName,
-      city,
-      country,
       activationCode,
-      role: UserRole.User,
+      documentType,
+      documentNumber,
+      phone,
+      role,
       status: UserStatus.Unverified,
-      mainTransportationMethod,
-      secondaryTransportationMethod,
     });
+
     await user.save();
 
     await new UserCreatedPublisher(natsClient.client).publish({
@@ -100,4 +102,4 @@ router.post(
   }
 );
 
-export { router as signupRouter };
+export { router as adminSignupRouter };
