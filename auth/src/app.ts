@@ -10,15 +10,18 @@ import { currentUserRouter } from './routes/current-user';
 import { signinRouter } from './routes/signin';
 import { signoutRouter } from './routes/signout';
 import { signupRouter } from './routes/signup';
+import { adminSignupRouter } from './routes/admin-signup';
 import { updateUserRouter } from './routes/update';
 import { activateUserRouter } from './routes/activate';
+import { passwordResetRouter } from './routes/password-reset';
+import { indexUserRouter } from './routes/index';
 
 /* Commons */
 import { errorHandler, NotFoundError } from '@movers/common';
 
 /* Cors configuration */
 const corsOptions = {
-  origin: ['https://meb-admin.moversapp.co'],
+  origin: ['https://meb-admin.moversapp.co', 'https://admin.meb.dev:4200'],
   methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
   preflightContinue: false,
   credentials: true,
@@ -36,6 +39,7 @@ app.use(
   cookieSession({
     signed: false,
     secure: process.env.NODE_ENV !== 'test',
+    // domain: '.meb.dev',
     domain: '.moversapp.co',
     httpOnly: false,
   })
@@ -51,10 +55,16 @@ app.use(
 app.use(currentUserRouter);
 /* Login User */
 app.use(signinRouter);
+/* List Users */
+app.use(indexUserRouter);
+/* Password Reset */
+app.use(passwordResetRouter);
 /* Log out User */
 app.use(signoutRouter);
 /* Register User */
 app.use(signupRouter);
+/* Register Admin */
+app.use(adminSignupRouter);
 /* Update User */
 app.use(updateUserRouter);
 /* Activate User */

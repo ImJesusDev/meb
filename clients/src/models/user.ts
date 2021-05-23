@@ -7,6 +7,8 @@ import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 interface UserAttrs {
   id: string;
   email: string;
+  firstName: string;
+  lastName: string;
 }
 
 /*
@@ -25,11 +27,21 @@ interface UserModel extends mongoose.Model<UserDoc> {
 interface UserDoc extends mongoose.Document {
   email: string;
   version: number;
+  firstName: string;
+  lastName: string;
 }
 
 const userSchema = new mongoose.Schema(
   {
     email: {
+      type: String,
+      required: true,
+    },
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
       type: String,
       required: true,
     },
@@ -51,6 +63,8 @@ userSchema.statics.build = (attrs: UserAttrs) => {
   return new User({
     _id: attrs.id,
     email: attrs.email,
+    firstName: attrs.firstName,
+    lastName: attrs.lastName,
   });
 };
 userSchema.statics.findByEvent = (event: { id: string; version: number }) => {

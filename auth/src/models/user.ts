@@ -12,10 +12,13 @@ interface UserAttrs {
   password: string;
   firstName: string;
   lastName: string;
-  mainTransportationMethod: string;
-  secondaryTransportationMethod: string;
-  city: string;
-  country: string;
+  mainTransportationMethod?: string;
+  secondaryTransportationMethod?: string;
+  city?: string;
+  country?: string;
+  documentType?: string;
+  documentNumber?: string;
+  phone?: string;
   activationCode: number;
   status: UserStatus;
   role: UserRole;
@@ -30,10 +33,13 @@ interface UserDoc extends mongoose.Document {
   password: string;
   firstName: string;
   lastName: string;
-  mainTransportationMethod: string;
-  secondaryTransportationMethod: string;
-  city: string;
-  country: string;
+  mainTransportationMethod?: string;
+  secondaryTransportationMethod?: string;
+  city?: string;
+  country?: string;
+  documentType?: string;
+  documentNumber?: string;
+  phone?: string;
   activationCode: number;
   status: UserStatus;
   role: UserRole;
@@ -61,19 +67,31 @@ const userSchema = new mongoose.Schema(
     },
     city: {
       type: String,
-      required: true,
+      required: false,
     },
     country: {
       type: String,
-      required: true,
+      required: false,
     },
     mainTransportationMethod: {
       type: String,
-      required: true,
+      required: false,
     },
     secondaryTransportationMethod: {
       type: String,
-      required: true,
+      required: false,
+    },
+    documentType: {
+      type: String,
+      required: false,
+    },
+    documentNumber: {
+      type: String,
+      required: false,
+    },
+    phone: {
+      type: String,
+      required: false,
     },
     activationCode: {
       type: Number,

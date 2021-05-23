@@ -8,10 +8,12 @@ export class UserCreatedListener extends Listener<UserCreatedEvent> {
   queueGroupName = queueGroupName;
 
   async onMessage(data: UserCreatedEvent['data'], msg: Message) {
-    const { id, email } = data;
+    const { id, email, firstName, lastName } = data;
     const user = User.build({
       id,
       email,
+      firstName,
+      lastName,
     });
     await user.save();
     msg.ack();

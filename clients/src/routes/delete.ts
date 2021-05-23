@@ -5,15 +5,13 @@ import { Client } from '../models/client';
 import { NotFoundError } from '@movers/common';
 const router = express.Router();
 
-router.get('/api/clients/:id', async (req: Request, res: Response) => {
-  const client = await Client.findById(req.params.id).populate([
-    'meb_admin',
-    'super_admin_client',
-  ]);
+router.delete('/api/clients/:id', async (req: Request, res: Response) => {
+  const client = await Client.findById(req.params.id);
   if (!client) {
     throw new NotFoundError();
   }
-  res.send(client);
+  await client.delete();
+  res.status(204).send({});
 });
 
-export { router as showClientRouter };
+export { router as deleteClientRouter };

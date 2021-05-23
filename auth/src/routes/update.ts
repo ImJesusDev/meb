@@ -17,14 +17,14 @@ const router = express.Router();
 router.put(
   '/api/users',
   [
-    body('firstName').not().isEmpty().withMessage('First name is required'),
-    body('lastName').not().isEmpty().withMessage('Last name is required'),
-    body('city').not().isEmpty().withMessage('City is required'),
-    body('country').not().isEmpty().withMessage('Country is required'),
+    body('firstName').not().isEmpty().withMessage('El nombre es requerido'),
+    body('city').not().isEmpty().withMessage('La ciudad es requerida'),
+    body('country').not().isEmpty().withMessage('El país es requerido'),
+    body('lastName').not().isEmpty().withMessage('El apellido es requerido'),
     body('password')
       .trim()
       .isLength({ min: 4, max: 20 })
-      .withMessage('Password must be between 4 and 20 characters'),
+      .withMessage('La contraseña debe de tener entre 4 y 20 caracteres'),
   ],
   validateRequest,
   currentUser,

@@ -19,7 +19,7 @@ it('returns 404 if client is not found', async () => {
   await request(app).get(`/api/clients/${id}`).send().expect(404);
 });
 
-it('returns the client if client is found', async () => {
+it('deletes the client', async () => {
   const name = 'Banco de Bogota';
   const nit = 'NITCLIENTE';
   const logo = 'https://img.com/logo.png';
@@ -35,12 +35,10 @@ it('returns the client if client is found', async () => {
       superAdminClient: mebAdmin.id,
     })
     .expect(201);
-  const clientResponse = await request(app)
-    .get(`/api/clients/${response.body.id}`)
-    .send()
-    .expect(200);
-
-  expect(clientResponse.body.name).toEqual(name);
-  expect(clientResponse.body.nit).toEqual(nit);
-  expect(clientResponse.body.logo).toEqual(logo);
+  await request(app)
+    .delete(`/api/clients/${response.body.id}`)
+    .send({})
+    .expect(204);
+  const clientResponse = await request(app).get('/api/clients').send({});
+  expect(clientResponse.body.length).toEqual(0);
 });
