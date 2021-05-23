@@ -13,6 +13,7 @@ import { signupRouter } from './routes/signup';
 import { adminSignupRouter } from './routes/admin-signup';
 import { updateUserRouter } from './routes/update';
 import { activateUserRouter } from './routes/activate';
+import { passwordResetRouter } from './routes/password-reset';
 import { indexUserRouter } from './routes/index';
 
 /* Commons */
@@ -38,8 +39,8 @@ app.use(
   cookieSession({
     signed: false,
     secure: process.env.NODE_ENV !== 'test',
-    domain: '.meb.dev',
-    // domain: '.moversapp.co',
+    // domain: '.meb.dev',
+    domain: '.moversapp.co',
     httpOnly: false,
   })
 );
@@ -56,6 +57,8 @@ app.use(currentUserRouter);
 app.use(signinRouter);
 /* List Users */
 app.use(indexUserRouter);
+/* Password Reset */
+app.use(passwordResetRouter);
 /* Log out User */
 app.use(signoutRouter);
 /* Register User */

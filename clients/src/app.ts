@@ -9,6 +9,7 @@ import { errorHandler, NotFoundError, currentUser } from '@movers/common';
 /* Routers */
 import { newClientRouter } from './routes/new';
 import { showClientRouter } from './routes/show';
+import { deleteClientRouter } from './routes/delete';
 import { indexClientRouter } from './routes/index';
 import { updateClientRouter } from './routes/update';
 /* Cors configuration */
@@ -47,6 +48,8 @@ app.get('/api/clients/healthz', (req, res) => {
 });
 /* Show Client */
 app.use(showClientRouter);
+/* Delete Client */
+app.use(deleteClientRouter);
 /* Not found error handler */
 app.get('*', async () => {
   throw new NotFoundError();
