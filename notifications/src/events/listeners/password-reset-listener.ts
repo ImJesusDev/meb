@@ -28,7 +28,7 @@ export class PasswordResetListener extends Listener<PasswordResetEvent> {
         ],
         context: {
           name: `${existingUser.firstName} ${existingUser.lastName}`,
-          link: `https://meb-admin.moversapp.co/recuperar-clave?codigo=${code}`,
+          link: `https://meb-admin.moversapp.co/auth/recuperar-clave?codigo=${code}&email=${existingUser.email}`,
         },
       };
       console.log(`Sending password reset email to ${existingUser.email}`);
