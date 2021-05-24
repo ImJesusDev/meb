@@ -14,6 +14,7 @@ import { adminSignupRouter } from './routes/admin-signup';
 import { updateUserRouter } from './routes/update';
 import { activateUserRouter } from './routes/activate';
 import { passwordResetRouter } from './routes/password-reset';
+import { updatePasswordRouter } from './routes/update-password';
 import { indexUserRouter } from './routes/index';
 
 /* Commons */
@@ -59,6 +60,8 @@ app.use(signinRouter);
 app.use(indexUserRouter);
 /* Password Reset */
 app.use(passwordResetRouter);
+/* Password Change */
+app.use(updatePasswordRouter);
 /* Log out User */
 app.use(signoutRouter);
 /* Register User */

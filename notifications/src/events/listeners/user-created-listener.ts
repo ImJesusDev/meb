@@ -39,7 +39,7 @@ export class UserCreatedListener extends Listener<UserCreatedEvent> {
       ],
       context: {
         name: `${firstName} ${lastName}`,
-        link: `https://meb-admin.moversapp.co/activacion?codigo=${activationCode}`,
+        link: `https://meb-admin.moversapp.co/auth/activacion?codigo=${activationCode}&email=${email}`,
       },
     };
     console.log(`Sending activation email to ${email}`);
