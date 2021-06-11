@@ -33,6 +33,11 @@ const clientSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    deletedAt: {
+      type: mongoose.Schema.Types.Date,
+      required: false,
+      default: null,
+    },
     mebAdmin: {
       type: String,
       required: true,
