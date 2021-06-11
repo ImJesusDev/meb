@@ -10,7 +10,10 @@ router.delete('/api/clients/:id', async (req: Request, res: Response) => {
   if (!client) {
     throw new NotFoundError();
   }
-  await client.delete();
+  client.set({
+    deletedAt: new Date(),
+  });
+  await client.save();
   res.status(204).send({});
 });
 
