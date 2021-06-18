@@ -30,7 +30,7 @@ router.post(
     }
     const existingSuperAdminClient = await User.findById(superAdminClient);
     if (!existingSuperAdminClient) {
-      throw new BadRequestError('El super administrador del cliente');
+      throw new BadRequestError('El super administrador del cliente no existe');
     }
 
     const client = Client.build({

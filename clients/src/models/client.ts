@@ -1,4 +1,4 @@
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 
 interface ClientAttrs {
   name: string;
@@ -75,6 +75,15 @@ clientSchema.virtual('super_admin_client', {
   foreignField: '_id',
   justOne: true,
 });
+// Add virtuals to populate offices of the client
+clientSchema.virtual('offices', {
+  ref: 'Office', // Reference the Office Model
+  localField: 'name', // Name of the field in Client to map the one in Office
+  foreignField: 'client', // Name of the field in Office to map the localField
+  justOne: false, // Set to false to return many
+  options: { sort: { name: -1 } },
+});
+
 const Client = mongoose.model<ClientDoc, ClientModel>('Client', clientSchema);
 
 export { Client };
