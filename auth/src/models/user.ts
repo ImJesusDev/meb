@@ -7,7 +7,7 @@ import { UserRole, UserStatus } from '@movers/common';
  *   Interface that describes the properties
  *   that are required to create a new User
  */
-interface UserAttrs {
+export interface UserAttrs {
   email: string;
   password: string;
   firstName: string;
@@ -19,6 +19,7 @@ interface UserAttrs {
   documentType?: string;
   documentNumber?: string;
   phone?: string;
+  photo?: string;
   activationCode: number;
   status: UserStatus;
   role: UserRole;
@@ -26,7 +27,7 @@ interface UserAttrs {
 
 /*
  *   Interface that describes the properties
- *   that a User Document has
+ *   that an User Document has
  */
 interface UserDoc extends mongoose.Document {
   email: string;
@@ -40,6 +41,7 @@ interface UserDoc extends mongoose.Document {
   documentType?: string;
   documentNumber?: string;
   phone?: string;
+  photo?: string;
   activationCode: number;
   status: UserStatus;
   role: UserRole;
@@ -48,7 +50,7 @@ interface UserDoc extends mongoose.Document {
 
 /*
  *   Interface that describes the properties
- *   that a User Model has
+ *   that an User Model has
  */
 interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
@@ -90,6 +92,10 @@ const userSchema = new mongoose.Schema(
       required: false,
     },
     phone: {
+      type: String,
+      required: false,
+    },
+    photo: {
       type: String,
       required: false,
     },

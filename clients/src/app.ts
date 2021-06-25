@@ -12,6 +12,7 @@ import { showClientRouter } from './routes/show';
 import { deleteClientRouter } from './routes/delete';
 import { indexClientRouter } from './routes/index';
 import { updateClientRouter } from './routes/update';
+import { addOfficeRouter } from './routes/new-office';
 /* Cors configuration */
 const corsOptions = {
   origin: ['https://meb-admin.moversapp.co', 'https://admin.meb.dev:4200'],
@@ -40,6 +41,8 @@ app.use(newClientRouter);
 app.use(indexClientRouter);
 /* Update Client */
 app.use(updateClientRouter);
+/* Add office */
+app.use(addOfficeRouter);
 /* k8s Liveness / Readiness probes */
 app.get('/api/clients/healthz', (req, res) => {
   res.status(200).send({

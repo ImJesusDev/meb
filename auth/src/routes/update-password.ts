@@ -47,4 +47,4 @@ router.post(
   }
 );
 
-export { router as updatePasswordRouter };
+export default router;

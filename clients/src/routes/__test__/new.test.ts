@@ -32,7 +32,7 @@ it('returns a status other than 401 if the user is signed in', async () => {
   expect(response.status).not.toEqual(401);
 });
 
-it('returns an error with name', async () => {
+it('returns an error with invalid name', async () => {
   const mebAdmin = await getUser();
   await request(app)
     .post('/api/clients')

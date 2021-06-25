@@ -53,4 +53,4 @@ router.put(
   }
 );
 
-export { router as updateUserRouter };
+export default router;

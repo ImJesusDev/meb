@@ -7,4 +7,4 @@ router.post('/api/users/signout', (req, res) => {
   res.send({});
 });
 
-export { router as signoutRouter };
+export default router;

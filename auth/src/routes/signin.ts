@@ -58,4 +58,4 @@ router.post(
   }
 );
 
-export { router as signinRouter };
+export default router;

@@ -34,4 +34,4 @@ router.post(
   }
 );
 
-export { router as activateUserRouter };
+export default router;

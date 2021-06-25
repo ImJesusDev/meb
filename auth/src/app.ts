@@ -1,21 +1,14 @@
 import express from 'express';
 import 'express-async-errors';
+import path from 'path';
+import fs from 'fs';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec, cssOptions } from './docs/swagger-spec';
 const cors = require('cors');
-/* Routers */
-import { currentUserRouter } from './routes/current-user';
-import { signinRouter } from './routes/signin';
-import { signoutRouter } from './routes/signout';
-import { signupRouter } from './routes/signup';
-import { adminSignupRouter } from './routes/admin-signup';
-import { updateUserRouter } from './routes/update';
-import { activateUserRouter } from './routes/activate';
-import { passwordResetRouter } from './routes/password-reset';
-import { updatePasswordRouter } from './routes/update-password';
-import { indexUserRouter } from './routes/index';
+/* Specify directory with route files */
+const routePath = path.join(__dirname, 'routes');
 
 /* Commons */
 import { errorHandler, NotFoundError } from '@movers/common';
@@ -52,26 +45,26 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(swaggerSpec, cssOptions)
 );
-/* Current User */
-app.use(currentUserRouter);
-/* Login User */
-app.use(signinRouter);
-/* List Users */
-app.use(indexUserRouter);
-/* Password Reset */
-app.use(passwordResetRouter);
-/* Password Change */
-app.use(updatePasswordRouter);
-/* Log out User */
-app.use(signoutRouter);
-/* Register User */
-app.use(signupRouter);
-/* Register Admin */
-app.use(adminSignupRouter);
-/* Update User */
-app.use(updateUserRouter);
-/* Activate User */
-app.use(activateUserRouter);
+
+/* Read all files from routePath to dynamically load routes */
+fs.readdirSync(routePath).forEach(async (filename) => {
+  // Get current file
+  let route = path.join(routePath, filename);
+  // Validate if it's a folder
+  const isFolder = fs.lstatSync(route).isDirectory();
+  // If it's not a folder, import and use route
+  if (!isFolder) {
+    try {
+      // Import route
+      const importedRoute = require(route);
+      // Attach to app
+      app.use(importedRoute.default);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+});
+
 /* k8s Liveness / Readiness probes */
 app.get('/api/users/healthz', (req, res) => {
   res.status(200).send({

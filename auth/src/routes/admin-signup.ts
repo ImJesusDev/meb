@@ -50,6 +50,7 @@ router.post(
       documentType,
       documentNumber,
       phone,
+      photo,
     } = req.body;
 
     const role = req.body.role as UserRole;
@@ -83,6 +84,7 @@ router.post(
       documentType,
       documentNumber,
       phone,
+      photo,
       role,
       status: UserStatus.Unverified,
     });
@@ -102,4 +104,4 @@ router.post(
   }
 );
 
-export { router as adminSignupRouter };
+export default router;
