@@ -39,4 +39,4 @@ router.post(
   }
 );
 
-export { router as passwordResetRouter };
+export default router;

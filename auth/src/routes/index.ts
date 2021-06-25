@@ -14,4 +14,4 @@ router.get('/api/users', async (req: Request, res: Response) => {
   res.send(users);
 });
 
-export { router as indexUserRouter };
+export default router;
