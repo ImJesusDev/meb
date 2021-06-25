@@ -33,8 +33,8 @@ app.use(
   cookieSession({
     signed: false,
     secure: process.env.NODE_ENV !== 'test',
-    domain: '.meb.dev',
-    // domain: '.moversapp.co',
+    // domain: '.meb.dev',
+    domain: '.moversapp.co',
     httpOnly: false,
   })
 );

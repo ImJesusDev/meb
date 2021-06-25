@@ -7,7 +7,7 @@ import { UserRole, UserStatus } from '@movers/common';
  *   Interface that describes the properties
  *   that are required to create a new User
  */
-interface UserAttrs {
+export interface UserAttrs {
   email: string;
   password: string;
   firstName: string;
