@@ -1,20 +1,24 @@
 import request from 'supertest';
 import { app } from '../../app';
 import { Domain } from '../../models/domain';
+import { natsClient } from '../../nats';
 
-it('has a POST route handler for /api/domains ', async () => {
-  const response = await request(app).post('/api/domains').send({});
+it('has a POST route handler for /api/users/domains ', async () => {
+  const response = await request(app).post('/api/users/domains').send({});
   expect(response.status).not.toEqual(404);
 });
 
 it('can only access by signed in users', async () => {
-  const response = await request(app).post('/api/domains').send({}).expect(401);
+  const response = await request(app)
+    .post('/api/users/domains')
+    .send({})
+    .expect(401);
 });
 
 it('returns a status other than 401 if the user is signed in', async () => {
   const cookie = await global.signin();
   const response = await request(app)
-    .post('/api/domains')
+    .post('/api/users/domains')
     .set('Cookie', cookie)
     .send({});
 
@@ -23,7 +27,7 @@ it('returns a status other than 401 if the user is signed in', async () => {
 it('returns an error with invalid domains', async () => {
   const cookie = await global.signin();
   const response = await request(app)
-    .post('/api/domains')
+    .post('/api/users/domains')
     .set('Cookie', cookie)
     .send({
       domains: '',
@@ -33,7 +37,7 @@ it('returns an error with invalid domains', async () => {
 it('returns an error with an empty domain', async () => {
   const cookie = await global.signin();
   const response = await request(app)
-    .post('/api/domains')
+    .post('/api/users/domains')
     .set('Cookie', cookie)
     .send({
       domains: [{ domain: '', client: 'Claro' }],
@@ -43,7 +47,7 @@ it('returns an error with an empty domain', async () => {
 it('returns an error with an invalid domain', async () => {
   const cookie = await global.signin();
   const response = await request(app)
-    .post('/api/domains')
+    .post('/api/users/domains')
     .set('Cookie', cookie)
     .send({
       domains: [{ domain: 'not a domain', client: 'Claro' }],
@@ -54,7 +58,7 @@ it('returns an error with an invalid domain', async () => {
 it('returns an error with an invalid client', async () => {
   const cookie = await global.signin();
   const response = await request(app)
-    .post('/api/domains')
+    .post('/api/users/domains')
     .set('Cookie', cookie)
     .send({
       domains: [{ domain: 'claro.com.co', client: '' }],
@@ -66,7 +70,7 @@ it('creates a domain when given valid params', async () => {
   expect(domains.length).toEqual(0);
   const cookie = await global.signin();
   const response = await request(app)
-    .post('/api/domains')
+    .post('/api/users/domains')
     .set('Cookie', cookie)
     .send({
       domains: [{ domain: 'claro.com.co', client: 'Claro' }],
@@ -75,4 +79,5 @@ it('creates a domain when given valid params', async () => {
   expect(response.body[0].active).toBeTruthy();
   domains = await Domain.find({});
   expect(domains.length).toEqual(1);
+  expect(natsClient.client.publish).toHaveBeenCalled();
 });

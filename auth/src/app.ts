@@ -27,7 +27,7 @@ const corsOptions = {
 
 const app = express();
 app.set('trust proxy', true);
-app.use(json());
+app.use(json({ limit: '2mb' }));
 app.use(cors(corsOptions));
 app.use(
   cookieSession({

@@ -2,6 +2,11 @@ import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
 import { User } from '../../models/user';
+import { Domain } from '../../models/domain';
+beforeEach(async () => {
+  // Hack to register domain schema and avoid MissingSchemaError
+  const domains = await Domain.find({});
+});
 
 it('it can fetch a list of clients', async () => {
   const id = new mongoose.Types.ObjectId().toHexString();
