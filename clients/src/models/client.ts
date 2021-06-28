@@ -83,6 +83,14 @@ clientSchema.virtual('offices', {
   justOne: false, // Set to false to return many
   options: { sort: { name: -1 } },
 });
+// Add virtuals to populate domains of the client
+clientSchema.virtual('domains', {
+  ref: 'Domain', // Reference the Office Model
+  localField: 'name', // Name of the field in Client to map the one in Office
+  foreignField: 'client', // Name of the field in Office to map the localField
+  justOne: false, // Set to false to return many
+  options: { sort: { name: -1 } },
+});
 
 const Client = mongoose.model<ClientDoc, ClientModel>('Client', clientSchema);
 

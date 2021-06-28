@@ -61,6 +61,9 @@ it('returns an error with invalid client', async () => {
       country: 'Colombia',
       city: 'Bogota',
       mebAdmin: user.id,
+      repairAdmin: user.id,
+      maintenanceAdmin: user.id,
+      inventoryAdmin: user.id,
       clientAdmin: user.id,
       location: {
         lat: 1,
@@ -80,6 +83,9 @@ it('returns an error with invalid name', async () => {
       country: 'Colombia',
       city: 'Bogota',
       mebAdmin: user.id,
+      repairAdmin: user.id,
+      maintenanceAdmin: user.id,
+      inventoryAdmin: user.id,
       clientAdmin: user.id,
       location: {
         lat: 1,
@@ -98,6 +104,9 @@ it('returns an error with invalid country', async () => {
       country: '',
       city: 'Bogota',
       mebAdmin: user.id,
+      repairAdmin: user.id,
+      maintenanceAdmin: user.id,
+      inventoryAdmin: user.id,
       clientAdmin: user.id,
       location: {
         lat: 1,
@@ -117,6 +126,9 @@ it('returns an error with invalid city', async () => {
       city: '',
       mebAdmin: user.id,
       clientAdmin: user.id,
+      repairAdmin: user.id,
+      maintenanceAdmin: user.id,
+      inventoryAdmin: user.id,
       location: {
         lat: 1,
         lng: 2,
@@ -137,6 +149,9 @@ it('returns an error with invalid meb admin', async () => {
       city: 'Bogota',
       mebAdmin: id,
       clientAdmin: user.id,
+      repairAdmin: user.id,
+      maintenanceAdmin: user.id,
+      inventoryAdmin: user.id,
       location: {
         lat: 1,
         lng: 2,
@@ -156,7 +171,76 @@ it('returns an error with invalid client admin', async () => {
       country: 'Colombia',
       city: 'Bogota',
       mebAdmin: user.id,
+      repairAdmin: user.id,
+      maintenanceAdmin: user.id,
+      inventoryAdmin: user.id,
       clientAdmin: id,
+      location: {
+        lat: 1,
+        lng: 2,
+      },
+    })
+    .expect(400);
+});
+it('returns an error with invalid repair admin', async () => {
+  const id = mongoose.Types.ObjectId().toHexString();
+  const { user, client } = await getData();
+  await request(app)
+    .post(`/api/clients/${client.id}/offices`)
+    .set('Cookie', global.signin())
+    .send({
+      name: 'Sede Principal',
+      country: 'Colombia',
+      city: 'Bogota',
+      mebAdmin: user.id,
+      repairAdmin: id,
+      maintenanceAdmin: user.id,
+      inventoryAdmin: user.id,
+      clientAdmin: user.id,
+      location: {
+        lat: 1,
+        lng: 2,
+      },
+    })
+    .expect(400);
+});
+it('returns an error with invalid repair maintenance admin', async () => {
+  const id = mongoose.Types.ObjectId().toHexString();
+  const { user, client } = await getData();
+  await request(app)
+    .post(`/api/clients/${client.id}/offices`)
+    .set('Cookie', global.signin())
+    .send({
+      name: 'Sede Principal',
+      country: 'Colombia',
+      city: 'Bogota',
+      mebAdmin: user.id,
+      repairAdmin: user.id,
+      maintenanceAdmin: id,
+      inventoryAdmin: user.id,
+      clientAdmin: user.id,
+      location: {
+        lat: 1,
+        lng: 2,
+      },
+    })
+    .expect(400);
+});
+it('returns an error with invalid repair inventory admin', async () => {
+  const id = mongoose.Types.ObjectId().toHexString();
+  const { user, client } = await getData();
+  await request(app)
+    .post(`/api/clients/${client.id}/offices`)
+    .set('Cookie', global.signin())
+    .send({
+      name: 'Sede Principal',
+      country: 'Colombia',
+      city: 'Bogota',
+      mebAdmin: user.id,
+      repairAdmin: user.id,
+      maintenanceAdmin: user.id,
+      inventoryAdmin: id,
+      clientAdmin: user.id,
       location: {
         lat: 1,
         lng: 2,
@@ -176,6 +260,9 @@ it('returns an error with invalid location', async () => {
       city: 'Bogota',
       mebAdmin: user.id,
       clientAdmin: user.id,
+      repairAdmin: user.id,
+      maintenanceAdmin: user.id,
+      inventoryAdmin: user.id,
       location: {},
     })
     .expect(400);
@@ -192,6 +279,9 @@ it('returns an error with invalid latitude', async () => {
       city: 'Bogota',
       mebAdmin: user.id,
       clientAdmin: user.id,
+      repairAdmin: user.id,
+      maintenanceAdmin: user.id,
+      inventoryAdmin: user.id,
       location: {
         lat: 'invalid',
         lng: 2,
@@ -211,6 +301,9 @@ it('returns an error with invalid longitude', async () => {
       city: 'Bogota',
       mebAdmin: user.id,
       clientAdmin: user.id,
+      repairAdmin: user.id,
+      maintenanceAdmin: user.id,
+      inventoryAdmin: user.id,
       location: {
         lat: 1,
         lng: 'invalid',
@@ -230,6 +323,9 @@ it('returns 201 with valid params', async () => {
       city: 'Bogota',
       mebAdmin: user.id,
       clientAdmin: user.id,
+      repairAdmin: user.id,
+      maintenanceAdmin: user.id,
+      inventoryAdmin: user.id,
       location: {
         lat: 1,
         lng: 2,
@@ -251,6 +347,9 @@ it('creates the office with valid params', async () => {
       city: 'Bogota',
       mebAdmin: user.id,
       clientAdmin: user.id,
+      repairAdmin: user.id,
+      maintenanceAdmin: user.id,
+      inventoryAdmin: user.id,
       location: {
         lat: 1,
         lng: 2,

@@ -3,7 +3,7 @@ import express, { Request, Response } from 'express';
 import { Domain } from '../models/domain';
 const router = express.Router();
 
-router.get('/api/domains', async (req: Request, res: Response) => {
+router.get('/api/users/domains', async (req: Request, res: Response) => {
   let query: any = {};
   const client = req.query.client;
   if (client) {

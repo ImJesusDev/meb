@@ -6,11 +6,14 @@ import { requireAuth, validateRequest, currentUser } from '@movers/common';
 
 /* Models */
 import { Domain } from '../models/domain';
-
+/* Publishers */
+import { DomainAuthorizedPublisher } from '../events/publishers/domain-authorized-publisher';
+/* NATS Client */
+import { natsClient } from '../nats';
 const router = express.Router();
 
 router.post(
-  '/api/domains',
+  '/api/users/domains',
   currentUser,
   requireAuth(),
   [
@@ -40,6 +43,13 @@ router.post(
         });
         await newDomain.save();
         success.push(newDomain);
+        await new DomainAuthorizedPublisher(natsClient.client).publish({
+          id: newDomain.id,
+          domain: newDomain.domain,
+          client: newDomain.client,
+          active: newDomain.active,
+          version: newDomain.version,
+        });
       }
     }
 

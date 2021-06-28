@@ -20,6 +20,18 @@ router.post(
     body('country').not().isEmpty().withMessage('Country is required'),
     body('mebAdmin').not().isEmpty().withMessage('MEB admin is required'),
     body('clientAdmin').not().isEmpty().withMessage('Client admin is required'),
+    body('repairAdmin')
+      .not()
+      .isEmpty()
+      .withMessage('Repairs admin is required'),
+    body('maintenanceAdmin')
+      .not()
+      .isEmpty()
+      .withMessage('Maintenance admin is required'),
+    body('inventoryAdmin')
+      .not()
+      .isEmpty()
+      .withMessage('Inventory admin is required'),
     body('location').not().isEmpty().withMessage('Location is required'),
     body('location.lat').not().isEmpty().withMessage('Latitude is required'),
     body('location.lng').not().isEmpty().withMessage('Longitude is required'),
@@ -30,7 +42,17 @@ router.post(
   async (req: Request, res: Response) => {
     const clientId = req.params.id;
 
-    const { name, city, country, mebAdmin, clientAdmin, location } = req.body;
+    const {
+      name,
+      city,
+      country,
+      mebAdmin,
+      clientAdmin,
+      location,
+      repairAdmin,
+      maintenanceAdmin,
+      inventoryAdmin,
+    } = req.body;
 
     const existingClient = await Client.findById(clientId);
     if (!existingClient) {
@@ -44,6 +66,18 @@ router.post(
     if (!existingClientAdmin) {
       throw new BadRequestError('El administrador del cliente no existe');
     }
+    const existingRepairAdmin = await User.findById(repairAdmin);
+    if (!existingRepairAdmin) {
+      throw new BadRequestError('El administrador de reparación no existe');
+    }
+    const existingMaintenanceAdmin = await User.findById(maintenanceAdmin);
+    if (!existingMaintenanceAdmin) {
+      throw new BadRequestError('El administrador de mantenimiento no existe');
+    }
+    const existingInventoryAdmin = await User.findById(inventoryAdmin);
+    if (!existingInventoryAdmin) {
+      throw new BadRequestError('El administrador de inventario no existe');
+    }
 
     const office = Office.build({
       name,
@@ -53,6 +87,9 @@ router.post(
       clientAdmin,
       location,
       client: existingClient.name,
+      repairAdmin,
+      maintenanceAdmin,
+      inventoryAdmin,
     });
 
     await office.save();

@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { app } from './app';
 import { natsClient } from './nats';
 import { UserCreatedListener } from './events/listeners/user-created-listener';
-
+import { DomainAuthorizedListener } from './events/listeners/domain-authorized-listener';
 const start = async () => {
   if (!process.env.JWT_KEY) {
     throw new Error('JWT_KEY must be defined');
@@ -33,6 +33,7 @@ const start = async () => {
     process.on('SIGTERM', () => natsClient.client.close());
 
     new UserCreatedListener(natsClient.client).listen();
+    new DomainAuthorizedListener(natsClient.client).listen();
 
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,

@@ -7,6 +7,9 @@ interface OfficeAttrs {
   client: string;
   mebAdmin: string;
   clientAdmin: string;
+  repairAdmin: string;
+  inventoryAdmin: string;
+  maintenanceAdmin: string;
   location: { lat: number; lng: number };
 }
 
@@ -17,6 +20,9 @@ interface OfficeDoc extends mongoose.Document {
   client: string;
   mebAdmin: string;
   clientAdmin: string;
+  repairAdmin: string;
+  inventoryAdmin: string;
+  maintenanceAdmin: string;
   location: { lat: number; lng: number };
 }
 interface OfficeModel extends mongoose.Model<OfficeDoc> {
@@ -54,6 +60,18 @@ const officeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    repairAdmin: {
+      type: String,
+      required: true,
+    },
+    inventoryAdmin: {
+      type: String,
+      required: true,
+    },
+    maintenanceAdmin: {
+      type: String,
+      required: true,
+    },
     location: {
       lat: Number,
       lng: Number,
@@ -84,6 +102,24 @@ officeSchema.virtual('meb_admin', {
 officeSchema.virtual('client_admin', {
   ref: 'User',
   localField: 'clientAdmin',
+  foreignField: '_id',
+  justOne: true,
+});
+officeSchema.virtual('repair_admin', {
+  ref: 'User',
+  localField: 'repairAdmin',
+  foreignField: '_id',
+  justOne: true,
+});
+officeSchema.virtual('inventory_admin', {
+  ref: 'User',
+  localField: 'inventoryAdmin',
+  foreignField: '_id',
+  justOne: true,
+});
+officeSchema.virtual('maintenance_admin', {
+  ref: 'User',
+  localField: 'maintenanceAdmin',
   foreignField: '_id',
   justOne: true,
 });
