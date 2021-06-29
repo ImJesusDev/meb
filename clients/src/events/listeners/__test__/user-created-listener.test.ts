@@ -15,6 +15,8 @@ const setup = async () => {
     email: 'test@mail.com',
     firstName: 'Regular',
     lastName: 'User',
+    client: 'Claro',
+    office: 'Sede principal',
     activationCode: 123456,
   };
   // Create a fake message event
@@ -34,6 +36,7 @@ it('creates and save an user', async () => {
   const user = await User.findById(data.id);
   expect(user).toBeDefined();
   expect(user!.email).toEqual(data.email);
+  expect(user!.client).toEqual(data.client);
 });
 it('ack the message', async () => {
   const { listener, data, message } = await setup();

@@ -9,6 +9,8 @@ interface UserAttrs {
   email: string;
   firstName: string;
   lastName: string;
+  client?: string;
+  office?: string;
 }
 
 /*
@@ -29,6 +31,8 @@ interface UserDoc extends mongoose.Document {
   version: number;
   firstName: string;
   lastName: string;
+  client?: string;
+  office?: string;
 }
 
 const userSchema = new mongoose.Schema(
@@ -44,6 +48,14 @@ const userSchema = new mongoose.Schema(
     lastName: {
       type: String,
       required: true,
+    },
+    client: {
+      type: String,
+      required: false,
+    },
+    office: {
+      type: String,
+      required: false,
     },
   },
   {
@@ -65,6 +77,8 @@ userSchema.statics.build = (attrs: UserAttrs) => {
     email: attrs.email,
     firstName: attrs.firstName,
     lastName: attrs.lastName,
+    client: attrs.client,
+    office: attrs.office,
   });
 };
 userSchema.statics.findByEvent = (event: { id: string; version: number }) => {

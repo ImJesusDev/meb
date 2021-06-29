@@ -4,14 +4,9 @@ import { User } from '../models/user';
 import { UserRole } from '@movers/common';
 const router = express.Router();
 
-router.get('/api/users/team', async (req: Request, res: Response) => {
+router.get('/api/users/client-admins', async (req: Request, res: Response) => {
   const users = await User.find({
-    $or: [
-      { role: UserRole.MebAdmin },
-      { role: UserRole.RepairManager },
-      { role: UserRole.InventoryManager },
-      { role: UserRole.MaintenanceManager },
-    ],
+    $or: [{ role: UserRole.Client }, { role: UserRole.ClientAdmin }],
   });
   res.send(users);
 });

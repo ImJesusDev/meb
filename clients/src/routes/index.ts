@@ -9,7 +9,13 @@ router.get('/api/clients', async (req: Request, res: Response) => {
     deletedAt: null,
   })
     .limit(10)
-    .populate(['meb_admin', 'super_admin_client', 'offices', 'domains']);
+    .populate([
+      'meb_admin',
+      'super_admin_client',
+      'offices',
+      'domains',
+      'users',
+    ]);
   res.send(clients);
 });
 

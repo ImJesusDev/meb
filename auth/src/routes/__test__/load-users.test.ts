@@ -58,8 +58,8 @@ it('returns an error if the role param is not sent', async () => {
           password: 'password',
           firstName: 'Regular',
           lastName: 'User',
-          city: 'Bogota',
-          country: 'Colombia',
+          client: 'Claro',
+          office: 'Sede Principal',
           mainTransportationMethod: 'Carro',
           secondaryTransportationMethod: 'Moto',
           termsDate: true,
@@ -83,8 +83,8 @@ it('returns an error if the users array does not contains firstName', async () =
           password: 'password',
           firstName: '',
           lastName: 'User',
-          city: 'Bogota',
-          country: 'Colombia',
+          client: 'Claro',
+          office: 'Sede Principal',
           mainTransportationMethod: 'Carro',
           secondaryTransportationMethod: 'Moto',
           termsDate: true,
@@ -108,8 +108,8 @@ it('returns an error if the users array does not contains lastName', async () =>
           password: 'password',
           firstName: 'Regular',
           lastName: '',
-          city: 'Bogota',
-          country: 'Colombia',
+          client: 'Claro',
+          office: 'Sede Principal',
           mainTransportationMethod: 'Carro',
           secondaryTransportationMethod: 'Moto',
           termsDate: true,
@@ -120,7 +120,7 @@ it('returns an error if the users array does not contains lastName', async () =>
   expect(response.status).toEqual(400);
 });
 
-it('returns an error if the users array does not contains city', async () => {
+it('returns an error if the users array does not contains client', async () => {
   const cookie = await global.signin();
   const response = await request(app)
     .post('/api/users/load-users')
@@ -133,8 +133,8 @@ it('returns an error if the users array does not contains city', async () => {
           password: 'password',
           firstName: 'Regular',
           lastName: 'User',
-          city: '',
-          country: 'Colombia',
+          client: '',
+          office: 'Sede Principal',
           mainTransportationMethod: 'Carro',
           secondaryTransportationMethod: 'Moto',
           termsDate: true,
@@ -145,7 +145,7 @@ it('returns an error if the users array does not contains city', async () => {
   expect(response.status).toEqual(400);
 });
 
-it('returns an error if the users array does not contains country', async () => {
+it('returns an error if the users array does not contains office', async () => {
   const cookie = await global.signin();
   const response = await request(app)
     .post('/api/users/load-users')
@@ -158,8 +158,8 @@ it('returns an error if the users array does not contains country', async () => 
           password: 'password',
           firstName: 'Regular',
           lastName: 'User',
-          city: 'Bogota',
-          country: '',
+          client: 'Claro',
+          office: '',
           mainTransportationMethod: 'Carro',
           secondaryTransportationMethod: 'Moto',
           termsDate: true,
@@ -183,8 +183,8 @@ it('returns an error if the users array does not contains email', async () => {
           password: 'password',
           firstName: 'Regular',
           lastName: 'User',
-          city: 'Bogota',
-          country: 'Colombia',
+          client: 'Claro',
+          office: 'Sede Principal',
           mainTransportationMethod: 'Carro',
           secondaryTransportationMethod: 'Moto',
           termsDate: true,
@@ -208,8 +208,8 @@ it('returns an error if the users array contains invalid email', async () => {
           password: 'password',
           firstName: 'Regular',
           lastName: 'User',
-          city: 'Bogota',
-          country: 'Colombia',
+          client: 'Claro',
+          office: 'Sede Principal',
           mainTransportationMethod: 'Carro',
           secondaryTransportationMethod: 'Moto',
           termsDate: true,
@@ -233,8 +233,8 @@ it('returns an error if the users array does not contains a valid password', asy
           password: '',
           firstName: 'Regular',
           lastName: 'User',
-          city: 'Bogota',
-          country: 'Colombia',
+          client: 'Claro',
+          office: 'Sede Principal',
           mainTransportationMethod: 'Carro',
           secondaryTransportationMethod: 'Moto',
           termsDate: true,
@@ -258,8 +258,8 @@ it('returns an error if the users array does not contains mainTransportationMeth
           password: '123456',
           firstName: 'Regular',
           lastName: 'User',
-          city: 'Bogota',
-          country: 'Colombia',
+          client: 'Claro',
+          office: 'Sede Principal',
           mainTransportationMethod: '',
           secondaryTransportationMethod: 'Moto',
           termsDate: true,
@@ -283,8 +283,8 @@ it('returns an error if the users array does not contains secondaryTransportatio
           password: '123456',
           firstName: 'Regular',
           lastName: 'User',
-          city: 'Bogota',
-          country: 'Colombia',
+          client: 'Claro',
+          office: 'Sede Principal',
           mainTransportationMethod: 'Carro',
           secondaryTransportationMethod: '',
           termsDate: true,
@@ -310,8 +310,8 @@ it('creates users and publishes events when given valid params', async () => {
           password: '123456',
           firstName: 'Regular',
           lastName: 'User',
-          city: 'Bogota',
-          country: 'Colombia',
+          client: 'Claro',
+          office: 'Sede Principal',
           mainTransportationMethod: 'Carro',
           secondaryTransportationMethod: 'Moto',
           termsDate: true,

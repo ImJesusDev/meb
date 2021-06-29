@@ -21,8 +21,8 @@ router.post(
   [
     body('email').isEmail().withMessage('Email inválido'),
     body('firstName').not().isEmpty().withMessage('El nombre es requerido'),
-    body('city').not().isEmpty().withMessage('La ciudad es requerida'),
-    body('country').not().isEmpty().withMessage('El país es requerido'),
+    body('client').not().isEmpty().withMessage('El cliente es requerido'),
+    body('office').not().isEmpty().withMessage('La sede es requerida'),
     body('lastName').not().isEmpty().withMessage('El apellido es requerido'),
     body('termsDate')
       .isBoolean()
@@ -50,8 +50,8 @@ router.post(
       password,
       firstName,
       lastName,
-      city,
-      country,
+      client,
+      office,
       mainTransportationMethod,
       secondaryTransportationMethod,
       termsDate,
@@ -77,8 +77,8 @@ router.post(
       password,
       firstName,
       lastName,
-      city,
-      country,
+      client,
+      office,
       activationCode,
       role: UserRole.User,
       status: UserStatus.Unverified,
@@ -94,6 +94,8 @@ router.post(
       lastName: user.lastName,
       version: user.version,
       activationCode: user.activationCode,
+      client: user.client!,
+      office: user.office!,
     });
 
     res.status(201).send(user);

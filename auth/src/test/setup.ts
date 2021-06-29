@@ -46,6 +46,8 @@ global.signin = async () => {
   const lastName = 'User';
   const city = 'Bogota';
   const country = 'Colombia';
+  const client = 'Claro';
+  const office = 'Sede Principal';
   const mainTransportationMethod = 'Carro';
   const secondaryTransportationMethod = 'Moto';
   const termsDate = true;
@@ -61,6 +63,8 @@ global.signin = async () => {
       lastName,
       city,
       country,
+      client,
+      office,
       mainTransportationMethod,
       secondaryTransportationMethod,
       termsDate,
