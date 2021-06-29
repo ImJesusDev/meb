@@ -13,6 +13,8 @@ import { deleteClientRouter } from './routes/delete';
 import { indexClientRouter } from './routes/index';
 import { updateClientRouter } from './routes/update';
 import { addOfficeRouter } from './routes/new-office';
+import { deleteOfficeRouter } from './routes/delete-office';
+
 /* Cors configuration */
 const corsOptions = {
   origin: ['https://meb-admin.moversapp.co', 'https://admin.meb.dev:4200'],
@@ -53,6 +55,8 @@ app.get('/api/clients/healthz', (req, res) => {
 app.use(showClientRouter);
 /* Delete Client */
 app.use(deleteClientRouter);
+/* Delete Office */
+app.use(deleteOfficeRouter);
 /* Not found error handler */
 app.get('*', async () => {
   throw new NotFoundError();
