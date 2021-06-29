@@ -75,6 +75,13 @@ clientSchema.virtual('super_admin_client', {
   foreignField: '_id',
   justOne: true,
 });
+clientSchema.virtual('users', {
+  ref: 'User',
+  localField: 'name',
+  foreignField: 'client',
+  justOne: false, // Set to false to return many
+  options: { sort: { name: -1 } },
+});
 // Add virtuals to populate offices of the client
 clientSchema.virtual('offices', {
   ref: 'Office', // Reference the Office Model

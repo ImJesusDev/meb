@@ -16,6 +16,8 @@ export interface UserAttrs {
   secondaryTransportationMethod?: string;
   city?: string;
   country?: string;
+  client?: string;
+  office?: string;
   documentType?: string;
   documentNumber?: string;
   phone?: string;
@@ -38,6 +40,8 @@ interface UserDoc extends mongoose.Document {
   secondaryTransportationMethod?: string;
   city?: string;
   country?: string;
+  client?: string;
+  office?: string;
   documentType?: string;
   documentNumber?: string;
   phone?: string;
@@ -72,6 +76,14 @@ const userSchema = new mongoose.Schema(
       required: false,
     },
     country: {
+      type: String,
+      required: false,
+    },
+    client: {
+      type: String,
+      required: false,
+    },
+    office: {
       type: String,
       required: false,
     },

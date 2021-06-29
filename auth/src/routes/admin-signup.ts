@@ -98,6 +98,8 @@ router.post(
       lastName: user.lastName,
       version: user.version,
       activationCode: user.activationCode,
+      client: '',
+      office: '',
     });
 
     res.status(201).send(user);

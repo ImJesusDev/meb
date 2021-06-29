@@ -36,14 +36,17 @@ router.post(
       .not()
       .isEmpty()
       .withMessage('The lastName is required'),
-    body('users.*.city').not().isEmpty().withMessage('The city is required'),
+    body('users.*.client')
+      .not()
+      .isEmpty()
+      .withMessage('The client is required'),
     body('users.*.password').trim().isLength({ min: 4, max: 20 }),
     body('users.*.email').not().isEmpty().withMessage('The email is required'),
     body('users.*.email').isEmail().withMessage('The email is invalid'),
-    body('users.*.country')
+    body('users.*.office')
       .not()
       .isEmpty()
-      .withMessage('The country is required'),
+      .withMessage('The office is required'),
     body('role').not().isEmpty().withMessage('Role is required'),
   ],
   validateRequest,
@@ -61,8 +64,8 @@ router.post(
           password: userAttrs.password,
           firstName: userAttrs.firstName,
           lastName: userAttrs.lastName,
-          city: userAttrs.city,
-          country: userAttrs.country,
+          client: userAttrs.client,
+          office: userAttrs.office,
           activationCode,
           role,
           status: UserStatus.Unverified,
@@ -79,6 +82,8 @@ router.post(
           lastName: user.lastName,
           version: user.version,
           activationCode: user.activationCode,
+          client: user.client!,
+          office: user.office!,
         });
       }
     }

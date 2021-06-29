@@ -18,8 +18,8 @@ router.put(
   '/api/users',
   [
     body('firstName').not().isEmpty().withMessage('El nombre es requerido'),
-    body('city').not().isEmpty().withMessage('La ciudad es requerida'),
-    body('country').not().isEmpty().withMessage('El país es requerido'),
+    body('client').not().isEmpty().withMessage('El cliente es requerido'),
+    body('office').not().isEmpty().withMessage('La sede es requerida'),
     body('lastName').not().isEmpty().withMessage('El apellido es requerido'),
     body('password')
       .trim()
@@ -30,7 +30,7 @@ router.put(
   currentUser,
   requireAuth(),
   async (req: Request, res: Response) => {
-    const { password, firstName, lastName, city, country } = req.body;
+    const { password, firstName, lastName, client, office } = req.body;
 
     const currentUser = req.currentUser;
 
@@ -44,8 +44,8 @@ router.put(
       password,
       firstName,
       lastName,
-      city,
-      country,
+      client,
+      office,
     });
 
     await user.save();
