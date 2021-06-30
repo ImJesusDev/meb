@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
  */
 
 interface EmailAttrs {
+  id: string;
   email: string;
   client: string;
   office: string;
@@ -32,6 +33,7 @@ interface EmailDoc extends mongoose.Document {
 
 interface EmailModel extends mongoose.Model<EmailDoc> {
   build(attrs: EmailAttrs): EmailDoc;
+  findByEvent(event: { id: string; version: number }): Promise<EmailDoc | null>;
 }
 
 const emailSchema = new mongoose.Schema({
@@ -62,7 +64,20 @@ emailSchema.set('versionKey', 'version');
 emailSchema.plugin(updateIfCurrentPlugin);
 
 emailSchema.statics.build = (attrs: EmailAttrs) => {
-  return new Email(attrs);
+  return new Email({
+    _id: attrs.id,
+    email: attrs.email,
+    client: attrs.client,
+    office: attrs.office,
+    active: attrs.active,
+  });
+};
+
+emailSchema.statics.findByEvent = (event: { id: string; version: number }) => {
+  return Email.findOne({
+    _id: event.id,
+    version: event.version - 1,
+  });
 };
 
 const Email = mongoose.model<EmailDoc, EmailModel>('Email', emailSchema);

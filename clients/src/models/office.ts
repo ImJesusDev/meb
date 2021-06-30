@@ -123,7 +123,14 @@ officeSchema.virtual('maintenance_admin', {
   foreignField: '_id',
   justOne: true,
 });
-
+// Add virtuals to populate email of the office
+officeSchema.virtual('emails', {
+  ref: 'Email', // Reference the Office Model
+  localField: 'name', // Name of the field in Client to map the one in Office
+  foreignField: 'office', // Name of the field in Office to map the localField
+  justOne: false, // Set to false to return many
+  options: { sort: { name: -1 } },
+});
 const Office = mongoose.model<OfficeDoc, OfficeModel>('Office', officeSchema);
 
 export { Office };
