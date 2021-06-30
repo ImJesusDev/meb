@@ -6,11 +6,14 @@ import { requireAuth, validateRequest, currentUser } from '@movers/common';
 
 /* Models */
 import { Email } from '../models/email';
-
+/* Publishers */
+import { EmailAuthorizedPublisher } from '../events/publishers/email-authorized-publisher';
+/* NATS Client */
+import { natsClient } from '../nats';
 const router = express.Router();
 
 router.post(
-  '/api/emails',
+  '/api/users/emails',
   currentUser,
   requireAuth(),
   [
@@ -19,10 +22,15 @@ router.post(
     body('emails.*.email').not().isEmpty().withMessage('Email is required'),
     body('emails.*.email').isEmail().withMessage('The email is invalid'),
     body('emails.*.client').not().isEmpty().withMessage('Client is required'),
+    body('emails.*.office').not().isEmpty().withMessage('Office is required'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const emails = req.body.emails as { email: string; client: string }[];
+    const emails = req.body.emails as {
+      email: string;
+      client: string;
+      office: string;
+    }[];
 
     const success = [];
 
@@ -36,11 +44,20 @@ router.post(
         const newEmail = Email.build({
           email: email.email,
           client: email.client,
+          office: email.office,
           active: true,
         });
 
         await newEmail.save();
         success.push(newEmail);
+        await new EmailAuthorizedPublisher(natsClient.client).publish({
+          id: newEmail.id,
+          email: newEmail.email,
+          client: newEmail.client,
+          office: newEmail.office,
+          active: newEmail.active,
+          version: newEmail.version,
+        });
       }
     }
 

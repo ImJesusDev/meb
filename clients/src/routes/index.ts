@@ -14,8 +14,13 @@ router.get('/api/clients', async (req: Request, res: Response) => {
       'super_admin_client',
       'offices',
       'domains',
+      'emails',
       'users',
-    ]);
+    ])
+    .populate({
+      path: 'offices',
+      populate: ['emails'],
+    });
   res.send(clients);
 });
 
