@@ -39,3 +39,10 @@ spec:
                 name: locations-srv
                 port:
                   number: 3000
+          - path: /api/resources/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: resources-srv
+                port:
+                  number: 3000
