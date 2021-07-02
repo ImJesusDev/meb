@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: resources-mongo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resources-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: resources-mongo
+  template:
+    metadata:
+      labels:
+        app: resources-mongo
+    spec:
+      volumes:
+        - name: mongo-storage
+          persistentVolumeClaim:
+              claimName: resources-mongo-pvc
+      containers:
+        - name: resources-mongo
+          image: mongo
+          volumeMounts:
+          - name: mongo-storage
+            mountPath: /data/db
+            subPath: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: resources-mongo-srv
+spec:
+  selector:
+    app: resources-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

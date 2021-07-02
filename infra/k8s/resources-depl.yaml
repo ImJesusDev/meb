@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resources-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: resources
+  template:
+    metadata:
+      labels:
+        app: resources
+    spec:
+      containers:
+        - name: resources
+          image: jdiaz740/meb-resources
+          startupProbe:
+            httpGet:
+              path: /api/resources/healthz
+              port: 3000
+            failureThreshold: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/resources/healthz
+              port: 3000
+            initialDelaySeconds: 3
+            failureThreshold: 10
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /api/resources/healthz
+              port: 3000
+            initialDelaySeconds: 3
+            failureThreshold: 10
+            periodSeconds: 3
+          env:
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: meb-nats
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MONGO_URI
+              value: 'mongodb://resources-mongo-srv:27017/resources'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: resources-srv
+spec:
+  selector:
+    app: resources
+  ports:
+    - name: resources
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
