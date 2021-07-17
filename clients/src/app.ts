@@ -17,7 +17,11 @@ import { deleteOfficeRouter } from './routes/delete-office';
 
 /* Cors configuration */
 const corsOptions = {
-  origin: ['https://meb-admin.moversapp.co', 'https://admin.meb.dev:4200'],
+  origin: [
+    'https://meb-admin.moversapp.co',
+    'https://admin.meb.dev:4200',
+    'https://meb-admin-demo.moversapp.co',
+  ],
   methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
   preflightContinue: false,
   credentials: true,
