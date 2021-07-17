@@ -20,7 +20,7 @@ const corsOptions = {
   origin: [
     'https://meb-admin.moversapp.co',
     'https://admin.meb.dev:4200',
-    'https://meb-admin-demo.moversapp.co',
+    'https://meb-admin-demo.moversapp.co:4200',
   ],
   methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
   preflightContinue: false,
