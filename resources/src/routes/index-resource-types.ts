@@ -6,7 +6,7 @@ const router = express.Router();
 router.get(
   '/api/resources/resource-types',
   async (req: Request, res: Response) => {
-    const resources = await ResourceType.find({});
+    const resources = await ResourceType.find({}).populate(['documentTypes']);
 
     res.status(200).send(resources);
   }
