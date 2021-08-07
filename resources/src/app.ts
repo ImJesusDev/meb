@@ -57,7 +57,7 @@ fs.readdirSync(routePath).forEach(async (filename) => {
   }
 });
 /* k8s Liveness / Readiness probes */
-app.get('/api/resources/healthz', (req, res) => {
+app.get('/api/resources/k8s/healthz', (req, res) => {
   res.status(200).send({
     message: `I'm just fine...`,
   });
