@@ -17,20 +17,20 @@ spec:
           image: jdiaz740/meb-resources
           startupProbe:
             httpGet:
-              path: /api/resources/healthz
+              path: /api/resources/k8s/healthz
               port: 3000
             failureThreshold: 30
             periodSeconds: 10
           livenessProbe:
             httpGet:
-              path: /api/resources/healthz
+              path: /api/resources/k8s/healthz
               port: 3000
             initialDelaySeconds: 3
             failureThreshold: 10
             periodSeconds: 3
           readinessProbe:
             httpGet:
-              path: /api/resources/healthz
+              path: /api/resources/k8s/healthz
               port: 3000
             initialDelaySeconds: 3
             failureThreshold: 10
@@ -46,6 +46,8 @@ spec:
                   fieldPath: metadata.name
             - name: MONGO_URI
               value: 'mongodb://resources-mongo-srv:27017/resources'
+            - name: REDIS_HOST
+              value: scheduler-redis-srv
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
