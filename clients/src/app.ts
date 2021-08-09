@@ -14,6 +14,7 @@ import { indexClientRouter } from './routes/index';
 import { updateClientRouter } from './routes/update';
 import { addOfficeRouter } from './routes/new-office';
 import { deleteOfficeRouter } from './routes/delete-office';
+import { availableResourcesRouter } from './routes/available-resources';
 
 /* Cors configuration */
 const corsOptions = {
@@ -47,6 +48,8 @@ app.use(newClientRouter);
 app.use(indexClientRouter);
 /* Update Client */
 app.use(updateClientRouter);
+/* Available Resources */
+app.use(availableResourcesRouter);
 /* Add office */
 app.use(addOfficeRouter);
 /* k8s Liveness / Readiness probes */

@@ -18,7 +18,6 @@ export class ResourceCreatedListener extends Listener<ResourceCreatedEvent> {
       office,
       loanTime,
       status,
-      version,
     } = data;
 
     const resource = Resource.build({
