@@ -10,6 +10,7 @@ export interface DocumentTypeAttrs {
   resourceType: string;
   disables: boolean;
   requiresPhoto: boolean;
+  expires: boolean;
 }
 
 /*
@@ -21,6 +22,7 @@ interface DocumentTypeDoc extends mongoose.Document {
   resourceType: string;
   disables: boolean;
   requiresPhoto: boolean;
+  expires: boolean;
 }
 
 /*
@@ -42,6 +44,10 @@ const documentTypeSchema = new mongoose.Schema(
       required: true,
     },
     disables: {
+      type: Boolean,
+      required: true,
+    },
+    expires: {
       type: Boolean,
       required: true,
     },

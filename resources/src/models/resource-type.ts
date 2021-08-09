@@ -1,5 +1,6 @@
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 import mongoose from 'mongoose';
+import { ComponentDoc } from './component';
 /*
  *   Interface that describes the properties
  *   that are required to create a new ResourceType
@@ -24,6 +25,7 @@ interface ResourceTypeDoc extends mongoose.Document {
   checkupTime: number;
   measureIndicators: boolean;
   photo: string;
+  components?: ComponentDoc[];
 }
 
 /*
