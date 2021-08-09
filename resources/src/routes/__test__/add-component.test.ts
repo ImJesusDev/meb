@@ -1,6 +1,5 @@
 import request from 'supertest';
 import { app } from '../../app';
-import mongoose from 'mongoose';
 import { ResourceType } from '../../models/resource-type';
 
 const getResourceType = async () => {

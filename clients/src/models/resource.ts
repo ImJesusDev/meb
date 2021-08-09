@@ -7,6 +7,7 @@ import { ResourceStatus } from '@movers/common';
  *   that are required to create a new Resource
  */
 interface ResourceAttrs {
+  id: string;
   type: string;
   reference: string;
   qrCode: string;
@@ -30,6 +31,7 @@ interface ResourceDoc extends mongoose.Document {
   office: string;
   loanTime: number;
   status: ResourceStatus;
+  version: number;
 }
 
 /*
@@ -38,6 +40,10 @@ interface ResourceDoc extends mongoose.Document {
  */
 interface ResourceModel extends mongoose.Model<ResourceDoc> {
   build(attrs: ResourceAttrs): ResourceDoc;
+  findByEvent(event: {
+    id: string;
+    version: number;
+  }): Promise<ResourceDoc | null>;
 }
 
 const resourceSchema = new mongoose.Schema(
@@ -90,29 +96,32 @@ const resourceSchema = new mongoose.Schema(
 );
 resourceSchema.set('versionKey', 'version');
 resourceSchema.plugin(updateIfCurrentPlugin);
-resourceSchema.statics.build = (attrs: ResourceAttrs) => {
-  return new Resource(attrs);
-};
 
+resourceSchema.statics.build = (attrs: ResourceAttrs) => {
+  return new Resource({
+    _id: attrs.id,
+    type: attrs.type,
+    reference: attrs.reference,
+    qrCode: attrs.qrCode,
+    lockerPassword: attrs.lockerPassword,
+    client: attrs.client,
+    office: attrs.office,
+    loanTime: attrs.loanTime,
+    status: attrs.status,
+  });
+};
+resourceSchema.statics.findByEvent = (event: {
+  id: string;
+  version: number;
+}) => {
+  return Resource.findOne({
+    _id: event.id,
+    version: event.version - 1,
+  });
+};
 const Resource = mongoose.model<ResourceDoc, ResourceModel>(
   'Resource',
   resourceSchema
 );
-// Add virtuals to populate documents
-resourceSchema.virtual('documents', {
-  ref: 'Document',
-  localField: 'reference',
-  foreignField: 'resourceReference',
-  justOne: false, // Set to false to return many
-  options: { sort: { name: -1 } },
-});
-// Add virtuals to populate checkups
-resourceSchema.virtual('checkups', {
-  ref: 'Checkup',
-  localField: 'reference',
-  foreignField: 'resourceRef',
-  justOne: false, // Set to false to return many
-  options: { sort: { name: -1 } },
-});
 
 export { Resource };

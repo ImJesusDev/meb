@@ -1,9 +1,18 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import { requireAuth, validateRequest, BadRequestError } from '@movers/common';
+import {
+  requireAuth,
+  validateRequest,
+  BadRequestError,
+  ResourceStatus,
+} from '@movers/common';
 import { Resource } from '../models/resource';
 import { ResourceType } from '../models/resource-type';
 import { Document, DocumentAttrs } from '../models/document';
+import { checkupQueue } from '../queues/checkup-queue';
+import { natsClient } from '../nats';
+import { ResourceCreatedPublisher } from '../events/publishers/resource-created-publisher';
+
 const router = express.Router();
 
 router.post(
@@ -66,8 +75,37 @@ router.post(
       client,
       office,
       loanTime,
+      status: ResourceStatus.Available,
     });
+
     await resource.save();
+
+    await new ResourceCreatedPublisher(natsClient.client).publish({
+      id: resource.id,
+      type: resource.type,
+      reference: resource.reference,
+      qrCode: resource.qrCode,
+      lockerPassword: resource.lockerPassword,
+      client: resource.client,
+      office: resource.office,
+      loanTime: resource.loanTime,
+      status: resource.status,
+    });
+
+    // Delay of days in ms
+    const delay = 1000 * 60 * 60 * 24 * existingType.checkupTime;
+
+    await checkupQueue.add(
+      {
+        resourceId: resource.id,
+      },
+      {
+        delay,
+      }
+    );
+
+    console.log(`Created checkup queue with delay ${delay}`);
+
     res.status(201).send(resource);
   }
 );

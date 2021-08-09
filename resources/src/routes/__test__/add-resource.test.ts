@@ -2,6 +2,9 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Resource } from '../../models/resource';
 import { ResourceType } from '../../models/resource-type';
+import { checkupQueue } from '../../queues/checkup-queue';
+import { natsClient } from '../../nats';
+
 beforeEach(async () => {
   const resourceType = ResourceType.build({
     resourceTypeBrand: 'Marca',
@@ -195,6 +198,8 @@ it('returns 201 code and creates resource when provided valid params', async () 
   expect(response.status).toEqual(201);
   resources = await Resource.find({});
   expect(resources.length).toEqual(1);
+  expect(checkupQueue.add).toHaveBeenCalled();
+  expect(natsClient.client.publish).toHaveBeenCalled();
 });
 
 it('disallows duplicate resources', async () => {

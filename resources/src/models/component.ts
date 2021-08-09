@@ -24,7 +24,7 @@ export interface ComponentAttrs {
  *   Interface that describes the properties
  *   that a Component Document has
  */
-interface ComponentDoc extends mongoose.Document {
+export interface ComponentDoc extends mongoose.Document {
   name: string;
   resourceType: string;
   componentBrand: string;

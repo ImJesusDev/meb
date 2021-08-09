@@ -11,6 +11,7 @@ declare global {
   }
 }
 jest.mock('../nats');
+jest.mock('../queues/checkup-queue');
 let mongo: any;
 beforeAll(async () => {
   process.env.JWT_KEY = 'asdf';
