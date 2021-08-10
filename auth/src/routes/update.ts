@@ -30,7 +30,17 @@ router.put(
   currentUser,
   requireAuth(),
   async (req: Request, res: Response) => {
-    const { password, firstName, lastName, client, office } = req.body;
+    const {
+      password,
+      firstName,
+      lastName,
+      client,
+      office,
+      mainTransportationMethod,
+      secondaryTransportationMethod,
+      phone,
+      photo,
+    } = req.body;
 
     const currentUser = req.currentUser;
 
@@ -46,6 +56,14 @@ router.put(
       lastName,
       client,
       office,
+      mainTransportationMethod: mainTransportationMethod
+        ? mainTransportationMethod
+        : user.mainTransportationMethod,
+      secondaryTransportationMethod: secondaryTransportationMethod
+        ? secondaryTransportationMethod
+        : user.secondaryTransportationMethod,
+      phone: phone ? phone : user.phone,
+      photo: photo ? photo : user.photo,
     });
 
     await user.save();
