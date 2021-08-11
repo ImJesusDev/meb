@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: travels-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: travels
+  template:
+    metadata:
+      labels:
+        app: travels
+    spec:
+      containers:
+        - name: travels
+          image: jdiaz740/meb-travels
+          startupProbe:
+            httpGet:
+              path: /api/travels/healthz
+              port: 3000
+            failureThreshold: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/travels/healthz
+              port: 3000
+            initialDelaySeconds: 3
+            failureThreshold: 10
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /api/travels/healthz
+              port: 3000
+            initialDelaySeconds: 3
+            failureThreshold: 10
+            periodSeconds: 3
+          env:
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: meb-nats
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MONGO_URI
+              value: 'mongodb://travels-mongo-srv:27017/travels'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: travels-srv
+spec:
+  selector:
+    app: travels
+  ports:
+    - name: travels
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

@@ -46,3 +46,10 @@ spec:
                 name: resources-srv
                 port:
                   number: 3000
+          - path: /api/travels/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: travels-srv
+                port:
+                  number: 3000
