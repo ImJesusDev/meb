@@ -3,11 +3,11 @@ import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 import { newTravelRouter } from './routes/new-travel';
-
+import { finishTravelRouter } from './routes/finish-travel';
 const cors = require('cors');
 
 /* Commons */
-import { errorHandler, NotFoundError } from '@movers/common';
+import { errorHandler, NotFoundError, currentUser } from '@movers/common';
 
 /* Cors configuration */
 const corsOptions = {
@@ -38,8 +38,9 @@ app.use(
     httpOnly: false,
   })
 );
-
+app.use(currentUser);
 app.use(newTravelRouter);
+app.use(finishTravelRouter);
 
 /* k8s Liveness / Readiness probes */
 app.get('/api/travels/healthz', (req, res) => {
