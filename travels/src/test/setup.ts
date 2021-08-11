@@ -3,13 +3,11 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 import { app } from '../app';
 import jwt from 'jsonwebtoken';
+
 declare global {
-  namespace NodeJS {
-    interface Global {
-      signin(): string[];
-    }
-  }
+  function signin(): string[];
 }
+
 jest.mock('../nats');
 let mongo: any;
 beforeAll(async () => {
