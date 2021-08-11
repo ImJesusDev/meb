@@ -44,7 +44,7 @@ it('returns error with invalid last name ', async (done) => {
   expect(response.status).toEqual(400);
   return done();
 });
-it('returns error with invalid password ', async (done) => {
+it.skip('returns error with invalid password ', async (done) => {
   const cookie = await global.signin();
   let response = await request(app)
     .put(`/api/users`)
