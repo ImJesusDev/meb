@@ -28,6 +28,8 @@ interface TravelDoc extends mongoose.Document {
   tracking?: [];
   status: TravelStatus;
   version: number;
+  createdAt: Date;
+  completedAt: Date;
 }
 
 /*
@@ -75,6 +77,10 @@ const travelSchema = new mongoose.Schema(
     createdAt: {
       type: mongoose.Schema.Types.Date,
       default: new Date(),
+    },
+    completedAt: {
+      type: mongoose.Schema.Types.Date,
+      required: false,
     },
   },
   {
