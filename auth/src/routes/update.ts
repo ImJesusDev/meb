@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
+/* JWT */
+import jwt from 'jsonwebtoken';
 /* Commons */
 import {
   BadRequestError,
@@ -63,6 +65,29 @@ router.put(
     });
 
     await user.save();
+
+    const userJwt = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        country: user.country,
+        city: user.city,
+        role: user.role,
+        status: user.status,
+        mainTransportationMethod: user.mainTransportationMethod,
+        secondaryTransportationMethod: user.secondaryTransportationMethod,
+        photo: user.photo,
+        client: user.client,
+        office: user.office,
+      },
+      process.env.JWT_KEY!
+    );
+
+    req.session = {
+      jwt: userJwt,
+    };
     res.status(200).send(user);
   }
 );
