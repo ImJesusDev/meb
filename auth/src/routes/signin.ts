@@ -46,6 +46,12 @@ router.post(
         city: existingUser.city,
         role: existingUser.role,
         status: existingUser.status,
+        mainTransportationMethod: existingUser.mainTransportationMethod,
+        secondaryTransportationMethod:
+          existingUser.secondaryTransportationMethod,
+        photo: existingUser.photo,
+        client: existingUser.client,
+        office: existingUser.office,
       },
       process.env.JWT_KEY!
     );
