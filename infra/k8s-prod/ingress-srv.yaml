@@ -41,6 +41,11 @@ spec:
             backend:
               serviceName: resources-srv
               servicePort: 3000
+          - path: /api/travels/?(.*)
+            pathType: Prefix
+            backend:
+              serviceName: travels-srv
+              servicePort: 3000
 ---
 # Source: ingress-nginx/templates/controller-service.yaml
 apiVersion: v1

@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: travels-mongo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: travels-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: travels-mongo
+  template:
+    metadata:
+      labels:
+        app: travels-mongo
+    spec:
+      volumes:
+        - name: mongo-storage
+          persistentVolumeClaim:
+              claimName: travels-mongo-pvc
+      containers:
+        - name: travels-mongo
+          image: mongo
+          volumeMounts:
+          - name: mongo-storage
+            mountPath: /data/db
+            subPath: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: travels-mongo-srv
+spec:
+  selector:
+    app: travels-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
