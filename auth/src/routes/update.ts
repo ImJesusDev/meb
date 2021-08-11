@@ -21,10 +21,6 @@ router.put(
     body('client').not().isEmpty().withMessage('El cliente es requerido'),
     body('office').not().isEmpty().withMessage('La sede es requerida'),
     body('lastName').not().isEmpty().withMessage('El apellido es requerido'),
-    body('password')
-      .trim()
-      .isLength({ min: 4, max: 20 })
-      .withMessage('La contraseña debe de tener entre 4 y 20 caracteres'),
   ],
   validateRequest,
   currentUser,
@@ -51,7 +47,6 @@ router.put(
     }
 
     user.set({
-      password,
       firstName,
       lastName,
       client,
@@ -64,6 +59,7 @@ router.put(
         : user.secondaryTransportationMethod,
       phone: phone ? phone : user.phone,
       photo: photo ? photo : user.photo,
+      password: password ? password : user.password,
     });
 
     await user.save();
