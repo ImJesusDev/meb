@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/api/resources/find/:id', async (req: Request, res: Response) => {
   const resource = await Resource.findById(req.params.id).populate([
     'documents',
+    'checkups',
   ]);
   if (!resource) {
     throw new NotFoundError();
