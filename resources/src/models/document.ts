@@ -72,5 +72,5 @@ const Document = mongoose.model<DocumentDoc, DocumentModel>(
   'Document',
   DocumentSchema
 );
-
+console.log('registered');
 export { Document };
