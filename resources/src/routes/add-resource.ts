@@ -48,7 +48,7 @@ router.post(
       loanTime,
     } = req.body;
     const documents = req.body.documents as DocumentAttrs[];
-
+    const existingDocs = await Document.find({});
     const existingResource = await Resource.findOne({ reference });
     if (existingResource) {
       throw new BadRequestError('The reference already exists');
@@ -90,6 +90,7 @@ router.post(
       office: resource.office,
       loanTime: resource.loanTime,
       status: resource.status,
+      version: resource.version,
     });
 
     // Delay of days in ms

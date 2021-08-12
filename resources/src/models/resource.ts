@@ -30,6 +30,7 @@ interface ResourceDoc extends mongoose.Document {
   office: string;
   loanTime: number;
   status: ResourceStatus;
+  version: number;
 }
 
 /*
