@@ -4,12 +4,9 @@ import request from 'supertest';
 import { app } from '../app';
 import jwt from 'jsonwebtoken';
 declare global {
-  namespace NodeJS {
-    interface Global {
-      signin(): string[];
-    }
-  }
+  function signin(): string[];
 }
+
 jest.mock('../nats');
 jest.mock('../queues/checkup-queue');
 let mongo: any;

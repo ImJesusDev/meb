@@ -4,17 +4,17 @@ import mongoose from 'mongoose';
 import { Resource } from '../../models/resource';
 import { ResourceType } from '../../models/resource-type';
 import { Component } from '../../models/component';
-import { Checkup } from '../../models/checkup';
-import { CheckupStatus, ResourceStatus } from '@movers/common';
+import { Maintenance } from '../../models/maintenance';
+import { MaintenanceStatus, ResourceStatus } from '@movers/common';
 import { natsClient } from '../../nats';
-const getCheckup = async () => {
-  const checkup = Checkup.build({
+const getMaintenance = async () => {
+  const maintenance = Maintenance.build({
     resourceRef: '0001',
     createdAt: new Date(),
-    status: CheckupStatus.Pending,
+    status: MaintenanceStatus.Pending,
   });
-  await checkup.save();
-  return checkup;
+  await maintenance.save();
+  return maintenance;
 };
 const getResource = async () => {
   const resourceType = ResourceType.build({
@@ -57,10 +57,10 @@ const getComponent = async () => {
   await component.save();
   return component;
 };
-it('has a PUT route handler for /api/resources/:id/checkup ', async () => {
+it('has a PUT route handler for /api/resources/:id/maintenances ', async () => {
   const resource = await getResource();
   const response = await request(app)
-    .put(`/api/resources/${resource.id}/checkups`)
+    .put(`/api/resources/${resource.id}/maintenances`)
     .send({});
   expect(response.status).not.toEqual(404);
 });
@@ -68,7 +68,7 @@ it('has a PUT route handler for /api/resources/:id/checkup ', async () => {
 it('can only be accessed by logged users', async () => {
   const resource = await getResource();
   const response = await request(app)
-    .put(`/api/resources/${resource.id}/checkups`)
+    .put(`/api/resources/${resource.id}/maintenances`)
     .send({});
   expect(response.status).toEqual(401);
 });
@@ -77,7 +77,7 @@ it('returns status other than 401 if the user is logged in', async () => {
   const cookie = global.signin();
   const resource = await getResource();
   const response = await request(app)
-    .put(`/api/resources/${resource.id}/checkups`)
+    .put(`/api/resources/${resource.id}/maintenances`)
     .set('Cookie', cookie)
     .send({});
   expect(response.status).not.toEqual(401);
@@ -87,7 +87,7 @@ it('returns an error when the resource does not exists', async () => {
   const cookie = global.signin();
   const id = mongoose.Types.ObjectId().toHexString();
   const response = await request(app)
-    .put(`/api/resources/${id}/checkups`)
+    .put(`/api/resources/${id}/maintenances`)
     .set('Cookie', cookie)
     .send({});
   expect(response.status).toEqual(400);
@@ -96,12 +96,12 @@ it('returns an error when the resource does not exists', async () => {
 it('returns an error when the components param is not provided', async () => {
   const cookie = global.signin();
   const resource = await getResource();
-  const checkup = await getCheckup();
+  const maintenance = await getMaintenance();
   const response = await request(app)
-    .put(`/api/resources/${resource.id}/checkups`)
+    .put(`/api/resources/${resource.id}/maintenances`)
     .set('Cookie', cookie)
     .send({
-      checkupId: checkup.id,
+      maintenanceId: maintenance.id,
     });
   expect(response.status).toEqual(400);
 });
@@ -109,12 +109,12 @@ it('returns an error when the components param is not provided', async () => {
 it('returns an error when the components param is invalid', async () => {
   const cookie = global.signin();
   const resource = await getResource();
-  const checkup = await getCheckup();
+  const maintenance = await getMaintenance();
   const response = await request(app)
-    .put(`/api/resources/${resource.id}/checkups`)
+    .put(`/api/resources/${resource.id}/maintenances`)
     .set('Cookie', cookie)
     .send({
-      checkupId: checkup.id,
+      maintenanceId: maintenance.id,
       components: 'invalid',
     });
   expect(response.status).toEqual(400);
@@ -123,12 +123,12 @@ it('returns an error when the components param is invalid', async () => {
 it('returns an error when the components param does not includes component id', async () => {
   const cookie = global.signin();
   const resource = await getResource();
-  const checkup = await getCheckup();
+  const maintenance = await getMaintenance();
   const response = await request(app)
-    .put(`/api/resources/${resource.id}/checkups`)
+    .put(`/api/resources/${resource.id}/maintenances`)
     .set('Cookie', cookie)
     .send({
-      checkupId: checkup.id,
+      maintenanceId: maintenance.id,
       components: [
         {
           status: 'Bueno',
@@ -143,12 +143,12 @@ it('returns an error when the components param does not includes status', async 
   const cookie = global.signin();
   const resource = await getResource();
   const component = await getComponent();
-  const checkup = await getCheckup();
+  const maintenance = await getMaintenance();
   const response = await request(app)
-    .put(`/api/resources/${resource.id}/checkups`)
+    .put(`/api/resources/${resource.id}/maintenances`)
     .set('Cookie', cookie)
     .send({
-      checkupId: checkup.id,
+      maintenanceId: maintenance.id,
       components: [
         {
           componentId: component.id,
@@ -163,12 +163,12 @@ it('returns an error when the components param does not includes component name'
   const cookie = global.signin();
   const resource = await getResource();
   const component = await getComponent();
-  const checkup = await getCheckup();
+  const maintenance = await getMaintenance();
   const response = await request(app)
-    .put(`/api/resources/${resource.id}/checkups`)
+    .put(`/api/resources/${resource.id}/maintenances`)
     .set('Cookie', cookie)
     .send({
-      checkupId: checkup.id,
+      maintenanceId: maintenance.id,
       components: [
         {
           componentId: component.id,
@@ -182,13 +182,13 @@ it('returns an error when the components param does not includes component name'
 it('returns an error when the component does not exists', async () => {
   const cookie = global.signin();
   const resource = await getResource();
-  const checkup = await getCheckup();
+  const maintenance = await getMaintenance();
   const id = mongoose.Types.ObjectId().toHexString();
   const response = await request(app)
-    .put(`/api/resources/${resource.id}/checkups`)
+    .put(`/api/resources/${resource.id}/maintenances`)
     .set('Cookie', cookie)
     .send({
-      checkupId: checkup.id,
+      maintenanceId: maintenance.id,
       components: [
         {
           componentId: id,
@@ -200,12 +200,12 @@ it('returns an error when the component does not exists', async () => {
   expect(response.status).toEqual(400);
 });
 
-it('returns an error when the checkupId param is not provide', async () => {
+it('returns an error when the maintenanceId param is not provide', async () => {
   const cookie = global.signin();
   const resource = await getResource();
   const component = await getComponent();
   const response = await request(app)
-    .put(`/api/resources/${resource.id}/checkups`)
+    .put(`/api/resources/${resource.id}/maintenances`)
     .set('Cookie', cookie)
     .send({
       components: [
@@ -220,18 +220,18 @@ it('returns an error when the checkupId param is not provide', async () => {
   expect(response.status).toEqual(400);
 });
 
-it('returns status 201 and creates checkup when given valid params', async () => {
-  let checkups = await Checkup.find({});
-  expect(checkups.length).toEqual(0);
-  const checkup = await getCheckup();
+it('returns status 201 and creates maintenance when given valid params', async () => {
+  let maintenances = await Maintenance.find({});
+  expect(maintenances.length).toEqual(0);
+  const maintenance = await getMaintenance();
   const cookie = global.signin();
   const resource = await getResource();
   const component = await getComponent();
   const response = await request(app)
-    .put(`/api/resources/${resource.id}/checkups`)
+    .put(`/api/resources/${resource.id}/maintenances`)
     .set('Cookie', cookie)
     .send({
-      checkupId: checkup.id,
+      maintenanceId: maintenance.id,
       components: [
         {
           componentId: component.id,
@@ -241,7 +241,7 @@ it('returns status 201 and creates checkup when given valid params', async () =>
       ],
     });
   expect(response.status).toEqual(201);
-  checkups = await Checkup.find({});
-  expect(checkups.length).toEqual(1);
+  maintenances = await Maintenance.find({});
+  expect(maintenances.length).toEqual(1);
   expect(natsClient.client.publish).toHaveBeenCalled();
 });
