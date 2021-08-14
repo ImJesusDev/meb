@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import { Resource } from '../../models/resource';
 import { ResourceType } from '../../models/resource-type';
 import { Component } from '../../models/component';
-import { Checkup } from '../../models/checkup';
+import { Repair } from '../../models/repair';
 import { ResourceStatus } from '@movers/common';
 import { natsClient } from '../../nats';
 const getResource = async () => {
@@ -48,10 +48,10 @@ const getResource = async () => {
   return resource;
 };
 
-it('has a POST route handler for /api/resources/:id/checkups ', async () => {
+it('has a POST route handler for /api/resources/:id/repairs ', async () => {
   const resource = await getResource();
   const response = await request(app)
-    .post(`/api/resources/${resource.id}/checkups`)
+    .post(`/api/resources/${resource.id}/repairs`)
     .send({});
   expect(response.status).not.toEqual(404);
 });
@@ -59,7 +59,7 @@ it('has a POST route handler for /api/resources/:id/checkups ', async () => {
 it('can only be accessed by logged users', async () => {
   const resource = await getResource();
   const response = await request(app)
-    .post(`/api/resources/${resource.id}/checkups`)
+    .post(`/api/resources/${resource.id}/repairs`)
     .send({});
   expect(response.status).toEqual(401);
 });
@@ -68,7 +68,7 @@ it('returns status other than 401 if the user is logged in', async () => {
   const cookie = global.signin();
   const resource = await getResource();
   const response = await request(app)
-    .post(`/api/resources/${resource.id}/checkups`)
+    .post(`/api/resources/${resource.id}/repairs`)
     .set('Cookie', cookie)
     .send({});
   expect(response.status).not.toEqual(401);
@@ -78,23 +78,23 @@ it('returns an error when the resource does not exists', async () => {
   const cookie = global.signin();
   const id = mongoose.Types.ObjectId().toHexString();
   const response = await request(app)
-    .post(`/api/resources/${id}/checkups`)
+    .post(`/api/resources/${id}/repairs`)
     .set('Cookie', cookie)
     .send({});
   expect(response.status).toEqual(400);
 });
 
-it('returns status 201 and creates checkup when given valid params', async () => {
-  let checkups = await Checkup.find({});
-  expect(checkups.length).toEqual(0);
+it('returns status 201 and creates repair when given valid params', async () => {
+  let repairs = await Repair.find({});
+  expect(repairs.length).toEqual(0);
   const cookie = global.signin();
   const resource = await getResource();
   const response = await request(app)
-    .post(`/api/resources/${resource.id}/checkups`)
+    .post(`/api/resources/${resource.id}/repairs`)
     .set('Cookie', cookie)
     .send({});
   expect(response.status).toEqual(201);
-  checkups = await Checkup.find({});
-  expect(checkups.length).toEqual(1);
+  repairs = await Repair.find({});
+  expect(repairs.length).toEqual(1);
   expect(natsClient.client.publish).toHaveBeenCalled();
 });

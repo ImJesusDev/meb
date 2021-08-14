@@ -2,20 +2,21 @@ import {
   BadRequestError,
   requireAuth,
   validateRequest,
-  CheckupStatus,
   ResourceStatus,
+  MaintenanceStatus,
 } from '@movers/common';
 import express, { Request, Response } from 'express';
 import { Resource } from '../models/resource';
 import { ResourceType } from '../models/resource-type';
-import { Component } from '../models/component';
-import { Checkup, ComponentCheckupAttrs } from '../models/checkup';
+
+import { Maintenance, ComponentMaintenanceAttrs } from '../models/maintenance';
 import { ResourceUpdatedPublisher } from '../events/publishers/resource-updated-publisher';
 import { natsClient } from '../nats';
+
 const router = express.Router();
 
 router.post(
-  '/api/resources/:id/checkups',
+  '/api/resources/:id/maintenances',
   requireAuth(),
   async (req: Request, res: Response) => {
     const resource = await Resource.findById(req.params.id);
@@ -27,7 +28,7 @@ router.post(
       type: resource.type,
     }).populate(['components']);
 
-    const components: ComponentCheckupAttrs[] = [];
+    const components: ComponentMaintenanceAttrs[] = [];
     if (existingType && existingType.components) {
       for (const component of existingType.components) {
         components.push({
@@ -37,17 +38,17 @@ router.post(
       }
     }
 
-    const checkup = Checkup.build({
+    const maintenance = Maintenance.build({
       resourceRef: resource.reference,
       createdAt: new Date(),
       components,
-      status: CheckupStatus.Pending,
+      status: MaintenanceStatus.Pending,
     });
 
-    await checkup.save();
+    await maintenance.save();
 
     resource.set({
-      status: ResourceStatus.PendingCheckup,
+      status: ResourceStatus.PendingMaintenance,
     });
 
     await resource.save();
@@ -57,7 +58,7 @@ router.post(
       version: resource.version,
     });
 
-    res.status(201).send(checkup);
+    res.status(201).send(maintenance);
   }
 );
 

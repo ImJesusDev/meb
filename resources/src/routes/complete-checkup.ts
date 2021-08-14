@@ -13,6 +13,8 @@ import { Checkup, ComponentCheckupAttrs } from '../models/checkup';
 import { body } from 'express-validator';
 import { checkupQueue } from '../queues/checkup-queue';
 import { ResourceType } from '../models/resource-type';
+import { ResourceUpdatedPublisher } from '../events/publishers/resource-updated-publisher';
+import { natsClient } from '../nats';
 
 const router = express.Router();
 
@@ -114,6 +116,11 @@ router.put(
     });
 
     await resource.save();
+    await new ResourceUpdatedPublisher(natsClient.client).publish({
+      id: resource.id,
+      status: resource.status,
+      version: resource.version,
+    });
     // Delay of days in ms
     const delay = 1000 * 60 * 60 * 24 * existingType.checkupTime;
 
