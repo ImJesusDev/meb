@@ -6,7 +6,7 @@ import { ResourceStatus } from '@movers/common';
  *   Interface that describes the properties
  *   that are required to create a new Resource
  */
-interface ResourceAttrs {
+export interface ResourceAttrs {
   type: string;
   reference: string;
   qrCode: string;
