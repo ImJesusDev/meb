@@ -12,6 +12,7 @@ import { Document, DocumentAttrs } from '../models/document';
 import { checkupQueue } from '../queues/checkup-queue';
 import { natsClient } from '../nats';
 import { ResourceCreatedPublisher } from '../events/publishers/resource-created-publisher';
+import QRCode from 'qrcode';
 
 const router = express.Router();
 
@@ -67,6 +68,7 @@ router.post(
     if (!existingType) {
       throw new BadRequestError('The resource type does not exists');
     }
+
     const resource = Resource.build({
       type,
       reference,
@@ -78,6 +80,12 @@ router.post(
       status: ResourceStatus.Available,
     });
 
+    await resource.save();
+    const url = `https://meb.moversapp.co/api/resources/find/${resource.id}`;
+    const generatedCode = await QRCode.toDataURL(url);
+    resource.set({
+      qrCode: generatedCode,
+    });
     await resource.save();
 
     await new ResourceCreatedPublisher(natsClient.client).publish({
