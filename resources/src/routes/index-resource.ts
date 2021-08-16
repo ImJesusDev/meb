@@ -19,7 +19,7 @@ router.get(
     const resources = await Resource.find({})
       .skip(Number(skip))
       .limit(Number(perPage))
-      .populate(['documents']);
+      .populate(['documents', 'checkups']);
 
     res.status(200).send(resources);
   }
