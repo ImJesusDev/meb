@@ -6,6 +6,9 @@ interface QueryParams {
   page: number;
   perPage: number;
   status: string;
+  client: string;
+  office: string;
+  type: string;
 }
 
 interface Params {
@@ -16,9 +19,14 @@ router.get(
   async (req: Request<Params, {}, {}, QueryParams>, res: Response) => {
     let query: any = {};
     const status = req.query.status;
-    if (status) {
-      query['status'] = status;
-    }
+    const client = req.query.client;
+    const office = req.query.office;
+    const type = req.query.type;
+    if (status) query['status'] = status;
+    if (client) query['client'] = client;
+    if (office) query['office'] = office;
+    if (type) query['type'] = type;
+
     let perPage = req.query.perPage ? req.query.perPage : 50;
     let skip = req.query.page ? (Math.max(0, req.query.page) - 1) * perPage : 0;
 
