@@ -25,5 +25,5 @@ it('it can fetch a list of resources', async () => {
   await resource.save();
 
   const response = await request(app).get(`/api/resources`).send().expect(200);
-  expect(response.body.length).toEqual(1);
+  expect(response.body.resources.length).toEqual(1);
 });
