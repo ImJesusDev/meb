@@ -10,6 +10,7 @@ export interface DocumentAttrs {
   resourceReference: string;
   expeditionDate: Date;
   expirationDate?: Date;
+  documentNumber?: string;
 }
 
 /*
@@ -21,6 +22,7 @@ interface DocumentDoc extends mongoose.Document {
   resourceReference: string;
   expeditionDate: Date;
   expirationDate?: Date;
+  documentNumber?: string;
 }
 
 /*
@@ -40,6 +42,10 @@ const DocumentSchema = new mongoose.Schema(
     resourceReference: {
       type: String,
       required: true,
+    },
+    documentNumber: {
+      type: String,
+      required: false,
     },
     expeditionDate: {
       type: mongoose.Schema.Types.Date,
