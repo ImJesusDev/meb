@@ -3,7 +3,7 @@ import { Checkup } from '../models/checkup';
 
 const router = express.Router();
 
-router.post(
+router.get(
   '/api/resources/checkups-history',
   async (req: Request<{}, {}, {}, any>, res: Response) => {
     let perPage = req.query.perPage ? req.query.perPage : 50;
