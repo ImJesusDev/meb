@@ -21,6 +21,7 @@ export interface ComponentMaintenanceAttrs {
   status?: ComponentStatus;
   componentName: string;
   photo?: string;
+  comment?: string;
 }
 /*
  *   Interface that describes the properties
@@ -68,6 +69,7 @@ const maintenanceSchema = new mongoose.Schema(
         status: { type: String, required: false },
         componentName: { type: String, required: true },
         photo: { type: String, required: false },
+        comment: { type: String, required: false },
       },
     ],
   },
