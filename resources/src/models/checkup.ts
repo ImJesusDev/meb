@@ -21,6 +21,7 @@ export interface ComponentCheckupAttrs {
   status?: ComponentStatus;
   componentName: string;
   photo?: string;
+  comment?: string;
 }
 /*
  *   Interface that describes the properties
@@ -68,6 +69,7 @@ const checkupSchema = new mongoose.Schema(
         status: { type: String, required: false },
         componentName: { type: String, required: true },
         photo: { type: String, required: false },
+        comment: { type: String, required: false },
       },
     ],
   },
@@ -92,5 +94,13 @@ const Checkup = mongoose.model<CheckupDoc, CheckupModel>(
   'Checkup',
   checkupSchema
 );
+
+// Add virtuals to populate checkups
+checkupSchema.virtual('resource', {
+  ref: 'Resource',
+  localField: 'resourceRef',
+  foreignField: 'reference',
+  justOne: true,
+});
 
 export { Checkup };
