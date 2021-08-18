@@ -8,6 +8,7 @@ it('returns 200 code and updates document type', async () => {
     resourceTypeBrand: 'brand',
     resourceTypeModel: 'model',
     checkupTime: 20,
+    kmToMaintenance: 20,
     photo: 'no photo',
     type: 'type',
     measureIndicators: true,

@@ -7,6 +7,7 @@ const getResourceType = async () => {
     resourceTypeBrand: 'Marca',
     resourceTypeModel: 'Modelo',
     checkupTime: 20,
+    kmToMaintenance: 20,
     photo: 'Photo',
     type: 'Bicicleta',
     measureIndicators: true,

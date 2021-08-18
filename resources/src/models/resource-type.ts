@@ -10,6 +10,7 @@ interface ResourceTypeAttrs {
   resourceTypeBrand: string;
   resourceTypeModel: string;
   checkupTime: number;
+  kmToMaintenance: number;
   photo: string;
   measureIndicators: boolean;
 }
@@ -23,6 +24,7 @@ interface ResourceTypeDoc extends mongoose.Document {
   resourceTypeBrand: string;
   resourceTypeModel: string;
   checkupTime: number;
+  kmToMaintenance: number;
   measureIndicators: boolean;
   photo: string;
   components?: ComponentDoc[];
@@ -51,6 +53,10 @@ const resourceTypeSchema = new mongoose.Schema(
       required: true,
     },
     checkupTime: {
+      type: Number,
+      required: true,
+    },
+    kmToMaintenance: {
       type: Number,
       required: true,
     },
