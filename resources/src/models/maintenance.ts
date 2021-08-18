@@ -89,7 +89,13 @@ maintenanceSchema.plugin(updateIfCurrentPlugin);
 maintenanceSchema.statics.build = (attrs: MaintenanceAttrs) => {
   return new Maintenance(attrs);
 };
-
+// Add virtuals to populate checkups
+maintenanceSchema.virtual('resource', {
+  ref: 'Resource',
+  localField: 'resourceRef',
+  foreignField: 'reference',
+  justOne: true,
+});
 const Maintenance = mongoose.model<MaintenanceDoc, MaintenanceModel>(
   'Maintenance',
   maintenanceSchema
