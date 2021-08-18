@@ -20,6 +20,7 @@ it('returns a status other than 401 if the user is signed in', async () => {
   expect(response.status).not.toEqual(401);
 });
 it('returns an error with invalid origin', async () => {
+  const reservationId = mongoose.Types.ObjectId().toString();
   await request(app)
     .post('/api/travels')
     .set('Cookie', global.signin())
@@ -27,10 +28,12 @@ it('returns an error with invalid origin', async () => {
       origin: '',
       destination: 'Calle 80',
       resourceRef: '0001',
+      reservationId: reservationId,
     })
     .expect(400);
 });
 it('returns an error with invalid destination', async () => {
+  const reservationId = mongoose.Types.ObjectId().toString();
   await request(app)
     .post('/api/travels')
     .set('Cookie', global.signin())
@@ -38,11 +41,13 @@ it('returns an error with invalid destination', async () => {
       origin: 'Calle 100',
       destination: '',
       resourceRef: '0001',
+      reservationId: reservationId,
     })
     .expect(400);
 });
 
 it('returns an error with invalid destination', async () => {
+  const reservationId = mongoose.Types.ObjectId().toString();
   const response = await request(app)
     .post('/api/travels')
     .set('Cookie', global.signin())
@@ -50,11 +55,13 @@ it('returns an error with invalid destination', async () => {
       origin: 'Calle 100',
       destination: 'Calle 80',
       resourceRef: '',
+      reservationId: reservationId,
     })
     .expect(400);
 });
 
 it('returns 201 and creates a new travel', async () => {
+  const reservationId = mongoose.Types.ObjectId().toString();
   let travels = await Travel.find({});
   expect(travels.length).toEqual(0);
   const response = await request(app)
@@ -64,6 +71,7 @@ it('returns 201 and creates a new travel', async () => {
       origin: 'Calle 100',
       destination: 'Calle 80',
       resourceRef: '001',
+      reservationId: reservationId,
     });
   expect(response.status).toEqual(201);
   travels = await Travel.find({});
