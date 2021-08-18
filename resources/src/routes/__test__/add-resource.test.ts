@@ -10,6 +10,7 @@ beforeEach(async () => {
     resourceTypeBrand: 'Marca',
     resourceTypeModel: 'Modelo',
     checkupTime: 20,
+    kmToMaintenance: 20,
     photo: 'photo',
     type: 'Bicicleta',
     measureIndicators: true,

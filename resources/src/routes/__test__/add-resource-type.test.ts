@@ -34,6 +34,7 @@ it('returns an error when no type is provided', async () => {
       brand: 'Marca',
       model: 'Modelo',
       checkupTime: 20,
+      kmToMaintenance: 20,
       measureIndicators: true,
       photo: 'https://myimages.com/brand.png',
     });
@@ -49,6 +50,7 @@ it('returns an error when no brand is provided', async () => {
       type: 'Tipo',
       model: 'Modelo',
       checkupTime: 20,
+      kmToMaintenance: 20,
       measureIndicators: true,
       photo: 'https://myimages.com/brand.png',
     });
@@ -64,6 +66,7 @@ it('returns an error when no model is provided', async () => {
       type: 'Tipo',
       brand: 'Marca',
       checkupTime: 20,
+      kmToMaintenance: 20,
       measureIndicators: true,
       photo: 'https://myimages.com/brand.png',
     });
@@ -80,6 +83,7 @@ it('returns an error when no checkupTime is provided', async () => {
       brand: 'Marca',
       model: 'Modelo',
       measureIndicators: true,
+      kmToMaintenance: 20,
       photo: 'https://myimages.com/brand.png',
     });
   expect(response.status).toEqual(400);
@@ -95,6 +99,38 @@ it('returns an error when invalid checkupTime is provided', async () => {
       model: 'Modelo',
       measureIndicators: true,
       checkupTime: 'Invalid',
+      kmToMaintenance: 20,
+      photo: 'https://myimages.com/brand.png',
+    });
+  expect(response.status).toEqual(400);
+});
+it('returns an error when no kmToMaintenance is provided', async () => {
+  const cookie = global.signin();
+  const response = await request(app)
+    .post('/api/resources/resource-types')
+    .set('Cookie', cookie)
+    .send({
+      type: 'Tipo',
+      brand: 'Marca',
+      model: 'Modelo',
+      measureIndicators: true,
+      checkupTime: 20,
+      photo: 'https://myimages.com/brand.png',
+    });
+  expect(response.status).toEqual(400);
+});
+it('returns an error when invalid kmToMaintenance is provided', async () => {
+  const cookie = global.signin();
+  const response = await request(app)
+    .post('/api/resources/resource-types')
+    .set('Cookie', cookie)
+    .send({
+      type: 'Tipo',
+      brand: 'Marca',
+      model: 'Modelo',
+      measureIndicators: true,
+      checkupTime: 20,
+      kmToMaintenance: 'invalid',
       photo: 'https://myimages.com/brand.png',
     });
   expect(response.status).toEqual(400);
@@ -110,6 +146,7 @@ it('returns an error when no measureIndicators is provided', async () => {
       brand: 'Marca',
       model: 'Modelo',
       checkupTime: 20,
+      kmToMaintenance: 20,
       photo: 'https://myimages.com/brand.png',
     });
   expect(response.status).toEqual(400);
@@ -126,6 +163,7 @@ it('returns an error when invalid measureIndicators is provided', async () => {
       model: 'Modelo',
       measureIndicators: 'Invalid',
       checkupTime: 20,
+      kmToMaintenance: 20,
       photo: 'https://myimages.com/brand.png',
     });
   expect(response.status).toEqual(400);
@@ -142,6 +180,7 @@ it('returns an error when no photo is provided', async () => {
       model: 'Modelo',
       measureIndicators: true,
       checkupTime: 20,
+      kmToMaintenance: 20,
     });
   expect(response.status).toEqual(400);
 });
@@ -158,6 +197,7 @@ it('returns 201 code and creates resource type when provided valid params', asyn
       brand: 'Marca',
       model: 'Modelo',
       checkupTime: 20,
+      kmToMaintenance: 20,
       measureIndicators: true,
       photo: 'https://myimages.com/brand.png',
     });
@@ -172,6 +212,7 @@ it('disallows duplicate types', async () => {
     brand: 'Marca',
     model: 'Modelo',
     checkupTime: 20,
+    kmToMaintenance: 20,
     measureIndicators: true,
     photo: 'https://myimages.com/brand.png',
   };

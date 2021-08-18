@@ -7,6 +7,7 @@ it('returns 204 code and deletes resource type', async () => {
     resourceTypeBrand: 'brand',
     resourceTypeModel: 'model',
     checkupTime: 20,
+    kmToMaintenance: 20,
     photo: 'no photo',
     type: 'type',
     measureIndicators: true,

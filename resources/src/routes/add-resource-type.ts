@@ -31,6 +31,13 @@ router.post(
     body('checkupTime')
       .isNumeric()
       .withMessage('The checkup time of the resource is required.'),
+    body('kmToMaintenance')
+      .not()
+      .isEmpty()
+      .withMessage('The kmToMaintenance time of the resource is required.'),
+    body('kmToMaintenance')
+      .isNumeric()
+      .withMessage('The kmToMaintenance time of the resource is required.'),
     body('photo')
       .not()
       .isEmpty()
@@ -38,8 +45,15 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { brand, model, type, checkupTime, photo, measureIndicators } =
-      req.body;
+    const {
+      brand,
+      model,
+      type,
+      checkupTime,
+      kmToMaintenance,
+      photo,
+      measureIndicators,
+    } = req.body;
 
     const existingResourceType = await ResourceType.findOne({ type });
     if (existingResourceType) {
@@ -49,6 +63,7 @@ router.post(
       resourceTypeBrand: brand,
       resourceTypeModel: model,
       checkupTime,
+      kmToMaintenance,
       photo,
       type,
       measureIndicators,
