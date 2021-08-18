@@ -90,7 +90,7 @@ repairSchema.statics.build = (attrs: RepairAttrs) => {
   return new Repair(attrs);
 };
 // Add virtuals to populate checkups
-checkupSchema.virtual('resource', {
+repairSchema.virtual('resource', {
   ref: 'Resource',
   localField: 'resourceRef',
   foreignField: 'reference',
