@@ -90,11 +90,6 @@ checkupSchema.statics.build = (attrs: CheckupAttrs) => {
   return new Checkup(attrs);
 };
 
-const Checkup = mongoose.model<CheckupDoc, CheckupModel>(
-  'Checkup',
-  checkupSchema
-);
-
 // Add virtuals to populate checkups
 checkupSchema.virtual('resource', {
   ref: 'Resource',
@@ -102,5 +97,10 @@ checkupSchema.virtual('resource', {
   foreignField: 'reference',
   justOne: true,
 });
+
+const Checkup = mongoose.model<CheckupDoc, CheckupModel>(
+  'Checkup',
+  checkupSchema
+);
 
 export { Checkup };
