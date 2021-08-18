@@ -15,16 +15,21 @@ router.post(
       .not()
       .isEmpty()
       .withMessage('Resource reference is required'),
+    body('reservationId')
+      .not()
+      .isEmpty()
+      .withMessage('Reservation id is required'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { origin, destination, resourceRef } = req.body;
+    const { origin, destination, resourceRef, reservationId } = req.body;
     const user = req.currentUser;
 
     const travel = Travel.build({
       origin,
       destination,
       resourceRef,
+      reservationId,
       status: TravelStatus.Pending,
       userId: user!.id,
     });

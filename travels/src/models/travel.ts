@@ -10,6 +10,7 @@ export interface TravelAttrs {
   origin: string;
   destination: string;
   resourceRef: string;
+  reservationId: string;
   userId: string;
   indicators?: [];
   tracking?: [];
@@ -23,6 +24,7 @@ interface TravelDoc extends mongoose.Document {
   origin: string;
   destination: string;
   resourceRef: string;
+  reservationId: string;
   userId: string;
   indicators?: [];
   tracking?: [];
@@ -53,6 +55,10 @@ const travelSchema = new mongoose.Schema(
     resourceRef: {
       type: String,
       required: false,
+    },
+    reservationId: {
+      type: String,
+      required: true,
     },
     userId: {
       type: String,
