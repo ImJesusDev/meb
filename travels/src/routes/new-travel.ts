@@ -2,7 +2,8 @@ import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Travel } from '../models/travel';
 import { requireAuth, validateRequest, TravelStatus } from '@movers/common';
-
+import { TravelCreatedPublisher } from '../events/publishers/travel-created-publisher';
+import { natsClient } from '../nats';
 const router = express.Router();
 
 router.post(
@@ -34,6 +35,15 @@ router.post(
       userId: user!.id,
     });
     await travel.save();
+
+    await new TravelCreatedPublisher(natsClient.client).publish({
+      id: travel.id,
+      resourceRef,
+      reservationId,
+      status: TravelStatus.Pending,
+      userId: travel.userId,
+      version: travel.version,
+    });
     res.status(201).send(travel);
   }
 );

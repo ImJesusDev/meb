@@ -8,6 +8,8 @@ import {
   NotFoundError,
   NotAuthorizedError,
 } from '@movers/common';
+import { TravelFinishedPublisher } from '../events/publishers/travel-finished-publisher';
+import { natsClient } from '../nats';
 
 const router = express.Router();
 
@@ -37,6 +39,15 @@ router.put(
     });
 
     await travel.save();
+    await new TravelFinishedPublisher(natsClient.client).publish({
+      id: travel.id,
+      resourceRef: travel.resourceRef,
+      reservationId: travel.reservationId,
+      status: TravelStatus.Completed,
+      indicators,
+      userId: travel.userId,
+      version: travel.version,
+    });
     res.status(200).send(travel);
   }
 );

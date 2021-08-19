@@ -3,6 +3,7 @@ import { app } from '../../app';
 import { Travel } from '../../models/travel';
 import { TravelStatus } from '@movers/common';
 import mongoose from 'mongoose';
+import { natsClient } from '../../nats';
 
 const getTravel = async () => {
   const id = mongoose.Types.ObjectId().toString();
@@ -99,4 +100,5 @@ it('returns a 200 and updates the travel with tracking and indicators', async ()
   expect(response.body.status).toEqual(TravelStatus.Completed);
   expect(response.body.tracking[0]).toEqual({ lat: 4.1, lng: -74.1 });
   expect(response.body.indicators[0]).toEqual({ calories: 20, km: 20 });
+  expect(natsClient.client.publish).toHaveBeenCalled();
 });
