@@ -2,6 +2,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Travel } from '../../models/travel';
 import mongoose from 'mongoose';
+import { natsClient } from '../../nats';
 
 it('has a POST route handler for /api/travels ', async () => {
   const response = await request(app).post('/api/travels').send({});
@@ -76,4 +77,5 @@ it('returns 201 and creates a new travel', async () => {
   expect(response.status).toEqual(201);
   travels = await Travel.find({});
   expect(travels.length).toEqual(1);
+  expect(natsClient.client.publish).toHaveBeenCalled();
 });
