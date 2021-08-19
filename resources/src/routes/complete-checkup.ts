@@ -101,6 +101,8 @@ router.put(
     }
     // If the resource should be sent to repair
     if (toRepair === true) {
+      console.log('creating repair');
+      console.log('components', JSON.stringify(components, null, 2));
       newStatus = ResourceStatus.PendingRepair;
       const repair = Repair.build({
         resourceRef: resource.reference,
@@ -108,8 +110,9 @@ router.put(
         components,
         status: RepairStatus.Pending,
       });
-
       await repair.save();
+      console.log('repair created');
+      console.log(JSON.stringify(repair, null, 2));
     } else if (disableResource === true) {
       // If the resource should be disabled
       newStatus = ResourceStatus.Disabled;
