@@ -5,6 +5,7 @@ import {
   CheckupStatus,
   ResourceStatus,
   ComponentStatus,
+  RepairStatus,
 } from '@movers/common';
 import express, { Request, Response } from 'express';
 import { Resource } from '../models/resource';
@@ -15,6 +16,7 @@ import { checkupQueue } from '../queues/checkup-queue';
 import { ResourceType } from '../models/resource-type';
 import { ResourceUpdatedPublisher } from '../events/publishers/resource-updated-publisher';
 import { natsClient } from '../nats';
+import { Repair } from '../models/repair';
 
 const router = express.Router();
 
@@ -100,6 +102,14 @@ router.put(
     // If the resource should be sent to repair
     if (toRepair === true) {
       newStatus = ResourceStatus.PendingRepair;
+      const repair = Repair.build({
+        resourceRef: resource.reference,
+        createdAt: new Date(),
+        components,
+        status: RepairStatus.Pending,
+      });
+
+      await repair.save();
     } else if (disableResource === true) {
       // If the resource should be disabled
       newStatus = ResourceStatus.Disabled;
