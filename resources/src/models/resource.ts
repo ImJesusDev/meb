@@ -115,5 +115,21 @@ resourceSchema.virtual('checkups', {
   justOne: false, // Set to false to return many
   options: { sort: { name: -1 } },
 });
+// Add virtuals to populate maintenances
+resourceSchema.virtual('maintenances', {
+  ref: 'Maintenance',
+  localField: 'reference',
+  foreignField: 'resourceRef',
+  justOne: false, // Set to false to return many
+  options: { sort: { name: -1 } },
+});
+// Add virtuals to populate repairs
+resourceSchema.virtual('repairs', {
+  ref: 'Repair',
+  localField: 'reference',
+  foreignField: 'resourceRef',
+  justOne: false, // Set to false to return many
+  options: { sort: { name: -1 } },
+});
 
 export { Resource };

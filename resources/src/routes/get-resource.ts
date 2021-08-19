@@ -8,6 +8,8 @@ router.get('/api/resources/find/:id', async (req: Request, res: Response) => {
   const resource = await Resource.findById(req.params.id).populate([
     'documents',
     'checkups',
+    'repairs',
+    'maintenances',
   ]);
   if (!resource) {
     throw new NotFoundError();
