@@ -26,6 +26,7 @@ export interface UserAttrs {
   status: UserStatus;
   role: UserRole;
   points?: number;
+  weight?: number;
 }
 
 /*
@@ -52,6 +53,7 @@ interface UserDoc extends mongoose.Document {
   role: UserRole;
   version: number;
   points?: number;
+  weight?: number;
 }
 
 /*
@@ -146,6 +148,11 @@ const userSchema = new mongoose.Schema(
       default: UserRole.User,
     },
     points: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+    weight: {
       type: Number,
       required: false,
       default: 0,
