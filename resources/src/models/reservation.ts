@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+import { ReservationStatus } from '@movers/common';
 /*
  *   Interface that describes the properties
  *   that are required to create a new Reservation
@@ -9,6 +9,8 @@ export interface ReservationAttrs {
   resourceRef: string;
   rating?: number;
   comments?: string;
+  status: ReservationStatus;
+  userId: string;
 }
 
 /*
@@ -20,6 +22,8 @@ interface ReservationDoc extends mongoose.Document {
   resourceRef: string;
   rating?: number;
   comments?: string;
+  status: ReservationStatus;
+  userId: string;
 }
 
 /*
@@ -40,6 +44,10 @@ const reservationSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    userId: {
+      type: String,
+      required: true,
+    },
     comments: {
       type: String,
       required: false,
@@ -47,6 +55,12 @@ const reservationSchema = new mongoose.Schema(
     rating: {
       type: Number,
       required: false,
+    },
+    status: {
+      type: String,
+      required: true,
+      enum: Object.values(ReservationStatus),
+      default: ReservationStatus.Active,
     },
   },
   {

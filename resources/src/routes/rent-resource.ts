@@ -1,5 +1,10 @@
 import express, { Request, Response } from 'express';
-import { requireAuth, BadRequestError, ResourceStatus } from '@movers/common';
+import {
+  requireAuth,
+  BadRequestError,
+  ResourceStatus,
+  ReservationStatus,
+} from '@movers/common';
 import { Resource } from '../models/resource';
 import { Reservation } from '../models/reservation';
 import { natsClient } from '../nats';
@@ -12,7 +17,7 @@ router.post(
   requireAuth(),
   async (req: Request, res: Response) => {
     const { id } = req.params;
-
+    const user = req.currentUser;
     const existingResource = await Resource.findById(id);
     if (!existingResource) {
       throw new BadRequestError('The reference already exists');
@@ -31,6 +36,8 @@ router.post(
     const reservation = Reservation.build({
       resourceRef: existingResource.reference,
       createdAt: new Date(),
+      status: ReservationStatus.Active,
+      userId: user!.id,
     });
     await reservation.save();
     res.status(200).send({ resource: existingResource, reservation });
