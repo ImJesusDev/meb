@@ -48,11 +48,11 @@ const getComponent = async () => {
     componentModel: 'Modelo',
     regularCondition: {
       disables: false,
-      ticket: false,
+      ticket: true,
     },
     badCondition: {
       disables: false,
-      ticket: false,
+      ticket: true,
     },
   });
   await component.save();
@@ -236,7 +236,7 @@ it('returns status 201 and creates checkup when given valid params', async () =>
       components: [
         {
           componentId: component.id,
-          status: 'Bueno',
+          status: 'bad',
           componentName: 'Frenos',
         },
       ],

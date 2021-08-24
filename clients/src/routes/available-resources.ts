@@ -17,10 +17,22 @@ router.get(
       throw new BadRequestError('Office is required');
     }
     const resources = await Resource.find({
-      status: ResourceStatus.Available,
-      client,
-      office,
+      $and: [
+        { client, office },
+        {
+          $or: [
+            { status: ResourceStatus.Available },
+            { status: ResourceStatus.PendingRepair },
+            { status: ResourceStatus.PendingCheckup },
+          ],
+        },
+      ],
     });
+    // const resources = await Resource.find({
+    //   status: ResourceStatus.Available,
+    //   client,
+    //   office,
+    // });
 
     res.send(resources);
   }

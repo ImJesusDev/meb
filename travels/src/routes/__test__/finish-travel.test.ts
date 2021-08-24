@@ -67,11 +67,23 @@ it('returns a 200 and updates the travel with indicators', async () => {
     .put(`/api/travels/${travel.id}/finish`)
     .set('Cookie', global.signin())
     .send({
-      indicators: [{ calories: 20, km: 20 }],
+      indicators: {
+        energyFootprint: 20,
+        environmentalFootprint: 20,
+        economicFootprint: 20,
+        calories: 20,
+        km: 20,
+      },
     });
   expect(response.status).toEqual(200);
   expect(response.body.status).toEqual(TravelStatus.Completed);
-  expect(response.body.indicators[0]).toEqual({ calories: 20, km: 20 });
+  expect(response.body.indicators).toEqual({
+    energyFootprint: 20,
+    environmentalFootprint: 20,
+    economicFootprint: 20,
+    calories: 20,
+    km: 20,
+  });
 });
 
 it('returns a 200 and updates the travel with tracking', async () => {
@@ -93,12 +105,24 @@ it('returns a 200 and updates the travel with tracking and indicators', async ()
     .put(`/api/travels/${travel.id}/finish`)
     .set('Cookie', global.signin())
     .send({
-      indicators: [{ calories: 20, km: 20 }],
+      indicators: {
+        energyFootprint: 20,
+        environmentalFootprint: 20,
+        economicFootprint: 20,
+        calories: 20,
+        km: 20,
+      },
       tracking: [{ lat: 4.1, lng: -74.1 }],
     });
   expect(response.status).toEqual(200);
   expect(response.body.status).toEqual(TravelStatus.Completed);
   expect(response.body.tracking[0]).toEqual({ lat: 4.1, lng: -74.1 });
-  expect(response.body.indicators[0]).toEqual({ calories: 20, km: 20 });
+  expect(response.body.indicators).toEqual({
+    energyFootprint: 20,
+    environmentalFootprint: 20,
+    economicFootprint: 20,
+    calories: 20,
+    km: 20,
+  });
   expect(natsClient.client.publish).toHaveBeenCalled();
 });

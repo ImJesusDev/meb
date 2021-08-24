@@ -1,7 +1,6 @@
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 import mongoose from 'mongoose';
-import { TravelStatus } from '@movers/common';
-
+import { TravelStatus, TravelIndicators } from '@movers/common';
 /*
  *   Interface that describes the properties
  *   that are required to create a new Travel
@@ -12,7 +11,7 @@ export interface TravelAttrs {
   resourceRef: string;
   reservationId: string;
   userId: string;
-  indicators?: [];
+  indicators?: TravelIndicators;
   tracking?: [];
   status: TravelStatus;
 }
@@ -26,7 +25,7 @@ interface TravelDoc extends mongoose.Document {
   resourceRef: string;
   reservationId: string;
   userId: string;
-  indicators?: [];
+  indicators: TravelIndicators;
   tracking?: [];
   status: TravelStatus;
   version: number;
@@ -71,9 +70,11 @@ const travelSchema = new mongoose.Schema(
       default: TravelStatus.Pending,
     },
     indicators: {
-      type: Array,
-      required: false,
-      default: [],
+      energyFootprint: { type: Number, required: false },
+      environmentalFootprint: { type: Number, required: false },
+      economicFootprint: { type: Number, required: false },
+      calories: { type: Number, required: false },
+      km: { type: Number, required: false },
     },
     tracking: {
       type: Array,

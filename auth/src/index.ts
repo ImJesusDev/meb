@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 import { app } from './app';
 import { natsClient } from './nats';
-
+import { TravelCreatedListener } from './events/listeners/travel-created-listener';
+import { ResourceCreatedListener } from './events/listeners/resource-created-listener';
+import { ResourceUpdatedListener } from './events/listeners/resource-updated-listener';
 const start = async () => {
   if (!process.env.JWT_KEY) {
     throw new Error('JWT_KEY must be defined');
@@ -30,7 +32,9 @@ const start = async () => {
     });
     process.on('SIGINT', () => natsClient.client.close());
     process.on('SIGTERM', () => natsClient.client.close());
-
+    new ResourceCreatedListener(natsClient.client).listen();
+    new ResourceUpdatedListener(natsClient.client).listen();
+    new TravelCreatedListener(natsClient.client).listen();
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,

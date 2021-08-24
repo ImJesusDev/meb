@@ -7,6 +7,7 @@ import {
   TravelStatus,
   NotFoundError,
   NotAuthorizedError,
+  TravelIndicators,
 } from '@movers/common';
 import { TravelFinishedPublisher } from '../events/publishers/travel-finished-publisher';
 import { natsClient } from '../nats';
@@ -17,7 +18,8 @@ router.put(
   '/api/travels/:id/finish',
   requireAuth(),
   async (req: Request, res: Response) => {
-    const { tracking, indicators } = req.body;
+    const { tracking } = req.body;
+    const indicators = req.body.indicators as TravelIndicators;
     const id = req.params.id;
     const travel = await Travel.findById(id);
 
@@ -33,7 +35,7 @@ router.put(
 
     travel.set({
       status: TravelStatus.Completed,
-      indicators: indicators ? indicators : [],
+      indicators: indicators ? indicators : {},
       tracking: tracking ? tracking : [],
       completedAt: new Date(),
     });

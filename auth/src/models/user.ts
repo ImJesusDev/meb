@@ -25,6 +25,7 @@ export interface UserAttrs {
   activationCode: number;
   status: UserStatus;
   role: UserRole;
+  points?: number;
 }
 
 /*
@@ -50,6 +51,7 @@ interface UserDoc extends mongoose.Document {
   status: UserStatus;
   role: UserRole;
   version: number;
+  points?: number;
 }
 
 /*
@@ -142,6 +144,11 @@ const userSchema = new mongoose.Schema(
       required: true,
       enum: Object.values(UserRole),
       default: UserRole.User,
+    },
+    points: {
+      type: Number,
+      required: false,
+      default: 0,
     },
   },
   {
