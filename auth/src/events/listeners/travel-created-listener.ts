@@ -3,6 +3,7 @@ import { Subjects, Listener, TravelCreatedEvent } from '@movers/common';
 import { queueGroupName } from './queue-group-name';
 import { User } from '../../models/user';
 import { UserPoints, PointsType } from '../../models/user-points';
+import { UserRanking } from '../../models/user-ranking';
 import { Resource } from '../../models/resource';
 export class TravelCreatedListener extends Listener<TravelCreatedEvent> {
   subject: Subjects.TravelCreated = Subjects.TravelCreated;
@@ -28,6 +29,28 @@ export class TravelCreatedListener extends Listener<TravelCreatedEvent> {
       reservationId,
       type: PointsType.ResourceRent,
     });
+
+    // Get the user ranking for the type
+    let userRanking = await UserRanking.findOne({
+      userId,
+      resourceType: resource.type,
+    });
+
+    // If does not have a ranking, create it
+    if (!userRanking) {
+      userRanking = UserRanking.build({
+        userId,
+        points: this.POINTS_PER_RENT,
+        resourceType: resource.type,
+      });
+      await userRanking.save();
+    } else {
+      // If the user already have a ranking for the given resource
+      userRanking.set({
+        points: userRanking.points + this.POINTS_PER_RENT,
+      });
+      await userRanking.save();
+    }
 
     if (!userPoints) {
       userPoints = UserPoints.build({

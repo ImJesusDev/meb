@@ -38,6 +38,7 @@ router.put(
       secondaryTransportationMethod,
       phone,
       photo,
+      weight,
     } = req.body;
 
     const currentUser = req.currentUser;
@@ -62,6 +63,7 @@ router.put(
       phone: phone ? phone : user.phone,
       photo: photo ? photo : user.photo,
       password: password ? password : user.password,
+      weight: weight ? weight : user.weight,
     });
 
     await user.save();

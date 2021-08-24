@@ -56,6 +56,7 @@ router.post(
       secondaryTransportationMethod,
       termsDate,
       comodatoDate,
+      weight,
     } = req.body;
 
     if (!termsDate) {
@@ -84,6 +85,7 @@ router.post(
       status: UserStatus.Unverified,
       mainTransportationMethod,
       secondaryTransportationMethod,
+      weight,
     });
     await user.save();
 
