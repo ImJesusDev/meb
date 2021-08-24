@@ -38,6 +38,7 @@ const userRankingSchema = new mongoose.Schema(
   },
   {
     toJSON: {
+      virtuals: true,
       transform(doc, ret) {
         ret.id = ret._id;
         delete ret._id;
@@ -55,5 +56,10 @@ const UserRanking = mongoose.model<UserRankingDoc, UserRankingModel>(
   'UserRanking',
   userRankingSchema
 );
-
+userRankingSchema.virtual('user', {
+  ref: 'User',
+  localField: 'userId',
+  foreignField: 'id',
+  justOne: true,
+});
 export { UserRanking };
