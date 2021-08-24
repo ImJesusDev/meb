@@ -12,6 +12,7 @@ import { User } from '../../../models/user';
 import { TravelCreatedListener } from '../travel-created-listener';
 import { UserPoints, PointsType } from '../../../models/user-points';
 import { Resource } from '../../../models/resource';
+import { UserRanking } from '../../../models/user-ranking';
 
 const setup = async () => {
   const user = User.build({
@@ -71,9 +72,14 @@ it('updated the points', async () => {
     reservationId: data.reservationId,
     type: PointsType.ResourceRent,
   });
+  const userRaking = await UserRanking.findOne({
+    userId: data.userId,
+  });
   expect(user).toBeDefined();
+  expect(userRaking).toBeDefined();
   expect(userPoints).toBeDefined();
   expect(user!.points).toEqual(50);
+  expect(userRaking!.points).toEqual(50);
 });
 it('ack the message', async () => {
   const { listener, data, message } = await setup();

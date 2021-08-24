@@ -4,6 +4,7 @@ import { queueGroupName } from './queue-group-name';
 import { User } from '../../models/user';
 import { UserPoints, PointsType } from '../../models/user-points';
 import { Resource } from '../../models/resource';
+import { UserRanking } from '../../models/user-ranking';
 
 export class TravelFinishedListener extends Listener<TravelFinishedEvent> {
   subject: Subjects.TravelFinished = Subjects.TravelFinished;
@@ -23,6 +24,27 @@ export class TravelFinishedListener extends Listener<TravelFinishedEvent> {
     }
     // If the travel has indicators
     if (indicators && indicators.km) {
+      // Get the user ranking for the type
+      let userRanking = await UserRanking.findOne({
+        userId,
+        resourceType: resource.type,
+      });
+
+      // If does not have a ranking, create it
+      if (!userRanking) {
+        userRanking = UserRanking.build({
+          userId,
+          points: indicators.km,
+          resourceType: resource.type,
+        });
+        await userRanking.save();
+      } else {
+        // If the user already have a ranking for the given resource
+        userRanking.set({
+          points: userRanking.points + indicators.km,
+        });
+        await userRanking.save();
+      }
       const userPoints = UserPoints.build({
         userId,
         reservationId,
