@@ -4,6 +4,8 @@ import { natsClient } from './nats';
 import { UserCreatedListener } from './events/listeners/user-created-listener';
 import { DomainAuthorizedListener } from './events/listeners/domain-authorized-listener';
 import { EmailAuthorizedListener } from './events/listeners/email-authorized-listener';
+import { ResourceCreatedListener } from './events/listeners/resource-created-listener';
+import { ResourceUpdatedListener } from './events/listeners/resource-updated-listener';
 const start = async () => {
   if (!process.env.JWT_KEY) {
     throw new Error('JWT_KEY must be defined');
@@ -36,6 +38,8 @@ const start = async () => {
     new UserCreatedListener(natsClient.client).listen();
     new DomainAuthorizedListener(natsClient.client).listen();
     new EmailAuthorizedListener(natsClient.client).listen();
+    new ResourceCreatedListener(natsClient.client).listen();
+    new ResourceUpdatedListener(natsClient.client).listen();
 
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
