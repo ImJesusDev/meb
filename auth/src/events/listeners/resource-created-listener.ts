@@ -31,7 +31,12 @@ export class ResourceCreatedListener extends Listener<ResourceCreatedEvent> {
       loanTime,
       status,
     });
-    await resource.save();
+    try {
+      await resource.save();
+    } catch (e) {
+      console.log(`Error @ResourceCreatedListener`);
+      console.log(e);
+    }
     msg.ack();
   }
 }
