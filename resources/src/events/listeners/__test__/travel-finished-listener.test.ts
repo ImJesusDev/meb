@@ -72,7 +72,6 @@ it('updated the travel', async () => {
   const travel = await Travel.findById(data.id);
   expect(travel).toBeDefined();
   expect(travel!.indicators).toBeDefined();
-  console.log(travel.indicators);
 });
 it('ack the message', async () => {
   const { listener, data, message } = await setup();
