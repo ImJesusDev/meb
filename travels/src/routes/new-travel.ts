@@ -43,6 +43,8 @@ router.post(
       status: TravelStatus.Pending,
       userId: travel.userId,
       version: travel.version,
+      origin: travel.origin,
+      destination: travel.destination,
     });
     res.status(201).send(travel);
   }
