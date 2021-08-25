@@ -15,7 +15,9 @@ export class ResourceUpdatedListener extends Listener<ResourceUpdatedEvent> {
       version,
     });
     if (!resource) {
-      throw new Error('User not found');
+      console.log(`Resource id:${id} version: ${version} not found`);
+      msg.ack();
+      return;
     }
     resource.set({
       status,
