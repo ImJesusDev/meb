@@ -99,6 +99,7 @@ router.post(
       loanTime: resource.loanTime,
       status: resource.status,
       version: resource.version,
+      photo: existingType.photo,
     });
 
     // Delay of days in ms
