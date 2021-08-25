@@ -83,5 +83,12 @@ const Reservation = mongoose.model<ReservationDoc, ReservationModel>(
   'Reservation',
   reservationSchema
 );
-
+// Add virtuals to populate
+reservationSchema.virtual('travels', {
+  ref: 'Travel',
+  localField: 'id',
+  foreignField: 'reservationId',
+  justOne: false, // Set to false to return many
+  options: { sort: { name: -1 } },
+});
 export { Reservation };

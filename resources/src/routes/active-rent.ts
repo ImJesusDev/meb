@@ -13,7 +13,7 @@ router.get(
     const reservation = await Reservation.find({
       status: ReservationStatus.Active,
       userId: user!.id,
-    });
+    }).populate(['travels']);
 
     res.status(200).send(reservation);
   }

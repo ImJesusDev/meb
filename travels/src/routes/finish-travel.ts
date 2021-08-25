@@ -49,6 +49,8 @@ router.put(
       indicators,
       userId: travel.userId,
       version: travel.version,
+      origin: travel.origin,
+      destination: travel.destination,
     });
     res.status(200).send(travel);
   }
