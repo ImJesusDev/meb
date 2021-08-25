@@ -9,18 +9,22 @@ export class ResourceUpdatedListener extends Listener<ResourceUpdatedEvent> {
 
   async onMessage(data: ResourceUpdatedEvent['data'], msg: Message) {
     const { id, status, version } = data;
-
-    const resource = await Resource.findByEvent({
-      id,
-      version,
-    });
-    if (!resource) {
-      throw new Error('User not found');
+    try {
+      const resource = await Resource.findByEvent({
+        id,
+        version,
+      });
+      if (!resource) {
+        throw new Error('User not found');
+      }
+      resource.set({
+        status,
+      });
+      await resource.save();
+    } catch (e) {
+      console.log(`Error @ResourceUpdatedListener`);
+      console.log(e);
     }
-    resource.set({
-      status,
-    });
-    await resource.save();
 
     msg.ack();
   }
