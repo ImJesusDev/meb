@@ -18,6 +18,7 @@ export class ResourceCreatedListener extends Listener<ResourceCreatedEvent> {
       office,
       loanTime,
       status,
+      photo,
     } = data;
 
     const resource = Resource.build({
@@ -30,6 +31,7 @@ export class ResourceCreatedListener extends Listener<ResourceCreatedEvent> {
       office,
       loanTime,
       status,
+      photo,
     });
     await resource.save();
     msg.ack();

@@ -15,6 +15,7 @@ interface ResourceAttrs {
   client: string;
   office: string;
   loanTime: number;
+  photo?: string;
   status: ResourceStatus;
 }
 
@@ -29,6 +30,7 @@ interface ResourceDoc extends mongoose.Document {
   lockerPassword: number;
   client: string;
   office: string;
+  photo?: string;
   loanTime: number;
   status: ResourceStatus;
   version: number;
@@ -59,6 +61,10 @@ const resourceSchema = new mongoose.Schema(
     qrCode: {
       type: String,
       required: true,
+    },
+    photo: {
+      type: String,
+      required: false,
     },
     lockerPassword: {
       type: Number,
