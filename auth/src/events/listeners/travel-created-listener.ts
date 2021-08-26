@@ -16,11 +16,11 @@ export class TravelCreatedListener extends Listener<TravelCreatedEvent> {
     try {
       const user = await User.findById(userId);
       if (!user) {
-        throw new Error('User not found');
+        return console.log(`User not found id: ${userId}`);
       }
       const resource = await Resource.findOne({ reference: resourceRef });
       if (!resource) {
-        throw new Error('Resource not found');
+        return console.log(`Resource not found ref: ${resourceRef}`);
       }
       // Find if the user already have points for this reservation
       // and for the same type (TripCreated). Those are the points

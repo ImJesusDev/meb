@@ -22,7 +22,7 @@ export class TravelCreatedListener extends Listener<TravelCreatedEvent> {
 
     const resource = await Resource.findOne({ reference: resourceRef });
     if (!resource) {
-      throw new Error('Resource not found');
+      return console.log(`Resource not found ref: ${resourceRef}`);
     }
 
     const travel = Travel.build({
