@@ -3,7 +3,14 @@ kind: Config
 deploy:
   kubectl:
     manifests:
-      - ./infra/k8s/*
+      - ./infra/k8s/nats*
+      - ./infra/k8s/auth*
+      - ./infra/k8s/clients*
+      # - ./infra/k8s/locations*
+      # - ./infra/k8s/notifications*
+      # - ./infra/k8s/resources*
+      # - ./infra/k8s/scheduler*
+      # - ./infra/k8s/travels*
       - ./infra/k8s-dev/*
 build:
   local:
@@ -27,37 +34,37 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: jdiaz740/meb-locations
-      context: locations
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: 'src/**/*.ts'
-            dest: .
-    - image: jdiaz740/meb-resources
-      context: resources
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: 'src/**/*.ts'
-            dest: .
-    - image: jdiaz740/meb-travels
-      context: travels
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: 'src/**/*.ts'
-            dest: .
-    - image: jdiaz740/meb-notifications
-      context: notifications
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: 'src/**/*.ts'
-            dest: .
-          - src: 'src/**/*.hbs'
-            dest: .
+    # - image: jdiaz740/meb-locations
+    #   context: locations
+    #   docker:
+    #     dockerfile: Dockerfile
+    #   sync:
+    #     manual:
+    #       - src: 'src/**/*.ts'
+    #         dest: .
+    # - image: jdiaz740/meb-resources
+    #   context: resources
+    #   docker:
+    #     dockerfile: Dockerfile
+    #   sync:
+    #     manual:
+    #       - src: 'src/**/*.ts'
+    #         dest: .
+    # - image: jdiaz740/meb-travels
+    #   context: travels
+    #   docker:
+    #     dockerfile: Dockerfile
+    #   sync:
+    #     manual:
+    #       - src: 'src/**/*.ts'
+    #         dest: .
+    # - image: jdiaz740/meb-notifications
+    #   context: notifications
+    #   docker:
+    #     dockerfile: Dockerfile
+    #   sync:
+    #     manual:
+    #       - src: 'src/**/*.ts'
+    #         dest: .
+    #       - src: 'src/**/*.hbs'
+    #         dest: .

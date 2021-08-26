@@ -11,7 +11,7 @@ export class UserUpdatedListener extends Listener<UserUpdatedEvent> {
     const user = await User.findByEvent(data);
 
     if (!user) {
-      throw new Error('User not found');
+      return console.log(`User not found id: ${data.id}`);
     }
 
     const { email } = data;

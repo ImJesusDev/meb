@@ -13,12 +13,12 @@ export class TravelFinishedListener extends Listener<TravelFinishedEvent> {
     const { userId, reservationId, indicators, status, resourceRef } = data;
     const resource = await Resource.findOne({ reference: resourceRef });
     if (!resource) {
-      throw new Error('Resource not found');
+      return console.log(`Resource not found ref: ${resourceRef}`);
     }
     const travel = await Travel.findByEvent(data);
 
     if (!travel) {
-      throw new Error('Travel not found');
+      return console.log(`Travel not found id: ${data.id}`);
     }
 
     travel.set({
