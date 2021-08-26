@@ -6,8 +6,8 @@ const router = express.Router();
 
 router.get(
   '/api/resources/find-by-ref',
-  async (req: Request, res: Response) => {
-    const ref = req.body.query;
+  async (req: Request<{}, {}, {}, any>, res: Response) => {
+    const ref = req.query.ref;
     const resource = await Resource.findOne({ reference: ref }).populate([
       'documents',
       'checkups',
