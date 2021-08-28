@@ -21,7 +21,7 @@ export interface ResourceAttrs {
  *   Interface that describes the properties
  *   that a Resource has
  */
-interface ResourceDoc extends mongoose.Document {
+export interface ResourceDoc extends mongoose.Document {
   type: string;
   reference: string;
   qrCode: string;
