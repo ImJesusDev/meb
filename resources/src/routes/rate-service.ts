@@ -12,7 +12,7 @@ import { ResourceUpdatedPublisher } from '../events/publishers/resource-updated-
 
 const router = express.Router();
 
-router.post(
+router.put(
   '/api/resources/rents/:id/rate',
   requireAuth(),
   async (req: Request, res: Response) => {
@@ -21,7 +21,7 @@ router.post(
     const { comments, rating } = req.body;
     const existingReservation = await Reservation.findById(id);
     if (!existingReservation) {
-      throw new BadRequestError('The reference already exists');
+      throw new BadRequestError('The reservation does not already exists');
     }
     existingReservation.set({
       rating,

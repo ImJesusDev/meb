@@ -9,6 +9,7 @@ export interface ReservationAttrs {
   resourceRef: string;
   rating?: number;
   comments?: string;
+  reply?: string;
   status: ReservationStatus;
   userId: string;
 }
@@ -22,6 +23,7 @@ interface ReservationDoc extends mongoose.Document {
   resourceRef: string;
   rating?: number;
   comments?: string;
+  reply?: string;
   status: ReservationStatus;
   userId: string;
 }
@@ -49,6 +51,10 @@ const reservationSchema = new mongoose.Schema(
       required: true,
     },
     comments: {
+      type: String,
+      required: false,
+    },
+    reply: {
       type: String,
       required: false,
     },
