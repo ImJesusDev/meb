@@ -31,6 +31,7 @@ interface ResourceDoc extends mongoose.Document {
   loanTime: number;
   status: ResourceStatus;
   version: number;
+  kmSinceMaintenance: number;
 }
 
 /*
@@ -76,6 +77,11 @@ const resourceSchema = new mongoose.Schema(
     office: {
       type: String,
       required: true,
+    },
+    kmSinceMaintenance: {
+      type: Number,
+      required: false,
+      default: 0,
     },
   },
   {

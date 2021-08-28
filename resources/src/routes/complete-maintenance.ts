@@ -83,6 +83,7 @@ router.put(
 
     resource.set({
       status: newStatus,
+      kmSinceMaintenance: 0,
     });
 
     await resource.save();
