@@ -16,8 +16,8 @@ import QRCode from 'qrcode';
 
 const router = express.Router();
 
-router.post(
-  '/api/resources',
+router.put(
+  '/api/resources/:id',
   requireAuth(),
   [
     body('type').not().isEmpty().withMessage('Resource type is required.'),
@@ -48,17 +48,14 @@ router.post(
       office,
       loanTime,
     } = req.body;
-    const documents = req.body.documents as DocumentAttrs[];
-    const existingDocs = await Document.find({});
-    const existingResource = await Resource.findOne({ reference });
-    if (existingResource) {
-      throw new BadRequestError('The reference already exists');
+    const id = req.params.id;
+    const existingResource = await Resource.findById(id);
+    if (!existingResource) {
+      throw new BadRequestError('Resource not found');
     }
-    if (documents && documents.length) {
-      for (const document of documents) {
-        const newDoc = Document.build(document);
-        await newDoc.save();
-      }
+    const existingResources = await Resource.find({ reference });
+    if (existingResources.length > 1) {
+      throw new BadRequestError('The reference already exists');
     }
 
     const existingType = await ResourceType.findOne({ type }).populate([
@@ -68,8 +65,7 @@ router.post(
     if (!existingType) {
       throw new BadRequestError('The resource type does not exists');
     }
-
-    const resource = Resource.build({
+    existingResource.set({
       type,
       reference,
       qrCode,
@@ -80,43 +76,29 @@ router.post(
       status: ResourceStatus.Available,
     });
 
-    await resource.save();
-    const url = `https://meb.moversapp.co/api/resources/find-by-ref?ref=${resource.reference}`;
+    await existingResource.save();
+    const url = `https://meb.moversapp.co/api/resources/find-by-ref?ref=${existingResource.reference}`;
     const generatedCode = await QRCode.toDataURL(url);
-    resource.set({
+    existingResource.set({
       qrCode: generatedCode,
     });
-    await resource.save();
+    await existingResource.save();
 
     await new ResourceCreatedPublisher(natsClient.client).publish({
-      id: resource.id,
-      type: resource.type,
-      reference: resource.reference,
-      qrCode: resource.qrCode,
-      lockerPassword: resource.lockerPassword,
-      client: resource.client,
-      office: resource.office,
-      loanTime: resource.loanTime,
-      status: resource.status,
-      version: resource.version,
+      id: existingResource.id,
+      type: existingResource.type,
+      reference: existingResource.reference,
+      qrCode: existingResource.qrCode,
+      lockerPassword: existingResource.lockerPassword,
+      client: existingResource.client,
+      office: existingResource.office,
+      loanTime: existingResource.loanTime,
+      status: existingResource.status,
+      version: existingResource.version,
       photo: existingType.photo,
     });
 
-    // Delay of days in ms
-    const delay = 1000 * 60 * 60 * 24 * existingType.checkupTime;
-
-    await checkupQueue.add(
-      {
-        resourceId: resource.id,
-      },
-      {
-        delay,
-      }
-    );
-
-    console.log(`Created checkup queue with delay ${delay}`);
-
-    res.status(201).send(resource);
+    res.status(201).send(existingResource);
   }
 );
 export default router;
