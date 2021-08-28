@@ -11,8 +11,22 @@ import { natsClient } from '../../../nats';
 import { TravelFinishedListener } from '../travel-finished-listener';
 import { Resource } from '../../../models/resource';
 import { Travel } from '../../../models/travel';
+import { ResourceType } from '../../../models/resource-type';
+import { Component } from '../../../models/component';
+import { Maintenance } from '../../../models/maintenance';
 
 const setup = async () => {
+  await Component.find({});
+  const resourceType = ResourceType.build({
+    resourceTypeBrand: 'Marca',
+    resourceTypeModel: 'Modelo',
+    checkupTime: 20,
+    kmToMaintenance: 5,
+    photo: 'Photo',
+    type: 'Bicicleta',
+    measureIndicators: true,
+  });
+  await resourceType.save();
   const resource = Resource.build({
     type: 'Bicicleta',
     reference: '0001',
@@ -65,13 +79,14 @@ const setup = async () => {
 
 it('updated the travel', async () => {
   const { listener, data, message } = await setup();
-
   // Call the on message method with fake data and event
   await listener.onMessage(data, message);
   // Make assertions
   const travel = await Travel.findById(data.id);
   expect(travel).toBeDefined();
   expect(travel!.indicators).toBeDefined();
+  let maintenances = await Maintenance.find({});
+  expect(maintenances.length).toEqual(1);
 });
 it('ack the message', async () => {
   const { listener, data, message } = await setup();
