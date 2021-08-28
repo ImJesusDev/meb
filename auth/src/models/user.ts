@@ -3,6 +3,10 @@ import { Password } from '../services/password';
 import mongoose from 'mongoose';
 import { UserRole, UserStatus } from '@movers/common';
 
+export enum UserGender {
+  Male = 'male',
+  Female = 'female',
+}
 /*
  *   Interface that describes the properties
  *   that are required to create a new User
@@ -27,6 +31,10 @@ export interface UserAttrs {
   role: UserRole;
   points?: number;
   weight?: number;
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
+  bloodType?: string;
+  gender?: UserGender;
 }
 
 /*
@@ -54,6 +62,10 @@ interface UserDoc extends mongoose.Document {
   version: number;
   points?: number;
   weight?: number;
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
+  bloodType?: string;
+  gender?: UserGender;
 }
 
 /*
@@ -146,6 +158,23 @@ const userSchema = new mongoose.Schema(
       required: true,
       enum: Object.values(UserRole),
       default: UserRole.User,
+    },
+    gender: {
+      type: String,
+      required: false,
+      enum: Object.values(UserGender),
+    },
+    emergencyContactName: {
+      type: String,
+      required: false,
+    },
+    bloodType: {
+      type: String,
+      required: false,
+    },
+    emergencyContactPhone: {
+      type: String,
+      required: false,
     },
     points: {
       type: Number,

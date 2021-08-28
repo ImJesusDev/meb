@@ -57,6 +57,10 @@ router.post(
       termsDate,
       comodatoDate,
       weight,
+      emergencyContactName,
+      emergencyContactPhone,
+      bloodType,
+      gender,
     } = req.body;
 
     if (!termsDate) {
@@ -86,6 +90,10 @@ router.post(
       mainTransportationMethod,
       secondaryTransportationMethod,
       weight,
+      emergencyContactName,
+      emergencyContactPhone,
+      bloodType,
+      gender,
     });
     await user.save();
 

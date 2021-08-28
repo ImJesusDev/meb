@@ -39,6 +39,10 @@ router.put(
       phone,
       photo,
       weight,
+      emergencyContactName,
+      emergencyContactPhone,
+      bloodType,
+      gender,
     } = req.body;
 
     const currentUser = req.currentUser;
@@ -64,6 +68,10 @@ router.put(
       photo: photo ? photo : user.photo,
       password: password ? password : user.password,
       weight: weight ? weight : user.weight,
+      emergencyContactName,
+      emergencyContactPhone,
+      bloodType,
+      gender,
     });
 
     await user.save();
