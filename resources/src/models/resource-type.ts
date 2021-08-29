@@ -28,6 +28,7 @@ interface ResourceTypeDoc extends mongoose.Document {
   measureIndicators: boolean;
   photo: string;
   components?: ComponentDoc[];
+  deletedAt: null | Date;
 }
 
 /*

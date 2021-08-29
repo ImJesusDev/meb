@@ -32,6 +32,7 @@ export interface ResourceDoc extends mongoose.Document {
   status: ResourceStatus;
   version: number;
   kmSinceMaintenance: number;
+  deletedAt: null | Date;
 }
 
 /*
