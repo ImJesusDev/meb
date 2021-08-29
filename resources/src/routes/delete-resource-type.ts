@@ -16,7 +16,10 @@ router.delete(
       throw new BadRequestError('Resource Type does not exists');
     }
 
-    await existingResourceType.delete();
+    existingResourceType.set({
+      deletedAt: new Date(),
+    });
+    await existingResourceType.save();
 
     res.status(204).send({});
   }

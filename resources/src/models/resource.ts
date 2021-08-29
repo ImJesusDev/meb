@@ -83,6 +83,11 @@ const resourceSchema = new mongoose.Schema(
       required: false,
       default: 0,
     },
+    deletedAt: {
+      type: mongoose.Schema.Types.Date,
+      required: false,
+      default: null,
+    },
   },
   {
     toJSON: {

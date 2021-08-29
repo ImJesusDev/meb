@@ -22,5 +22,5 @@ it('returns 204 code and deletes resource type', async () => {
     .send({});
   expect(response.status).toEqual(204);
   resourceTypes = await ResourceType.find({});
-  expect(resourceTypes.length).toEqual(0);
+  expect(resourceTypes[0].deletedAt).toBeDefined();
 });
