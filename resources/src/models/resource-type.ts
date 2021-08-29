@@ -28,6 +28,7 @@ interface ResourceTypeDoc extends mongoose.Document {
   measureIndicators: boolean;
   photo: string;
   components?: ComponentDoc[];
+  deletedAt: null | Date;
 }
 
 /*
@@ -67,6 +68,11 @@ const resourceTypeSchema = new mongoose.Schema(
     photo: {
       type: String,
       required: true,
+    },
+    deletedAt: {
+      type: mongoose.Schema.Types.Date,
+      required: false,
+      default: null,
     },
   },
   {
