@@ -52,7 +52,7 @@ fs.readdirSync(routePath).forEach(async (filename) => {
       // Attach to app
       app.use(importedRoute.default);
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
     }
   }
 });
