@@ -8,6 +8,25 @@ router.get(
   async (req: Request<{}, {}, {}, any>, res: Response) => {
     let query: any = {};
     const status = req.query.status;
+    const from = req.query.from;
+    const to = req.query.to;
+
+    if (to) {
+      query['createdAt'] = {
+        $lte: new Date(to),
+      };
+    }
+    if (from) {
+      query['createdAt'] = {
+        $gte: new Date(from),
+      };
+    }
+    if (from && to) {
+      query['createdAt'] = {
+        $gte: new Date(from),
+        $lte: new Date(to),
+      };
+    }
     if (status) {
       query['status'] = status;
     }
