@@ -16,7 +16,7 @@ interface Params {
   id: string;
 }
 router.get(
-  '/api/resources',
+  '/api/resources/filter/demon',
   async (req: Request<Params, {}, {}, QueryParams>, res: Response) => {
     let query: any = {};
     const status = req.query.status;
@@ -37,7 +37,14 @@ router.get(
     const resources = await Resource.find(query)
       .skip(Number(skip))
       .limit(Number(perPage))
-      .populate(['documents', 'checkups', 'repairs', 'maintenances']);
+      .populate(['documents'])
+      .populate('checkups', {
+        match: {
+          created_at: {
+            $gte: new Date('2020-08-30'),
+          },
+        },
+      });
 
     res.status(200).send({
       resources,
