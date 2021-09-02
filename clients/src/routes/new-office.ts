@@ -8,6 +8,8 @@ import { requireAuth, validateRequest, BadRequestError } from '@movers/common';
 import { Client } from '../models/client';
 import { Office } from '../models/office';
 import { User } from '../models/user';
+import { natsClient } from '../nats';
+import { OfficeCreatedPublisher } from '../events/publishers/office-created-publisher';
 
 const router = express.Router();
 
@@ -93,6 +95,14 @@ router.post(
     });
 
     await office.save();
+    await new OfficeCreatedPublisher(natsClient.client).publish({
+      id: office.id,
+      name: office.name,
+      repairAdmin: office.repairAdmin,
+      inventoryAdmin: office.inventoryAdmin,
+      maintenanceAdmin: office.maintenanceAdmin,
+      client: office.client,
+    });
     res.status(201).send(office);
   }
 );

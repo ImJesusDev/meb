@@ -7,6 +7,7 @@ import { Component } from '../../models/component';
 import { Checkup } from '../../models/checkup';
 import { ResourceStatus } from '@movers/common';
 import { natsClient } from '../../nats';
+import { Office } from '../../models/office';
 const getResource = async () => {
   const resourceType = ResourceType.build({
     resourceTypeBrand: 'Marca',
@@ -34,6 +35,15 @@ const getResource = async () => {
   await component.save();
 
   await resourceType.save();
+  const office = Office.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    name: 'Sede principal',
+    client: 'Claro',
+    repairAdmin: new mongoose.Types.ObjectId().toHexString(),
+    maintenanceAdmin: new mongoose.Types.ObjectId().toHexString(),
+    inventoryAdmin: new mongoose.Types.ObjectId().toHexString(),
+  });
+  await office.save();
   const resource = Resource.build({
     type: 'Bicicleta',
     reference: '0001',

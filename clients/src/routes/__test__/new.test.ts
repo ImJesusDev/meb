@@ -98,7 +98,7 @@ it('returns an error with meb admin that does not exists', async () => {
       name: 'CLARO',
       nit: 'NITCLARO',
       logo: 'https://img.com/logo.png',
-      mebAdmin: mongoose.Types.ObjectId().toHexString(),
+      mebAdmin: new mongoose.Types.ObjectId().toHexString(),
       superAdminClient: mebAdmin.id,
     })
     .expect(400);
@@ -113,7 +113,7 @@ it('returns an error with super admin client that does not exists', async () => 
       nit: 'NITCLARO',
       logo: 'https://img.com/logo.png',
       mebAdmin: mebAdmin.id,
-      superAdminClient: mongoose.Types.ObjectId().toHexString(),
+      superAdminClient: new mongoose.Types.ObjectId().toHexString(),
     })
     .expect(400);
 });

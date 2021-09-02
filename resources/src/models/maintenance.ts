@@ -11,6 +11,7 @@ export interface MaintenanceAttrs {
   resourceRef: string;
   components?: ComponentMaintenanceAttrs[];
   status: MaintenanceStatus;
+  assignee: string;
 }
 /*
  *   Interface that describes the properties
@@ -33,6 +34,7 @@ interface MaintenanceDoc extends mongoose.Document {
   resourceRef: string;
   components?: [];
   status: MaintenanceStatus;
+  assignee: string;
 }
 
 /*
@@ -54,6 +56,10 @@ const maintenanceSchema = new mongoose.Schema(
       required: false,
     },
     resourceRef: {
+      type: String,
+      required: true,
+    },
+    assignee: {
       type: String,
       required: true,
     },
@@ -94,6 +100,12 @@ maintenanceSchema.virtual('resource', {
   ref: 'Resource',
   localField: 'resourceRef',
   foreignField: 'reference',
+  justOne: true,
+});
+maintenanceSchema.virtual('assignedUser', {
+  ref: 'User',
+  localField: 'assignee',
+  foreignField: 'id',
   justOne: true,
 });
 const Maintenance = mongoose.model<MaintenanceDoc, MaintenanceModel>(

@@ -7,7 +7,7 @@ import { Office } from '../../models/office';
 
 const getData = async () => {
   const user = User.build({
-    id: mongoose.Types.ObjectId().toHexString(),
+    id: new mongoose.Types.ObjectId().toHexString(),
     firstName: 'Jesus',
     lastName: 'Diaz',
     email: 'test@mail.com',
@@ -26,7 +26,7 @@ const getData = async () => {
   return { user, client };
 };
 it('has a POST route handler for /api/clients/:id/offices ', async () => {
-  const id = mongoose.Types.ObjectId().toHexString();
+  const id = new mongoose.Types.ObjectId().toHexString();
   const response = await request(app)
     .post(`/api/clients/${id}/offices`)
     .send({});
@@ -34,7 +34,7 @@ it('has a POST route handler for /api/clients/:id/offices ', async () => {
 });
 
 it('can only access by signed in users', async () => {
-  const id = mongoose.Types.ObjectId().toHexString();
+  const id = new mongoose.Types.ObjectId().toHexString();
   const response = await request(app)
     .post(`/api/clients/${id}/offices`)
     .send({})
@@ -42,7 +42,7 @@ it('can only access by signed in users', async () => {
 });
 
 it('returns a status other than 401 if the user is signed in', async () => {
-  const id = mongoose.Types.ObjectId().toHexString();
+  const id = new mongoose.Types.ObjectId().toHexString();
   const response = await request(app)
     .post(`/api/clients/${id}/offices`)
     .set('Cookie', global.signin())
@@ -52,7 +52,7 @@ it('returns a status other than 401 if the user is signed in', async () => {
 
 it('returns an error with invalid client', async () => {
   const { user } = await getData();
-  const id = mongoose.Types.ObjectId().toHexString();
+  const id = new mongoose.Types.ObjectId().toHexString();
   await request(app)
     .post(`/api/clients/${id}/offices`)
     .set('Cookie', global.signin())
@@ -138,7 +138,7 @@ it('returns an error with invalid city', async () => {
 });
 
 it('returns an error with invalid meb admin', async () => {
-  const id = mongoose.Types.ObjectId().toHexString();
+  const id = new mongoose.Types.ObjectId().toHexString();
   const { user, client } = await getData();
   await request(app)
     .post(`/api/clients/${client.id}/offices`)
@@ -161,7 +161,7 @@ it('returns an error with invalid meb admin', async () => {
 });
 
 it('returns an error with invalid client admin', async () => {
-  const id = mongoose.Types.ObjectId().toHexString();
+  const id = new mongoose.Types.ObjectId().toHexString();
   const { user, client } = await getData();
   await request(app)
     .post(`/api/clients/${client.id}/offices`)
@@ -183,7 +183,7 @@ it('returns an error with invalid client admin', async () => {
     .expect(400);
 });
 it('returns an error with invalid repair admin', async () => {
-  const id = mongoose.Types.ObjectId().toHexString();
+  const id = new mongoose.Types.ObjectId().toHexString();
   const { user, client } = await getData();
   await request(app)
     .post(`/api/clients/${client.id}/offices`)
@@ -205,7 +205,7 @@ it('returns an error with invalid repair admin', async () => {
     .expect(400);
 });
 it('returns an error with invalid repair maintenance admin', async () => {
-  const id = mongoose.Types.ObjectId().toHexString();
+  const id = new mongoose.Types.ObjectId().toHexString();
   const { user, client } = await getData();
   await request(app)
     .post(`/api/clients/${client.id}/offices`)
@@ -227,7 +227,7 @@ it('returns an error with invalid repair maintenance admin', async () => {
     .expect(400);
 });
 it('returns an error with invalid repair inventory admin', async () => {
-  const id = mongoose.Types.ObjectId().toHexString();
+  const id = new mongoose.Types.ObjectId().toHexString();
   const { user, client } = await getData();
   await request(app)
     .post(`/api/clients/${client.id}/offices`)

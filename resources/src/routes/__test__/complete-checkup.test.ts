@@ -7,11 +7,14 @@ import { Component } from '../../models/component';
 import { Checkup } from '../../models/checkup';
 import { CheckupStatus, ResourceStatus } from '@movers/common';
 import { natsClient } from '../../nats';
+import { Office } from '../../models/office';
+
 const getCheckup = async () => {
   const checkup = Checkup.build({
     resourceRef: '0001',
     createdAt: new Date(),
     status: CheckupStatus.Pending,
+    assignee: new mongoose.Types.ObjectId().toHexString(),
   });
   await checkup.save();
   return checkup;
@@ -27,6 +30,15 @@ const getResource = async () => {
     measureIndicators: true,
   });
   await resourceType.save();
+  const office = Office.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    name: 'Sede principal',
+    client: 'Claro',
+    repairAdmin: new mongoose.Types.ObjectId().toHexString(),
+    maintenanceAdmin: new mongoose.Types.ObjectId().toHexString(),
+    inventoryAdmin: new mongoose.Types.ObjectId().toHexString(),
+  });
+  await office.save();
   const resource = Resource.build({
     type: 'Bicicleta',
     reference: '0001',
@@ -241,6 +253,7 @@ it('returns status 201 and creates checkup when given valid params', async () =>
         },
       ],
     });
+  console.log(response.body);
   expect(response.status).toEqual(201);
   checkups = await Checkup.find({});
   expect(checkups.length).toEqual(1);

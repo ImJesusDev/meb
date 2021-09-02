@@ -11,6 +11,7 @@ import { ResourceType } from '../models/resource-type';
 import { Repair, ComponentRepairAttrs } from '../models/repair';
 import { ResourceUpdatedPublisher } from '../events/publishers/resource-updated-publisher';
 import { natsClient } from '../nats';
+import { Office } from '../models/office';
 
 const router = express.Router();
 
@@ -22,6 +23,10 @@ router.post(
 
     if (!resource) {
       throw new BadRequestError('The resource does not exists');
+    }
+    const office = await Office.findOne({ name: resource.office });
+    if (!office) {
+      throw new BadRequestError('The resource office does not exists');
     }
     const existingType = await ResourceType.findOne({
       type: resource.type,
@@ -42,6 +47,7 @@ router.post(
       createdAt: new Date(),
       components,
       status: RepairStatus.Pending,
+      assignee: office.repairAdmin,
     });
 
     await repair.save();

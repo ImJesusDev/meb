@@ -57,7 +57,19 @@ router.get(
     const resources = await Resource.find(query)
       .skip(Number(skip))
       .limit(Number(perPage))
-      .populate(['documents', 'checkups', 'repairs', 'maintenances']);
+      .populate(['documents', 'checkups', 'repairs', 'maintenances'])
+      .populate({
+        path: 'repairs',
+        populate: ['assignee'],
+      })
+      .populate({
+        path: 'checkups',
+        populate: ['assignee'],
+      })
+      .populate({
+        path: 'maintenances',
+        populate: ['assignee'],
+      });
 
     res.status(200).send({
       resources,

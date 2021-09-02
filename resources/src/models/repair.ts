@@ -11,6 +11,7 @@ export interface RepairAttrs {
   resourceRef: string;
   components?: ComponentRepairAttrs[];
   status: RepairStatus;
+  assignee: string;
 }
 /*
  *   Interface that describes the properties
@@ -33,6 +34,7 @@ interface RepairDoc extends mongoose.Document {
   resourceRef: string;
   components?: [];
   status: RepairStatus;
+  assignee: string;
 }
 
 /*
@@ -54,6 +56,10 @@ const repairSchema = new mongoose.Schema(
       required: false,
     },
     resourceRef: {
+      type: String,
+      required: true,
+    },
+    assignee: {
       type: String,
       required: true,
     },
@@ -94,6 +100,12 @@ repairSchema.virtual('resource', {
   ref: 'Resource',
   localField: 'resourceRef',
   foreignField: 'reference',
+  justOne: true,
+});
+repairSchema.virtual('assignedUser', {
+  ref: 'User',
+  localField: 'assignee',
+  foreignField: 'id',
   justOne: true,
 });
 const Repair = mongoose.model<RepairDoc, RepairModel>('Repair', repairSchema);

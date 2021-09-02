@@ -50,7 +50,7 @@ it('returns an error with invalid name', async () => {
     .expect(400);
 });
 it('returns an error with invalid city', async () => {
-  const fakeCityId = mongoose.Types.ObjectId().toHexString();
+  const fakeCityId = new mongoose.Types.ObjectId().toHexString();
   await request(app)
     .post(`/api/locations/cities/${fakeCityId}/geometries`)
     .set('Cookie', global.signin())

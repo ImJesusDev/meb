@@ -5,7 +5,7 @@ import { User } from '../../models/user';
 
 const getUser = async () => {
   const user = User.build({
-    id: mongoose.Types.ObjectId().toHexString(),
+    id: new mongoose.Types.ObjectId().toHexString(),
     firstName: 'Jesus',
     lastName: 'Diaz',
     email: 'test@mail.com',
