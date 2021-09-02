@@ -7,11 +7,22 @@ import { Component } from '../../models/component';
 import { Repair } from '../../models/repair';
 import { RepairStatus, ResourceStatus } from '@movers/common';
 import { natsClient } from '../../nats';
+import { Office } from '../../models/office';
 const getRepair = async () => {
+  const office = Office.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    name: 'Sede principal',
+    client: 'Claro',
+    repairAdmin: new mongoose.Types.ObjectId().toHexString(),
+    maintenanceAdmin: new mongoose.Types.ObjectId().toHexString(),
+    inventoryAdmin: new mongoose.Types.ObjectId().toHexString(),
+  });
+  await office.save();
   const repair = Repair.build({
     resourceRef: '0001',
     createdAt: new Date(),
     status: RepairStatus.Pending,
+    assignee: new mongoose.Types.ObjectId().toHexString(),
   });
   await repair.save();
   return repair;
@@ -86,7 +97,7 @@ it('returns status other than 401 if the user is logged in', async () => {
 
 it('returns an error when the resource does not exists', async () => {
   const cookie = global.signin();
-  const id = mongoose.Types.ObjectId().toHexString();
+  const id = new mongoose.Types.ObjectId().toHexString();
   const response = await request(app)
     .put(`/api/resources/${id}/repairs`)
     .set('Cookie', cookie)

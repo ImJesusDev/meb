@@ -11,6 +11,7 @@ export interface CheckupAttrs {
   resourceRef: string;
   components?: ComponentCheckupAttrs[];
   status: CheckupStatus;
+  assignee: string;
 }
 /*
  *   Interface that describes the properties
@@ -33,6 +34,7 @@ interface CheckupDoc extends mongoose.Document {
   resourceRef: string;
   components?: [];
   status: CheckupStatus;
+  assignee: string;
 }
 
 /*
@@ -54,6 +56,10 @@ const checkupSchema = new mongoose.Schema(
       required: false,
     },
     resourceRef: {
+      type: String,
+      required: true,
+    },
+    assignee: {
       type: String,
       required: true,
     },
@@ -97,7 +103,12 @@ checkupSchema.virtual('resource', {
   foreignField: 'reference',
   justOne: true,
 });
-
+checkupSchema.virtual('assignedUser', {
+  ref: 'User',
+  localField: 'assignee',
+  foreignField: 'id',
+  justOne: true,
+});
 const Checkup = mongoose.model<CheckupDoc, CheckupModel>(
   'Checkup',
   checkupSchema

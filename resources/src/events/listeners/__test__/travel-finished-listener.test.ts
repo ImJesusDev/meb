@@ -14,6 +14,7 @@ import { Travel } from '../../../models/travel';
 import { ResourceType } from '../../../models/resource-type';
 import { Component } from '../../../models/component';
 import { Maintenance } from '../../../models/maintenance';
+import { Office } from '../../../models/office';
 
 const setup = async () => {
   await Component.find({});
@@ -38,6 +39,15 @@ const setup = async () => {
     status: ResourceStatus.Available,
   });
   await resource.save();
+  const office = Office.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    name: 'Bogota',
+    client: 'Claro',
+    repairAdmin: new mongoose.Types.ObjectId().toHexString(),
+    maintenanceAdmin: new mongoose.Types.ObjectId().toHexString(),
+    inventoryAdmin: new mongoose.Types.ObjectId().toHexString(),
+  });
+  await office.save();
   const travel = Travel.build({
     id: new mongoose.Types.ObjectId().toHexString(),
     origin: 'Calle 80',

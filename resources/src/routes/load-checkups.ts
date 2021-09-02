@@ -13,6 +13,7 @@ import { Component } from '../models/component';
 import { Checkup, ComponentCheckupAttrs } from '../models/checkup';
 import { ResourceUpdatedPublisher } from '../events/publishers/resource-updated-publisher';
 import { natsClient } from '../nats';
+import { Office } from '../models/office';
 const router = express.Router();
 
 router.post(
@@ -32,6 +33,10 @@ router.post(
       // Find resource
       const resource = await Resource.findById(item.id);
       if (resource) {
+        const office = await Office.findOne({ name: resource.office });
+        if (!office) {
+          continue;
+        }
         // Find existing type with components
         const existingType = await ResourceType.findOne({
           type: resource.type,
@@ -52,6 +57,7 @@ router.post(
           createdAt: new Date(),
           components,
           status: CheckupStatus.Pending,
+          assignee: office.inventoryAdmin,
         });
         // Save Checkup
         await checkup.save();

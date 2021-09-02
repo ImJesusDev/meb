@@ -7,11 +7,22 @@ import { Component } from '../../models/component';
 import { Maintenance } from '../../models/maintenance';
 import { MaintenanceStatus, ResourceStatus } from '@movers/common';
 import { natsClient } from '../../nats';
+import { Office } from '../../models/office';
 const getMaintenance = async () => {
+  const office = Office.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    name: 'Sede principal',
+    client: 'Claro',
+    repairAdmin: new mongoose.Types.ObjectId().toHexString(),
+    maintenanceAdmin: new mongoose.Types.ObjectId().toHexString(),
+    inventoryAdmin: new mongoose.Types.ObjectId().toHexString(),
+  });
+  await office.save();
   const maintenance = Maintenance.build({
     resourceRef: '0001',
     createdAt: new Date(),
     status: MaintenanceStatus.Pending,
+    assignee: new mongoose.Types.ObjectId().toHexString(),
   });
   await maintenance.save();
   return maintenance;

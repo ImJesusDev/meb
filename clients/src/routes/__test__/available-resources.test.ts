@@ -6,7 +6,7 @@ import { ResourceStatus } from '@movers/common';
 
 beforeEach(async () => {
   const resource = Resource.build({
-    id: mongoose.Types.ObjectId().toHexString(),
+    id: new mongoose.Types.ObjectId().toHexString(),
     type: 'Bicicleta',
     reference: '001',
     qrCode: 'qrCode',

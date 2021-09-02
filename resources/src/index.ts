@@ -1,5 +1,9 @@
 import mongoose from 'mongoose';
 import { app } from './app';
+import { OfficeCreatedListener } from './events/listeners/office-created-listener';
+import { TravelCreatedListener } from './events/listeners/travel-created-listener';
+import { TravelFinishedListener } from './events/listeners/travel-finished-listener';
+import { UserCreatedListener } from './events/listeners/user-created-listener';
 import { natsClient } from './nats';
 
 const start = async () => {
@@ -30,6 +34,10 @@ const start = async () => {
     });
     process.on('SIGINT', () => natsClient.client.close());
     process.on('SIGTERM', () => natsClient.client.close());
+    new UserCreatedListener(natsClient.client).listen();
+    new OfficeCreatedListener(natsClient.client).listen();
+    new TravelCreatedListener(natsClient.client).listen();
+    new TravelFinishedListener(natsClient.client).listen();
 
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,

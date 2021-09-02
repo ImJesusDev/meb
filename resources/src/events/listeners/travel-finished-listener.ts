@@ -16,6 +16,7 @@ import {
 } from '../../models/maintenance';
 import { ResourceUpdatedPublisher } from '../publishers/resource-updated-publisher';
 import { natsClient } from '../../nats';
+import { Office } from '../../models/office';
 
 export class TravelFinishedListener extends Listener<TravelFinishedEvent> {
   subject: Subjects.TravelFinished = Subjects.TravelFinished;
@@ -27,6 +28,10 @@ export class TravelFinishedListener extends Listener<TravelFinishedEvent> {
     const resource = await Resource.findOne({ reference: resourceRef });
     if (!resource) {
       return console.log(`Resource not found ref: ${resourceRef}`);
+    }
+    const office = await Office.findOne({ name: resource.office });
+    if (!office) {
+      return console.log(`Office not found ref: ${resource.office}`);
     }
     // Get the type
     const type = await ResourceType.findOne({ type: resource.type }).populate([
@@ -67,6 +72,7 @@ export class TravelFinishedListener extends Listener<TravelFinishedEvent> {
           createdAt: new Date(),
           components,
           status: MaintenanceStatus.Pending,
+          assignee: office.maintenanceAdmin,
         });
 
         await maintenance.save();

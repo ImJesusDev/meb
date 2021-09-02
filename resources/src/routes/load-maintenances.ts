@@ -12,6 +12,7 @@ import { ResourceType } from '../models/resource-type';
 import { Maintenance, ComponentMaintenanceAttrs } from '../models/maintenance';
 import { ResourceUpdatedPublisher } from '../events/publishers/resource-updated-publisher';
 import { natsClient } from '../nats';
+import { Office } from '../models/office';
 
 const router = express.Router();
 
@@ -25,6 +26,10 @@ router.post(
       const resource = await Resource.findById(id);
 
       if (!resource) {
+        continue;
+      }
+      const office = await Office.findOne({ name: resource.office });
+      if (!office) {
         continue;
       }
       const existingType = await ResourceType.findOne({
@@ -45,6 +50,7 @@ router.post(
         createdAt: new Date(),
         components,
         status: MaintenanceStatus.Pending,
+        assignee: office.maintenanceAdmin,
       });
 
       await maintenance.save();
