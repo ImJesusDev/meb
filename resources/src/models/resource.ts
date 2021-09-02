@@ -33,6 +33,7 @@ export interface ResourceDoc extends mongoose.Document {
   version: number;
   kmSinceMaintenance: number;
   deletedAt: null | Date;
+  createdAt: Date;
 }
 
 /*
@@ -88,6 +89,11 @@ const resourceSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.Date,
       required: false,
       default: null,
+    },
+    createdAt: {
+      type: mongoose.Schema.Types.Date,
+      required: false,
+      default: new Date(),
     },
   },
   {
