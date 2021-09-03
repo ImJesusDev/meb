@@ -7,6 +7,11 @@ export enum UserGender {
   Male = 'male',
   Female = 'female',
 }
+
+export interface UserEps {
+  id: string;
+  name: string;
+}
 /*
  *   Interface that describes the properties
  *   that are required to create a new User
@@ -35,6 +40,7 @@ export interface UserAttrs {
   emergencyContactPhone?: string;
   bloodType?: string;
   gender?: UserGender;
+  eps?: UserEps;
 }
 
 /*
@@ -66,6 +72,7 @@ interface UserDoc extends mongoose.Document {
   emergencyContactPhone?: string;
   bloodType?: string;
   gender?: UserGender;
+  eps?: UserEps;
 }
 
 /*
@@ -185,6 +192,10 @@ const userSchema = new mongoose.Schema(
       type: Number,
       required: false,
       default: 0,
+    },
+    eps: {
+      id: { type: String, required: false },
+      name: { type: String, required: false },
     },
   },
   {

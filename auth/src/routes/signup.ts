@@ -8,7 +8,7 @@ import {
   BadRequestError,
 } from '@movers/common';
 /* Models */
-import { User } from '../models/user';
+import { User, UserEps } from '../models/user';
 /* Publishers */
 import { UserCreatedPublisher } from '../events/publishers/user-created-publisher';
 /* NATS Client */
@@ -63,7 +63,7 @@ router.post(
       gender,
       documentNumber,
     } = req.body;
-
+    const eps = req.body.eps as UserEps;
     if (!termsDate) {
       throw new BadRequestError('Debe aceptar términos y condiciones');
     }
@@ -96,6 +96,7 @@ router.post(
       bloodType,
       gender,
       documentNumber,
+      eps,
     });
     await user.save();
 
