@@ -47,6 +47,12 @@ export class TravelFinishedListener extends Listener<TravelFinishedEvent> {
     if (!travel) {
       return console.log(`Travel not found id: ${data.id}`);
     }
+    if (indicators) {
+      travel.set({
+        indicators,
+      });
+      await travel.save();
+    }
     // If the travel has indicators with km
     if (
       indicators &&
