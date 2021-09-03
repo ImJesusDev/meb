@@ -61,6 +61,7 @@ router.post(
       emergencyContactPhone,
       bloodType,
       gender,
+      documentNumber,
     } = req.body;
 
     if (!termsDate) {
@@ -94,6 +95,7 @@ router.post(
       emergencyContactPhone,
       bloodType,
       gender,
+      documentNumber,
     });
     await user.save();
 
@@ -106,6 +108,12 @@ router.post(
       activationCode: user.activationCode,
       client: user.client!,
       office: user.office!,
+      weight,
+      emergencyContactName,
+      emergencyContactPhone,
+      bloodType,
+      gender,
+      documentNumber,
     });
 
     res.status(201).send(user);

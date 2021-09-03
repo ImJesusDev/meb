@@ -1,5 +1,10 @@
 import mongoose from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
+
+export enum UserGender {
+  Male = 'male',
+  Female = 'female',
+}
 /*
  *   Interface that describes the properties
  *   that are required to create a new User
@@ -11,6 +16,13 @@ interface UserAttrs {
   lastName: string;
   client?: string;
   office?: string;
+  photo?: string;
+  weight?: number;
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
+  bloodType?: string;
+  gender?: UserGender;
+  documentNumber?: string;
 }
 
 /*
@@ -33,6 +45,13 @@ interface UserDoc extends mongoose.Document {
   lastName: string;
   client?: string;
   office?: string;
+  photo?: string;
+  documentNumber?: string;
+  weight?: number;
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
+  bloodType?: string;
+  gender?: UserGender;
 }
 
 const userSchema = new mongoose.Schema(
@@ -56,6 +75,36 @@ const userSchema = new mongoose.Schema(
     office: {
       type: String,
       required: false,
+    },
+    photo: {
+      type: String,
+      required: false,
+    },
+    documentNumber: {
+      type: String,
+      required: false,
+    },
+    gender: {
+      type: String,
+      required: false,
+      enum: Object.values(UserGender),
+    },
+    emergencyContactName: {
+      type: String,
+      required: false,
+    },
+    bloodType: {
+      type: String,
+      required: false,
+    },
+    emergencyContactPhone: {
+      type: String,
+      required: false,
+    },
+    weight: {
+      type: Number,
+      required: false,
+      default: 0,
     },
   },
   {
