@@ -105,7 +105,7 @@ repairSchema.virtual('resource', {
 repairSchema.virtual('assignedUser', {
   ref: 'User',
   localField: 'assignee',
-  foreignField: 'id',
+  foreignField: '_id',
   justOne: true,
 });
 const Repair = mongoose.model<RepairDoc, RepairModel>('Repair', repairSchema);
