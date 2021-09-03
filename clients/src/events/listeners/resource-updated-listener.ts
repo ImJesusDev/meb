@@ -16,7 +16,6 @@ export class ResourceUpdatedListener extends Listener<ResourceUpdatedEvent> {
     });
     if (!resource) {
       console.log(`Resource id:${id} version: ${version} not found`);
-      msg.ack();
       return;
     }
     resource.set({
