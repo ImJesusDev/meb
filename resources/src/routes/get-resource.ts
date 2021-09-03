@@ -9,15 +9,15 @@ router.get('/api/resources/find/:id', async (req: Request, res: Response) => {
     .populate(['documents', 'checkups', 'repairs', 'maintenances'])
     .populate({
       path: 'repairs',
-      populate: ['assignee'],
+      populate: ['assignedUser'],
     })
     .populate({
       path: 'checkups',
-      populate: ['assignee'],
+      populate: ['assignedUser'],
     })
     .populate({
       path: 'maintenances',
-      populate: ['assignee'],
+      populate: ['assignedUser'],
     });
   if (!resource) {
     throw new NotFoundError();
