@@ -1,10 +1,13 @@
 import mongoose from 'mongoose';
 import { app } from './app';
 import { natsClient } from './nats';
+
 import { TravelCreatedListener } from './events/listeners/travel-created-listener';
 import { ResourceCreatedListener } from './events/listeners/resource-created-listener';
 import { ResourceUpdatedListener } from './events/listeners/resource-updated-listener';
 import { TravelFinishedListener } from './events/listeners/travel-finished-listener';
+import seed from './seed';
+
 const start = async () => {
   if (!process.env.JWT_KEY) {
     throw new Error('JWT_KEY must be defined');
@@ -42,6 +45,7 @@ const start = async () => {
       useUnifiedTopology: true,
       useCreateIndex: true,
     });
+    await seed();
     console.log('Connected to MongoDb.');
   } catch (error) {
     console.log(error);
