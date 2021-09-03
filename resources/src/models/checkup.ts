@@ -106,7 +106,7 @@ checkupSchema.virtual('resource', {
 checkupSchema.virtual('assignedUser', {
   ref: 'User',
   localField: 'assignee',
-  foreignField: 'id',
+  foreignField: '_id',
   justOne: true,
 });
 const Checkup = mongoose.model<CheckupDoc, CheckupModel>(

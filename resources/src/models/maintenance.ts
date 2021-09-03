@@ -105,7 +105,7 @@ maintenanceSchema.virtual('resource', {
 maintenanceSchema.virtual('assignedUser', {
   ref: 'User',
   localField: 'assignee',
-  foreignField: 'id',
+  foreignField: '_id',
   justOne: true,
 });
 const Maintenance = mongoose.model<MaintenanceDoc, MaintenanceModel>(
