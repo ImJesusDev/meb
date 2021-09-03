@@ -27,16 +27,27 @@ interface EpsModel extends mongoose.Model<EpsDoc> {
   build(attrs: EpsAttrs): EpsDoc;
 }
 
-const epsSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const epsSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    createdAt: {
+      type: mongoose.Schema.Types.Date,
+      default: new Date(),
+    },
   },
-  createdAt: {
-    type: mongoose.Schema.Types.Date,
-    default: new Date(),
-  },
-});
+  {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+      },
+    },
+  }
+);
 
 epsSchema.set('versionKey', 'version');
 epsSchema.plugin(updateIfCurrentPlugin);
