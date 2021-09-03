@@ -36,7 +36,7 @@ router.get(
     const maintenances = await Maintenance.find(query)
       .skip(Number(skip))
       .limit(Number(perPage))
-      .populate(['resource']);
+      .populate(['resource', 'assignedUser']);
 
     res.status(200).send({
       maintenances,

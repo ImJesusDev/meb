@@ -60,15 +60,15 @@ router.get(
       .populate(['documents', 'checkups', 'repairs', 'maintenances'])
       .populate({
         path: 'repairs',
-        populate: ['assignee'],
+        populate: ['assignedUser'],
       })
       .populate({
         path: 'checkups',
-        populate: ['assignee'],
+        populate: ['assignedUser'],
       })
       .populate({
         path: 'maintenances',
-        populate: ['assignee'],
+        populate: ['assignedUser'],
       });
 
     res.status(200).send({
