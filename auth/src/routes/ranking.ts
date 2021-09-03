@@ -9,7 +9,7 @@ router.get('/api/users/ranking', async (req: Request, res: Response) => {
   const type = req.query.type;
 
   if (type) {
-    query['type'] = type;
+    query['resourceType'] = type;
   }
 
   const ranking = await UserRanking.find(query)

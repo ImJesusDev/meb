@@ -5,6 +5,7 @@ import { User } from '../../models/user';
 import { UserPoints, PointsType } from '../../models/user-points';
 import { Resource } from '../../models/resource';
 import { UserRanking } from '../../models/user-ranking';
+import { UserIndicators } from '../../models/user-indicators';
 
 export class TravelFinishedListener extends Listener<TravelFinishedEvent> {
   subject: Subjects.TravelFinished = Subjects.TravelFinished;
@@ -25,6 +26,38 @@ export class TravelFinishedListener extends Listener<TravelFinishedEvent> {
       }
       // If the travel has indicators
       if (indicators && indicators.km) {
+        // get the user indicators for the type
+        let userIndicators = await UserIndicators.findOne({
+          userId,
+          resourceType: resource.type,
+        });
+        if (!userIndicators) {
+          // If the user does not have indicators
+          userIndicators = UserIndicators.build({
+            userId,
+            energyFootprint: indicators.energyFootprint,
+            environmentalFootprint: indicators.environmentalFootprint,
+            economicFootprint: indicators.economicFootprint,
+            calories: indicators.calories,
+            km: indicators.km,
+            resourceType: resource.type,
+            createdAt: new Date(),
+          });
+          await userIndicators.save();
+        } else {
+          userIndicators.set({
+            energyFootprint:
+              userIndicators.energyFootprint + indicators.energyFootprint,
+            environmentalFootprint:
+              userIndicators.environmentalFootprint +
+              indicators.environmentalFootprint,
+            economicFootprint:
+              userIndicators.economicFootprint + indicators.economicFootprint,
+            calories: userIndicators.calories + indicators.calories,
+            km: userIndicators.km + indicators.km,
+          });
+          await userIndicators.save();
+        }
         // Get the user ranking for the type
         let userRanking = await UserRanking.findOne({
           userId,
