@@ -51,6 +51,8 @@ const setup = async () => {
     reservationId: new mongoose.Types.ObjectId().toHexString(),
     userId: user.id,
     status: TravelStatus.Pending,
+    origin: 'Calle 100',
+    destination: 'Call 80',
   };
   // Create a fake message event
   // @ts-ignore

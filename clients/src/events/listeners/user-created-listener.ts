@@ -10,7 +10,21 @@ export class UserCreatedListener extends Listener<UserCreatedEvent> {
   async onMessage(data: UserCreatedEvent['data'], msg: Message) {
     console.log(`UserCreatedEvent`);
     console.log(JSON.stringify(data, null, 2));
-    const { id, email, firstName, lastName, client, office } = data;
+    const {
+      id,
+      email,
+      firstName,
+      lastName,
+      client,
+      office,
+      photo,
+      documentNumber,
+      weight,
+      emergencyContactName,
+      emergencyContactPhone,
+      bloodType,
+      gender,
+    } = data;
     const user = User.build({
       id,
       email,
@@ -18,6 +32,13 @@ export class UserCreatedListener extends Listener<UserCreatedEvent> {
       lastName,
       client,
       office,
+      photo,
+      documentNumber,
+      weight,
+      emergencyContactName,
+      emergencyContactPhone,
+      bloodType,
+      gender,
     });
     await user.save();
     msg.ack();

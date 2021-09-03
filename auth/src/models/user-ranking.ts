@@ -59,7 +59,7 @@ const UserRanking = mongoose.model<UserRankingDoc, UserRankingModel>(
 userRankingSchema.virtual('user', {
   ref: 'User',
   localField: 'userId',
-  foreignField: 'id',
+  foreignField: '_id',
   justOne: true,
 });
 export { UserRanking };
