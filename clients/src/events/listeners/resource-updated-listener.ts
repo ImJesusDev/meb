@@ -8,6 +8,8 @@ export class ResourceUpdatedListener extends Listener<ResourceUpdatedEvent> {
   queueGroupName = queueGroupName;
 
   async onMessage(data: ResourceUpdatedEvent['data'], msg: Message) {
+    console.log('ResourceUpdatedEvent');
+    console.log(JSON.stringify(data, null, 2));
     const { id, status, version } = data;
 
     const resource = await Resource.findByEvent({
