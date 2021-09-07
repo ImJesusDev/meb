@@ -1,12 +1,15 @@
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 import mongoose from 'mongoose';
-import { TravelStatus, TravelIndicators } from '@movers/common';
+import { TravelStatus, TravelIndicators, Location } from '@movers/common';
+
 /*
  *   Interface that describes the properties
  *   that are required to create a new Travel
  */
 export interface TravelAttrs {
   origin: string;
+  originPoint?: Location;
+  destinationPoint?: Location;
   destination: string;
   resourceRef: string;
   reservationId: string;
@@ -21,6 +24,8 @@ export interface TravelAttrs {
  */
 interface TravelDoc extends mongoose.Document {
   origin: string;
+  originPoint?: Location;
+  destinationPoint?: Location;
   destination: string;
   resourceRef: string;
   reservationId: string;
@@ -46,6 +51,14 @@ const travelSchema = new mongoose.Schema(
     origin: {
       type: String,
       required: true,
+    },
+    originPoint: {
+      longitude: { type: Number, required: false },
+      latitude: { type: Number, required: false },
+    },
+    destinationPoint: {
+      longitude: { type: Number, required: false },
+      latitude: { type: Number, required: false },
     },
     destination: {
       type: String,
