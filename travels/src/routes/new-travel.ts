@@ -1,7 +1,12 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Travel } from '../models/travel';
-import { requireAuth, validateRequest, TravelStatus } from '@movers/common';
+import {
+  requireAuth,
+  validateRequest,
+  TravelStatus,
+  Location,
+} from '@movers/common';
 import { TravelCreatedPublisher } from '../events/publishers/travel-created-publisher';
 import { natsClient } from '../nats';
 const router = express.Router();
@@ -25,7 +30,8 @@ router.post(
   async (req: Request, res: Response) => {
     const { origin, destination, resourceRef, reservationId } = req.body;
     const user = req.currentUser;
-
+    const originPoint = req.body.originPoint as Location;
+    const destinationPoint = req.body.destinationPoint as Location;
     const travel = Travel.build({
       origin,
       destination,
@@ -33,6 +39,8 @@ router.post(
       reservationId,
       status: TravelStatus.Pending,
       userId: user!.id,
+      originPoint,
+      destinationPoint,
     });
     await travel.save();
 
@@ -45,6 +53,8 @@ router.post(
       version: travel.version,
       origin: travel.origin,
       destination: travel.destination,
+      originPoint,
+      destinationPoint,
     });
     res.status(201).send(travel);
   }

@@ -18,6 +18,8 @@ export class TravelCreatedListener extends Listener<TravelCreatedEvent> {
       userId,
       reservationId,
       resourceRef,
+      originPoint,
+      destinationPoint,
     } = data;
 
     const resource = await Resource.findOne({ reference: resourceRef });
@@ -33,6 +35,8 @@ export class TravelCreatedListener extends Listener<TravelCreatedEvent> {
       reservationId,
       status,
       userId,
+      originPoint,
+      destinationPoint,
     });
 
     await travel.save();

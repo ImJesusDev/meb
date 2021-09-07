@@ -51,6 +51,8 @@ router.put(
       version: travel.version,
       origin: travel.origin,
       destination: travel.destination,
+      originPoint: travel.originPoint,
+      destinationPoint: travel.destinationPoint,
     });
     res.status(200).send(travel);
   }

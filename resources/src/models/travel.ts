@@ -1,4 +1,4 @@
-import { TravelIndicators, TravelStatus } from '@movers/common';
+import { TravelIndicators, TravelStatus, Location } from '@movers/common';
 import mongoose from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 /*
@@ -9,6 +9,8 @@ interface TravelAttrs {
   id: string;
   origin: string;
   destination: string;
+  originPoint?: Location;
+  destinationPoint?: Location;
   resourceRef: string;
   reservationId: string;
   userId: string;
@@ -36,6 +38,8 @@ interface TravelModel extends mongoose.Model<TravelDoc> {
 interface TravelDoc extends mongoose.Document {
   origin: string;
   destination: string;
+  originPoint?: Location;
+  destinationPoint?: Location;
   resourceRef: string;
   reservationId: string;
   userId: string;
@@ -62,6 +66,14 @@ const userSchema = new mongoose.Schema(
     reservationId: {
       type: String,
       required: true,
+    },
+    originPoint: {
+      longitude: { type: Number, required: false },
+      latitude: { type: Number, required: false },
+    },
+    destinationPoint: {
+      longitude: { type: Number, required: false },
+      latitude: { type: Number, required: false },
     },
     userId: {
       type: String,
