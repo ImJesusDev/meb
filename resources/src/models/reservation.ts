@@ -12,6 +12,7 @@ export interface ReservationAttrs {
   reply?: string;
   status: ReservationStatus;
   userId: string;
+  typeRent?: number;
 }
 
 /*
@@ -26,6 +27,7 @@ interface ReservationDoc extends mongoose.Document {
   reply?: string;
   status: ReservationStatus;
   userId: string;
+  typeRent?: number;
 }
 
 /*
@@ -59,6 +61,10 @@ const reservationSchema = new mongoose.Schema(
       required: false,
     },
     rating: {
+      type: Number,
+      required: false,
+    },
+    typeRent: {
       type: Number,
       required: false,
     },

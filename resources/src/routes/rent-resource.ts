@@ -17,6 +17,7 @@ router.post(
   requireAuth(),
   async (req: Request, res: Response) => {
     const { id } = req.params;
+    const { typeRent } = req.body;
     const user = req.currentUser;
     const existingResource = await Resource.findById(id);
     if (!existingResource) {
@@ -38,6 +39,7 @@ router.post(
       createdAt: new Date(),
       status: ReservationStatus.Active,
       userId: user!.id,
+      typeRent,
     });
     await reservation.save();
     res.status(200).send({ resource: existingResource, reservation });
