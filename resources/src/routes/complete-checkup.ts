@@ -18,6 +18,7 @@ import { ResourceUpdatedPublisher } from '../events/publishers/resource-updated-
 import { natsClient } from '../nats';
 import { Repair } from '../models/repair';
 import { Office } from '../models/office';
+import { s3Client } from '../s3';
 
 const router = express.Router();
 
@@ -75,6 +76,29 @@ router.put(
       throw new BadRequestError('The resource type does not exists');
     }
     for (const component of components) {
+      if (component.photo) {
+        // Create Buffer
+        const buffer = Buffer.from(
+          component.photo.replace(/^data:image\/\w+;base64,/, ''),
+          'base64'
+        );
+        // Get MimeType
+        const mimeType = component.photo.match(
+          /[^:]\w+\/[\w-+\d.]+(?=;|,)/
+        )![0];
+        const imageKey = `images/checkups/${Date.now()}`;
+        // Params to upload file
+        const uploadParams = {
+          Bucket: 'meb-images',
+          Key: imageKey,
+          Body: buffer,
+          ContentEncoding: 'base64',
+          ContentType: mimeType,
+          ACL: 'public-read',
+        };
+        await s3Client.client.upload(uploadParams).promise();
+        component.photo = `https://meb-images.${process.env.SPACES_ENDPOINT}/${imageKey}`;
+      }
       const existingComponent = await Component.findById(component.componentId);
       if (!existingComponent) {
         throw new BadRequestError(
