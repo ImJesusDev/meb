@@ -5,6 +5,7 @@ import { requireAuth, validateRequest, BadRequestError } from '@movers/common';
 /* Models */
 import { Client } from '../models/client';
 import { User } from '../models/user';
+import { s3Client } from '../s3';
 const router = express.Router();
 
 router.post(
@@ -23,7 +24,7 @@ router.post(
   validateRequest,
   async (req: Request, res: Response) => {
     const { name, nit, logo, mebAdmin, superAdminClient } = req.body;
-
+    let clientLogo = '';
     const existingMebAdmin = await User.findById(mebAdmin);
     if (!existingMebAdmin) {
       throw new BadRequestError('El administrador Mejor en Bici no existe');
@@ -32,11 +33,34 @@ router.post(
     if (!existingSuperAdminClient) {
       throw new BadRequestError('El super administrador del cliente no existe');
     }
+    if (logo && logo.includes('data:image')) {
+      // Create Buffer
+      const buffer = Buffer.from(
+        logo.replace(/^data:image\/\w+;base64,/, ''),
+        'base64'
+      );
+      // Get MimeType
+      const mimeType = logo.match(/[^:]\w+\/[\w-+\d.]+(?=;|,)/)[0];
+      const imageKey = `images/clients/${Date.now()}`;
+      // Params to upload file
+      const uploadParams = {
+        Bucket: 'meb-images',
+        Key: imageKey,
+        Body: buffer,
+        ContentEncoding: 'base64',
+        ContentType: mimeType,
+        ACL: 'public-read',
+      };
+      await s3Client.client.upload(uploadParams).promise();
+      clientLogo = `https://meb-images.${process.env.SPACES_ENDPOINT}/${imageKey}`;
+    } else if (logo) {
+      clientLogo = logo;
+    }
 
     const client = Client.build({
       name,
       nit,
-      logo,
+      logo: clientLogo,
       mebAdmin,
       superAdminClient,
     });
