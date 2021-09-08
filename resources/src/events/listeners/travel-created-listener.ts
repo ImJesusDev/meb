@@ -9,6 +9,8 @@ export class TravelCreatedListener extends Listener<TravelCreatedEvent> {
   POINTS_PER_RENT = 50;
 
   async onMessage(data: TravelCreatedEvent['data'], msg: Message) {
+    console.log('TravelCreatedEvent');
+    console.log(JSON.stringify(data, null, 2));
     // Find user
     const {
       id,

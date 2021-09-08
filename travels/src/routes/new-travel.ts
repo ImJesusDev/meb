@@ -56,6 +56,19 @@ router.post(
       originPoint,
       destinationPoint,
     });
+
+    console.log('TravelCreatedPublisher', {
+      id: travel.id,
+      resourceRef,
+      reservationId,
+      status: TravelStatus.Pending,
+      userId: travel.userId,
+      version: travel.version,
+      origin: travel.origin,
+      destination: travel.destination,
+      originPoint,
+      destinationPoint,
+    });
     res.status(201).send(travel);
   }
 );
