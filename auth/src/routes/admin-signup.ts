@@ -13,7 +13,8 @@ import { User } from '../models/user';
 import { UserCreatedPublisher } from '../events/publishers/user-created-publisher';
 /* NATS Client */
 import { natsClient } from '../nats';
-
+/* S3 Client */
+import { s3Client } from '../s3';
 const router = express.Router();
 
 router.post(
@@ -54,6 +55,7 @@ router.post(
     } = req.body;
 
     const role = req.body.role as UserRole;
+    let userPhoto = '';
 
     // Validate existing email
     let existingUser = await User.findOne({ email });
@@ -74,7 +76,27 @@ router.post(
       throw new BadRequestError('El número de documento se encuentra en uso');
     }
     const activationCode = User.generateActivationCode();
-
+    if (photo) {
+      // Create Buffer
+      const buffer = Buffer.from(
+        photo.replace(/^data:image\/\w+;base64,/, ''),
+        'base64'
+      );
+      // Get MimeType
+      const mimeType = photo.match(/[^:]\w+\/[\w-+\d.]+(?=;|,)/)[0];
+      const imageKey = `images/users/${Date.now()}`;
+      // Params to upload file
+      const uploadParams = {
+        Bucket: 'meb-images',
+        Key: imageKey,
+        Body: buffer,
+        ContentEncoding: 'base64',
+        ContentType: mimeType,
+        ACL: 'public-read',
+      };
+      await s3Client.client.upload(uploadParams).promise();
+      userPhoto = `https://meb-images.${process.env.SPACES_ENDPOINT}/${imageKey}`;
+    }
     const user = User.build({
       email,
       password,
@@ -84,13 +106,12 @@ router.post(
       documentType,
       documentNumber,
       phone,
-      photo,
       role,
       status: UserStatus.Unverified,
+      photo: userPhoto,
     });
 
     await user.save();
-
     await new UserCreatedPublisher(natsClient.client).publish({
       id: user.id,
       email: user.email,
@@ -100,6 +121,7 @@ router.post(
       activationCode: user.activationCode,
       client: '',
       office: '',
+      photo: user.photo,
     });
 
     res.status(201).send(user);
