@@ -225,7 +225,18 @@ userSchema.statics.build = (attrs: UserAttrs) => {
 userSchema.statics.generateActivationCode = () => {
   return Math.floor(100000 + Math.random() * 900000);
 };
-
+userSchema.virtual('primaryTransport', {
+  ref: 'TransportMethod',
+  localField: 'mainTransportationMethod',
+  foreignField: 'name',
+  justOne: true,
+});
+userSchema.virtual('secondaryTransport', {
+  ref: 'TransportMethod',
+  localField: 'secondaryTransportationMethod',
+  foreignField: 'name',
+  justOne: true,
+});
 const User = mongoose.model<UserDoc, UserModel>('User', userSchema);
 
 export { User };
