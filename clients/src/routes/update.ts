@@ -10,6 +10,7 @@ import {
 /* Models */
 import { Client } from '../models/client';
 import { User } from '../models/user';
+import { s3Client } from '../s3';
 
 const router = express.Router();
 
@@ -29,6 +30,7 @@ router.put(
   validateRequest,
   async (req: Request, res: Response) => {
     const client = await Client.findById(req.params.id);
+    let clientLogo = '';
     if (!client) {
       throw new NotFoundError();
     }
@@ -43,10 +45,33 @@ router.put(
     if (!existingSuperAdminClient) {
       throw new BadRequestError('El super administrador del cliente no existe');
     }
+    if (logo && logo.includes('data:image')) {
+      // Create Buffer
+      const buffer = Buffer.from(
+        logo.replace(/^data:image\/\w+;base64,/, ''),
+        'base64'
+      );
+      // Get MimeType
+      const mimeType = logo.match(/[^:]\w+\/[\w-+\d.]+(?=;|,)/)[0];
+      const imageKey = `images/clients/${Date.now()}`;
+      // Params to upload file
+      const uploadParams = {
+        Bucket: 'meb-images',
+        Key: imageKey,
+        Body: buffer,
+        ContentEncoding: 'base64',
+        ContentType: mimeType,
+        ACL: 'public-read',
+      };
+      await s3Client.client.upload(uploadParams).promise();
+      clientLogo = `https://meb-images.${process.env.SPACES_ENDPOINT}/${imageKey}`;
+    } else if (logo) {
+      clientLogo = logo;
+    }
     client.set({
       name,
       nit,
-      logo,
+      logo: clientLogo,
       mebAdmin,
       superAdminClient,
     });

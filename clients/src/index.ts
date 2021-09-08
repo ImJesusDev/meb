@@ -1,12 +1,22 @@
 import mongoose from 'mongoose';
 import { app } from './app';
 import { natsClient } from './nats';
+import { s3Client } from './s3';
 import { UserCreatedListener } from './events/listeners/user-created-listener';
 import { DomainAuthorizedListener } from './events/listeners/domain-authorized-listener';
 import { EmailAuthorizedListener } from './events/listeners/email-authorized-listener';
 import { ResourceCreatedListener } from './events/listeners/resource-created-listener';
 import { ResourceUpdatedListener } from './events/listeners/resource-updated-listener';
 const start = async () => {
+  if (!process.env.SPACES_ENDPOINT) {
+    throw new Error('SPACES_ENDPOINT must be defined');
+  }
+  if (!process.env.SPACES_KEY) {
+    throw new Error('SPACES_KEY must be defined');
+  }
+  if (!process.env.SPACES_SECRET) {
+    throw new Error('SPACES_SECRET must be defined');
+  }
   if (!process.env.JWT_KEY) {
     throw new Error('JWT_KEY must be defined');
   }
@@ -32,6 +42,12 @@ const start = async () => {
       console.log('NATS connection closed');
       process.exit();
     });
+
+    s3Client.init(
+      process.env.SPACES_KEY,
+      process.env.SPACES_SECRET,
+      process.env.SPACES_ENDPOINT
+    );
     process.on('SIGINT', () => natsClient.client.close());
     process.on('SIGTERM', () => natsClient.client.close());
 
