@@ -130,6 +130,8 @@ userSchema.statics.build = (attrs: TravelAttrs) => {
     indicators: attrs.indicators,
     tracking: attrs.tracking,
     status: attrs.status,
+    originPoint: attrs.originPoint,
+    destinationPoint: attrs.destinationPoint,
   });
 };
 userSchema.statics.findByEvent = (event: { id: string; version: number }) => {
