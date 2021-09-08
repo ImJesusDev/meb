@@ -53,6 +53,18 @@ spec:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_KEY
+            - name: SPACES_ENDPOINT
+              value: 'sfo3.digitaloceanspaces.com'
+            - name: SPACES_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: spaces-key
+                  key: SPACES_KEY
+            - name: SPACES_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: spaces-secret
+                  key: SPACES_SECRET
 ---
 apiVersion: v1
 kind: Service

@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { requireAuth, validateRequest, BadRequestError } from '@movers/common';
 import { ResourceType } from '../models/resource-type';
+import { s3Client } from '../s3';
 const router = express.Router();
 
 router.post(
@@ -54,17 +55,40 @@ router.post(
       photo,
       measureIndicators,
     } = req.body;
-
+    let resourcePhoto = '';
     const existingResourceType = await ResourceType.findOne({ type });
     if (existingResourceType) {
       throw new BadRequestError('Resource Type already exists');
+    }
+    if (photo && photo.includes('data:image')) {
+      // Create Buffer
+      const buffer = Buffer.from(
+        photo.replace(/^data:image\/\w+;base64,/, ''),
+        'base64'
+      );
+      // Get MimeType
+      const mimeType = photo.match(/[^:]\w+\/[\w-+\d.]+(?=;|,)/)[0];
+      const imageKey = `images/resourceTypes/${Date.now()}`;
+      // Params to upload file
+      const uploadParams = {
+        Bucket: 'meb-images',
+        Key: imageKey,
+        Body: buffer,
+        ContentEncoding: 'base64',
+        ContentType: mimeType,
+        ACL: 'public-read',
+      };
+      await s3Client.client.upload(uploadParams).promise();
+      resourcePhoto = `https://meb-images.${process.env.SPACES_ENDPOINT}/${imageKey}`;
+    } else if (photo) {
+      resourcePhoto = photo;
     }
     const resourceType = ResourceType.build({
       resourceTypeBrand: brand,
       resourceTypeModel: model,
       checkupTime,
       kmToMaintenance,
-      photo,
+      photo: resourcePhoto,
       type,
       measureIndicators,
     });

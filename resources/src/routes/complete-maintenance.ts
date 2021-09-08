@@ -14,6 +14,7 @@ import { body } from 'express-validator';
 import { ResourceType } from '../models/resource-type';
 import { ResourceUpdatedPublisher } from '../events/publishers/resource-updated-publisher';
 import { natsClient } from '../nats';
+import { s3Client } from '../s3';
 
 const router = express.Router();
 
@@ -70,6 +71,29 @@ router.put(
         throw new BadRequestError(
           `The component id ${component.componentId} does not exists`
         );
+      }
+      if (component.photo) {
+        // Create Buffer
+        const buffer = Buffer.from(
+          component.photo.replace(/^data:image\/\w+;base64,/, ''),
+          'base64'
+        );
+        // Get MimeType
+        const mimeType = component.photo.match(
+          /[^:]\w+\/[\w-+\d.]+(?=;|,)/
+        )![0];
+        const imageKey = `images/maintenances/${Date.now()}`;
+        // Params to upload file
+        const uploadParams = {
+          Bucket: 'meb-images',
+          Key: imageKey,
+          Body: buffer,
+          ContentEncoding: 'base64',
+          ContentType: mimeType,
+          ACL: 'public-read',
+        };
+        await s3Client.client.upload(uploadParams).promise();
+        component.photo = `https://meb-images.${process.env.SPACES_ENDPOINT}/${imageKey}`;
       }
     }
 
