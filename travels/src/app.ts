@@ -4,6 +4,7 @@ import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 import { newTravelRouter } from './routes/new-travel';
 import { finishTravelRouter } from './routes/finish-travel';
+import { travelListRouter } from './routes/list';
 const cors = require('cors');
 
 /* Commons */
@@ -41,6 +42,7 @@ app.use(
 app.use(currentUser);
 app.use(newTravelRouter);
 app.use(finishTravelRouter);
+app.use(travelListRouter);
 
 /* k8s Liveness / Readiness probes */
 app.get('/api/travels/healthz', (req, res) => {
