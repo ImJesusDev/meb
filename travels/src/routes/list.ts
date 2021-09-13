@@ -17,16 +17,17 @@ router.get(
   requireAuth(),
   async (req: Request<{}, {}, {}, any>, res: Response) => {
     const user = req.currentUser;
-    if(!user) {
-      throw new BadRequestError("Must be logged in");
+    if (!user) {
+      throw new BadRequestError('Must be logged in');
     }
     let query: any = {};
     query['userId'] = req.currentUser?.id;
     let perPage = req.query.perPage ? req.query.perPage : 50;
     let skip = req.query.page ? (Math.max(0, req.query.page) - 1) * perPage : 0;
     const travels = await Travel.find(query)
+      .sort({ createdAt: 'descending' })
       .skip(Number(skip))
-      .limit(Number(perPage))
+      .limit(Number(perPage));
     res.status(201).send(travels);
   }
 );
