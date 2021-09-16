@@ -23,7 +23,8 @@ export class TravelFinishedListener extends Listener<TravelFinishedEvent> {
   queueGroupName = queueGroupName;
 
   async onMessage(data: TravelFinishedEvent['data'], msg: Message) {
-    const { userId, reservationId, indicators, status, resourceRef } = data;
+    const { userId, reservationId, indicators, status, resourceRef, tracking } =
+      data;
     // Get the resource
     const resource = await Resource.findOne({ reference: resourceRef });
     if (!resource) {
@@ -50,6 +51,12 @@ export class TravelFinishedListener extends Listener<TravelFinishedEvent> {
     if (indicators) {
       travel.set({
         indicators,
+      });
+      await travel.save();
+    }
+    if (tracking) {
+      travel.set({
+        tracking,
       });
       await travel.save();
     }
