@@ -18,7 +18,10 @@ router.put(
   '/api/travels/:id/finish',
   requireAuth(),
   async (req: Request, res: Response) => {
+    console.log('finish travel');
+
     const { tracking } = req.body;
+    console.log('tracking: ', tracking);
     const indicators = req.body.indicators as TravelIndicators;
     const id = req.params.id;
     const travel = await Travel.findById(id);
