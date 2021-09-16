@@ -53,6 +53,7 @@ router.put(
       destination: travel.destination,
       originPoint: travel.originPoint,
       destinationPoint: travel.destinationPoint,
+      tracking: travel.tracking,
     });
     res.status(200).send(travel);
   }
