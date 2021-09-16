@@ -8,6 +8,7 @@ import {
   NotFoundError,
   NotAuthorizedError,
   TravelIndicators,
+  Location,
 } from '@movers/common';
 import { TravelFinishedPublisher } from '../events/publishers/travel-finished-publisher';
 import { natsClient } from '../nats';
@@ -25,7 +26,8 @@ router.put(
     const indicators = req.body.indicators as TravelIndicators;
     const id = req.params.id;
     const travel = await Travel.findById(id);
-
+    const originPoint = req.body.originPoint as Location;
+    const destinationPoint = req.body.destinationPoint as Location;
     if (!travel) {
       throw new NotFoundError();
     }
@@ -41,6 +43,8 @@ router.put(
       indicators: indicators ? indicators : {},
       tracking: tracking ? tracking : [],
       completedAt: new Date(),
+      originPoint,
+      destinationPoint,
     });
 
     await travel.save();
