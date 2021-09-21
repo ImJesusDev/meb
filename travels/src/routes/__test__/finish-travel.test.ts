@@ -14,6 +14,7 @@ const getTravel = async () => {
     status: TravelStatus.Pending,
     userId: '611454639edb430d704a2b7b',
     reservationId: id,
+    createdAt: new Date(),
   });
   await travel.save();
   return travel;

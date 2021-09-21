@@ -16,6 +16,7 @@ export interface TravelAttrs {
   userId: string;
   indicators?: TravelIndicators;
   tracking?: [];
+  createdAt: Date;
   status: TravelStatus;
 }
 /*
@@ -96,7 +97,7 @@ const travelSchema = new mongoose.Schema(
     },
     createdAt: {
       type: mongoose.Schema.Types.Date,
-      default: new Date(),
+      required: true,
     },
     completedAt: {
       type: mongoose.Schema.Types.Date,
