@@ -10,7 +10,12 @@ router.get(
   async (req: Request, res: Response) => {
     let query: any = {};
     // Model to return
-    let types: { id: string; name: string; photo: string }[] = [];
+    let types: {
+      id: string;
+      name: string;
+      photo: string;
+      measureIndicators: boolean;
+    }[] = [];
     // Get client to filter
     const { client } = req.query;
     if (client) {
@@ -29,7 +34,12 @@ router.get(
         });
         // If the type is found
         if (type) {
-          types.push({ id: type.id, name: type.type, photo: type.photo });
+          types.push({
+            id: type.id,
+            name: type.type,
+            photo: type.photo,
+            measureIndicators: type.measureIndicators,
+          });
         }
       }
     }

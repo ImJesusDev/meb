@@ -24,10 +24,12 @@ router.get(
     query['userId'] = req.currentUser?.id;
     let perPage = req.query.perPage ? req.query.perPage : 50;
     let skip = req.query.page ? (Math.max(0, req.query.page) - 1) * perPage : 0;
+    console.log(`SKIP ${skip}`);
+    console.log(`perPage ${perPage}`);
     const travels = await Travel.find(query)
-      .sort({ createdAt: 'descending' })
       .skip(Number(skip))
-      .limit(Number(perPage));
+      .limit(Number(perPage))
+      .sort({ createdAt: 'descending' });
     res.status(201).send(travels);
   }
 );
