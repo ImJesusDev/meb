@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev --poll src/index.ts",
+    "start": "ts-node-dev --poll --transpile-only src/index.ts",
     "test": "jest --watchAll --no-cache --runInBand",
     "test:ci": "jest --runInBand --detectOpenHandles"
   },
@@ -25,7 +25,7 @@
     }
   },
   "dependencies": {
-    "@movers/common": "^1.0.51",
+    "@movers/common": "^1.0.54",
     "@types/cookie-session": "^2.0.42",
     "@types/express": "^4.17.11",
     "@types/jsonwebtoken": "^8.5.1",

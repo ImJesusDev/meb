@@ -73,6 +73,7 @@ interface UserDoc extends mongoose.Document {
   bloodType?: string;
   gender?: UserGender;
   eps?: UserEps;
+  deletedAt?: Date | null;
 }
 
 /*
@@ -187,6 +188,11 @@ const userSchema = new mongoose.Schema(
       type: Number,
       required: false,
       default: 0,
+    },
+    deletedAt: {
+      type: mongoose.Schema.Types.Date,
+      required: false,
+      default: null,
     },
     weight: {
       type: Number,
