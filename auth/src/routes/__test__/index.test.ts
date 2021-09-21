@@ -23,7 +23,7 @@ it('it can fetch a list of users', async (done) => {
 
   response = await request(app).get('/api/users').send({});
   expect(response.status).toEqual(200);
-  expect(response.body.length).toEqual(1);
+  expect(response.body.users.length).toEqual(1);
   return done();
 });
 it('it can filter a list of users by role', async (done) => {
@@ -43,11 +43,11 @@ it('it can filter a list of users by role', async (done) => {
 
   response = await request(app).get('/api/users?role=user').send({});
   expect(response.status).toEqual(200);
-  expect(response.body.length).toEqual(1);
+  expect(response.body.users.length).toEqual(1);
 
   response = await request(app).get('/api/users?role=client-admin').send({});
   expect(response.status).toEqual(200);
-  expect(response.body.length).toEqual(0);
+  expect(response.body.users.length).toEqual(0);
 
   return done();
 });
