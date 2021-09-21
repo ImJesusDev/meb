@@ -8,7 +8,7 @@ export class ResourceUpdatedListener extends Listener<ResourceUpdatedEvent> {
   queueGroupName = queueGroupName;
 
   async onMessage(data: ResourceUpdatedEvent['data'], msg: Message) {
-    const { id, status, version } = data;
+    const { id, type, status, version } = data;
     try {
       const resource = await Resource.findByEvent({
         id,
@@ -19,6 +19,7 @@ export class ResourceUpdatedListener extends Listener<ResourceUpdatedEvent> {
       }
       resource.set({
         status,
+        type,
       });
       await resource.save();
     } catch (e) {

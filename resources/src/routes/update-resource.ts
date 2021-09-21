@@ -11,8 +11,8 @@ import { ResourceType } from '../models/resource-type';
 import { Document, DocumentAttrs } from '../models/document';
 import { checkupQueue } from '../queues/checkup-queue';
 import { natsClient } from '../nats';
-import { ResourceCreatedPublisher } from '../events/publishers/resource-created-publisher';
 import QRCode from 'qrcode';
+import { ResourceUpdatedPublisher } from '../events/publishers/resource-updated-publisher';
 
 const router = express.Router();
 
@@ -84,7 +84,7 @@ router.put(
     });
     await existingResource.save();
 
-    await new ResourceCreatedPublisher(natsClient.client).publish({
+    await new ResourceUpdatedPublisher(natsClient.client).publish({
       id: existingResource.id,
       type: existingResource.type,
       reference: existingResource.reference,

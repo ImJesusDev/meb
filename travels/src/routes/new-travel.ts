@@ -41,6 +41,7 @@ router.post(
       userId: user!.id,
       originPoint,
       destinationPoint,
+      createdAt: new Date(),
     });
     await travel.save();
 
