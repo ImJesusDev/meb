@@ -63,17 +63,17 @@ export class TravelCreatedListener extends Listener<TravelCreatedEvent> {
           resourceType: resource.type,
         });
         await userPoints.save();
-        // Update the total user point's
-        let totalPoints = user.points
-          ? user.points + this.POINTS_PER_RENT
-          : this.POINTS_PER_RENT;
-
-        user.set({
-          points: totalPoints,
-        });
-
-        await user.save();
       }
+      // Update the total user point's
+      let totalPoints = user.points
+        ? user.points + this.POINTS_PER_RENT
+        : this.POINTS_PER_RENT;
+
+      user.set({
+        points: totalPoints,
+      });
+
+      await user.save();
     } catch (e) {
       console.log(`Error @TravelCreatedListener`);
       console.log(e);
