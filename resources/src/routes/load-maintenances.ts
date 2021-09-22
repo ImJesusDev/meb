@@ -22,8 +22,8 @@ router.post(
   async (req: Request, res: Response) => {
     const resources = req.body.resources as [{ id: string }];
     const success = [];
-    for (const id of resources) {
-      const resource = await Resource.findById(id);
+    for (const res of resources) {
+      const resource = await Resource.findById(res.id);
 
       if (!resource) {
         continue;
