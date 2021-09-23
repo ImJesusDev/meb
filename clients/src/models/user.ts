@@ -147,6 +147,14 @@ userSchema.statics.build = (attrs: UserAttrs) => {
     lastName: attrs.lastName,
     client: attrs.client,
     office: attrs.office,
+    photo: attrs.photo,
+    documentNumber: attrs.documentNumber,
+    weight: attrs.weight,
+    emergencyContactName: attrs.emergencyContactName,
+    emergencyContactPhone: attrs.emergencyContactPhone,
+    bloodType: attrs.bloodType,
+    phone: attrs.phone,
+    eps: attrs.eps,
   });
 };
 userSchema.statics.findByEvent = (event: { id: string; version: number }) => {
