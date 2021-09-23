@@ -14,10 +14,38 @@ export class UserUpdatedListener extends Listener<UserUpdatedEvent> {
       return console.log(`User not found id: ${data.id}`);
     }
 
-    const { email } = data;
+    const {
+      id,
+      email,
+      firstName,
+      lastName,
+      client,
+      office,
+      photo,
+      documentNumber,
+      weight,
+      emergencyContactName,
+      emergencyContactPhone,
+      bloodType,
+      gender,
+      phone,
+    } = data;
 
     user.set({
+      id,
       email,
+      firstName,
+      lastName,
+      client,
+      office,
+      photo,
+      documentNumber,
+      weight,
+      emergencyContactName,
+      emergencyContactPhone,
+      bloodType,
+      gender,
+      phone,
     });
     await user.save();
     msg.ack();

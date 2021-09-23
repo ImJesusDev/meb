@@ -62,6 +62,7 @@ router.post(
       bloodType,
       gender,
       documentNumber,
+      phone,
     } = req.body;
     const eps = req.body.eps as UserEps;
     if (!termsDate) {
@@ -97,6 +98,7 @@ router.post(
       gender,
       documentNumber,
       eps,
+      phone,
     });
     await user.save();
 
@@ -115,6 +117,7 @@ router.post(
       bloodType,
       gender,
       documentNumber,
+      phone,
     });
 
     res.status(201).send(user);

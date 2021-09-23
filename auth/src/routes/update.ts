@@ -13,6 +13,8 @@ import {
 } from '@movers/common';
 /* Models */
 import { User } from '../models/user';
+import { UserUpdatedPublisher } from '../events/publishers/user-updated-publisher';
+import { natsClient } from '../nats';
 
 const router = express.Router();
 
@@ -43,6 +45,7 @@ router.put(
       emergencyContactPhone,
       bloodType,
       gender,
+      documentNumber,
     } = req.body;
 
     const currentUser = req.currentUser;
@@ -68,13 +71,38 @@ router.put(
       photo: photo ? photo : user.photo,
       password: password ? password : user.password,
       weight: weight ? weight : user.weight,
-      emergencyContactName,
-      emergencyContactPhone,
-      bloodType,
-      gender,
+      documentNumber: documentNumber ? documentNumber : user.documentNumber,
+      emergencyContactName: emergencyContactName
+        ? emergencyContactName
+        : user.emergencyContactName,
+      emergencyContactPhone: emergencyContactPhone
+        ? emergencyContactPhone
+        : user.emergencyContactPhone,
+      bloodType: bloodType ? bloodType : user.bloodType,
+      gender: gender ? gender : user.gender,
     });
 
     await user.save();
+    await new UserUpdatedPublisher(natsClient.client).publish({
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      version: user.version,
+      client: user.client!,
+      office: user.office!,
+      weight: weight ? weight : user.weight,
+      documentNumber: documentNumber ? documentNumber : user.documentNumber,
+      emergencyContactName: emergencyContactName
+        ? emergencyContactName
+        : user.emergencyContactName,
+      emergencyContactPhone: emergencyContactPhone
+        ? emergencyContactPhone
+        : user.emergencyContactPhone,
+      bloodType: bloodType ? bloodType : user.bloodType,
+      gender: gender ? gender : user.gender,
+      phone: phone ? phone : user.phone,
+    });
 
     const userJwt = jwt.sign(
       {
