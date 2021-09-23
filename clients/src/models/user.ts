@@ -148,6 +148,7 @@ userSchema.statics.build = (attrs: UserAttrs) => {
     client: attrs.client,
     office: attrs.office,
     photo: attrs.photo,
+    gender: attrs.gender,
     documentNumber: attrs.documentNumber,
     weight: attrs.weight,
     emergencyContactName: attrs.emergencyContactName,
