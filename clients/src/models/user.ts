@@ -17,6 +17,7 @@ interface UserAttrs {
   client?: string;
   office?: string;
   photo?: string;
+  phone?: string;
   weight?: number;
   emergencyContactName?: string;
   emergencyContactPhone?: string;
@@ -46,6 +47,7 @@ interface UserDoc extends mongoose.Document {
   client?: string;
   office?: string;
   photo?: string;
+  phone?: string;
   documentNumber?: string;
   weight?: number;
   emergencyContactName?: string;
@@ -77,6 +79,10 @@ const userSchema = new mongoose.Schema(
       required: false,
     },
     photo: {
+      type: String,
+      required: false,
+    },
+    phone: {
       type: String,
       required: false,
     },

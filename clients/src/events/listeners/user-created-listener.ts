@@ -24,6 +24,7 @@ export class UserCreatedListener extends Listener<UserCreatedEvent> {
       emergencyContactPhone,
       bloodType,
       gender,
+      phone,
     } = data;
     const user = User.build({
       id,
@@ -39,6 +40,7 @@ export class UserCreatedListener extends Listener<UserCreatedEvent> {
       emergencyContactPhone,
       bloodType,
       gender,
+      phone,
     });
     await user.save();
     msg.ack();
