@@ -7,6 +7,7 @@ import { DomainAuthorizedListener } from './events/listeners/domain-authorized-l
 import { EmailAuthorizedListener } from './events/listeners/email-authorized-listener';
 import { ResourceCreatedListener } from './events/listeners/resource-created-listener';
 import { ResourceUpdatedListener } from './events/listeners/resource-updated-listener';
+import { UserUpdatedListener } from './events/listeners/user-updated-listener';
 const start = async () => {
   if (!process.env.SPACES_ENDPOINT) {
     throw new Error('SPACES_ENDPOINT must be defined');
@@ -52,6 +53,7 @@ const start = async () => {
     process.on('SIGTERM', () => natsClient.client.close());
 
     new UserCreatedListener(natsClient.client).listen();
+    new UserUpdatedListener(natsClient.client).listen();
     new DomainAuthorizedListener(natsClient.client).listen();
     new EmailAuthorizedListener(natsClient.client).listen();
     new ResourceCreatedListener(natsClient.client).listen();

@@ -47,7 +47,7 @@ router.put(
       gender,
       documentNumber,
     } = req.body;
-
+    const eps = req.body.eps as UserEps;
     const currentUser = req.currentUser;
 
     const user = await User.findOne({ email: currentUser?.email });
@@ -80,6 +80,7 @@ router.put(
         : user.emergencyContactPhone,
       bloodType: bloodType ? bloodType : user.bloodType,
       gender: gender ? gender : user.gender,
+      eps: eps ? eps : user.eps,
     });
 
     await user.save();
@@ -102,6 +103,7 @@ router.put(
       bloodType: bloodType ? bloodType : user.bloodType,
       gender: gender ? gender : user.gender,
       phone: phone ? phone : user.phone,
+      eps: eps ? eps : user.eps,
     });
 
     const userJwt = jwt.sign(

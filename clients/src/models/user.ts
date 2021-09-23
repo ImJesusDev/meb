@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
+import { UserEps } from '@movers/common';
 
 export enum UserGender {
   Male = 'male',
@@ -24,6 +25,7 @@ interface UserAttrs {
   bloodType?: string;
   gender?: UserGender;
   documentNumber?: string;
+  eps?: UserEps;
 }
 
 /*
@@ -54,6 +56,8 @@ interface UserDoc extends mongoose.Document {
   emergencyContactPhone?: string;
   bloodType?: string;
   gender?: UserGender;
+  eps?: UserEps;
+  deletedAt?: Date | null;
 }
 
 const userSchema = new mongoose.Schema(
@@ -111,6 +115,15 @@ const userSchema = new mongoose.Schema(
       type: Number,
       required: false,
       default: 0,
+    },
+    eps: {
+      id: { type: String, required: false },
+      name: { type: String, required: false },
+    },
+    deletedAt: {
+      type: mongoose.Schema.Types.Date,
+      required: false,
+      default: null,
     },
   },
   {

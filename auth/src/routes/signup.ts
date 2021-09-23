@@ -118,6 +118,7 @@ router.post(
       gender,
       documentNumber,
       phone,
+      eps,
     });
 
     res.status(201).send(user);
