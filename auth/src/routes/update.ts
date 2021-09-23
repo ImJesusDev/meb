@@ -46,6 +46,7 @@ router.put(
       bloodType,
       gender,
       documentNumber,
+      eps,
     } = req.body;
 
     const currentUser = req.currentUser;
@@ -80,6 +81,7 @@ router.put(
         : user.emergencyContactPhone,
       bloodType: bloodType ? bloodType : user.bloodType,
       gender: gender ? gender : user.gender,
+      eps: eps ? eps : user.eps,
     });
 
     await user.save();
@@ -102,6 +104,7 @@ router.put(
       bloodType: bloodType ? bloodType : user.bloodType,
       gender: gender ? gender : user.gender,
       phone: phone ? phone : user.phone,
+      eps: eps ? eps : user.eps,
     });
 
     const userJwt = jwt.sign(

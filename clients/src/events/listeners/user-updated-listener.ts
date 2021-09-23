@@ -29,6 +29,7 @@ export class UserUpdatedListener extends Listener<UserUpdatedEvent> {
       bloodType,
       gender,
       phone,
+      eps,
     } = data;
 
     user.set({
@@ -46,6 +47,7 @@ export class UserUpdatedListener extends Listener<UserUpdatedEvent> {
       bloodType,
       gender,
       phone,
+      eps,
     });
     await user.save();
     msg.ack();
