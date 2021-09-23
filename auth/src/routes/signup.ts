@@ -63,7 +63,6 @@ router.post(
       gender,
       documentNumber,
       phone,
-      eps,
     } = req.body;
     const eps = req.body.eps as UserEps;
     if (!termsDate) {

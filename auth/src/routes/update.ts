@@ -46,9 +46,8 @@ router.put(
       bloodType,
       gender,
       documentNumber,
-      eps,
     } = req.body;
-
+    const eps = req.body.eps as UserEps;
     const currentUser = req.currentUser;
 
     const user = await User.findOne({ email: currentUser?.email });
