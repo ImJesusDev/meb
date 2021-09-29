@@ -20,7 +20,7 @@ import { natsClient } from '../nats';
 const router = express.Router();
 
 router.put(
-  '/api/users',
+  '/api/users/:id',
   [
     body('firstName').not().isEmpty().withMessage('El nombre es requerido'),
     body('client').not().isEmpty().withMessage('El cliente es requerido'),
@@ -49,9 +49,9 @@ router.put(
       documentNumber,
     } = req.body;
     const eps = req.body.eps as UserEps;
-    const currentUser = req.currentUser;
+    const { id } = req.params;
 
-    const user = await User.findOne({ email: currentUser?.email });
+    const user = await User.findById(id);
 
     if (!user) {
       throw new NotFoundError();
