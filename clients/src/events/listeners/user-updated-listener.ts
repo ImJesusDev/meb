@@ -36,21 +36,25 @@ export class UserUpdatedListener extends Listener<UserUpdatedEvent> {
 
     user.set({
       id,
-      email,
+      email: email ? email : user.email,
       firstName: firstName ? firstName : user.firstName,
       lastName: lastName ? lastName : user.lastName,
-      client,
-      office,
-      photo,
-      documentNumber,
-      weight,
-      emergencyContactName,
-      emergencyContactPhone,
-      bloodType,
-      gender,
-      phone,
-      eps,
-      deletedAt,
+      client: client ? client : user.client,
+      office: office ? office : user.office,
+      photo: photo ? photo : user.photo,
+      documentNumber: documentNumber ? documentNumber : user.documentNumber,
+      weight: weight ? weight : user.weight,
+      emergencyContactName: emergencyContactName
+        ? emergencyContactName
+        : user.emergencyContactName,
+      emergencyContactPhone: emergencyContactPhone
+        ? emergencyContactPhone
+        : user.emergencyContactPhone,
+      bloodType: bloodType ? bloodType : user.bloodType,
+      gender: gender ? gender : user.gender,
+      phone: phone ? phone : user.phone,
+      eps: eps ? eps : user.eps,
+      deletedAt: deletedAt ? deletedAt : user.deletedAt,
     });
     await user.save();
     msg.ack();
