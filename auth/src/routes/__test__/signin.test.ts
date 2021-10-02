@@ -1,61 +1,78 @@
-import request from 'supertest';
-import { app } from '../../app';
+import request from "supertest";
+import { app } from "../../app";
+import { Domain } from "../../models/domain";
+import { Email } from "../../models/email";
 
-it('fails with an email that does not exists', async () => {
+beforeEach(async () => {
+  const email = Email.build({
+    email: "test@test.com",
+    client: "Claro",
+    office: "Sede Principal",
+    active: true,
+  });
+  await email.save();
+  const domain = Domain.build({
+    domain: "test.com",
+    client: "Claro",
+    active: true,
+  });
+  await domain.save();
+});
+it("fails with an email that does not exists", async () => {
   await request(app)
-    .post('/api/users/signin')
+    .post("/api/users/signin")
     .send({
-      email: 'fail@mail.com',
-      password: '1234',
+      email: "fail@mail.com",
+      password: "1234",
     })
     .expect(400);
 });
-it('fails with an incorrect password', async () => {
+it("fails with an incorrect password", async () => {
   await request(app)
-    .post('/api/users/signup')
+    .post("/api/users/signup")
     .send({
-      email: 'test@test.com',
-      password: 'password',
-      firstName: 'Regular',
-      lastName: 'User',
-      client: 'Claro',
-      office: 'Sede Principal',
-      mainTransportationMethod: 'Carro',
-      secondaryTransportationMethod: 'Moto',
+      email: "test@test.com",
+      password: "password",
+      firstName: "Regular",
+      lastName: "User",
+      client: "Claro",
+      office: "Sede Principal",
+      mainTransportationMethod: "Carro",
+      secondaryTransportationMethod: "Moto",
       termsDate: true,
       comodatoDate: true,
     })
     .expect(201);
 
   await request(app)
-    .post('/api/users/signin')
+    .post("/api/users/signin")
     .send({
-      email: 'test@test.com',
-      password: 'passwordFail',
+      email: "test@test.com",
+      password: "passwordFail",
     })
     .expect(400);
 });
-it('responds with a cookie when given valid credentials', async () => {
+it("responds with a cookie when given valid credentials", async () => {
   await request(app)
-    .post('/api/users/signup')
+    .post("/api/users/signup")
     .send({
-      email: 'test@test.com',
-      password: 'password',
-      firstName: 'Regular',
-      lastName: 'User',
-      client: 'Claro',
-      office: 'Sede Principal',
-      mainTransportationMethod: 'Carro',
-      secondaryTransportationMethod: 'Moto',
+      email: "test@test.com",
+      password: "password",
+      firstName: "Regular",
+      lastName: "User",
+      client: "Claro",
+      office: "Sede Principal",
+      mainTransportationMethod: "Carro",
+      secondaryTransportationMethod: "Moto",
       termsDate: true,
       comodatoDate: true,
     })
     .expect(201);
 
-  const response = await request(app).post('/api/users/signin').send({
-    email: 'test@test.com',
-    password: 'password',
+  const response = await request(app).post("/api/users/signin").send({
+    email: "test@test.com",
+    password: "password",
   });
   expect(response.status).toEqual(200);
-  expect(response.get('Set-Cookie')).toBeDefined();
+  expect(response.get("Set-Cookie")).toBeDefined();
 });
