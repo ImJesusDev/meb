@@ -1,60 +1,60 @@
-import express, { Request, Response } from 'express';
-import { body } from 'express-validator';
+import express, { Request, Response } from "express";
+import { body } from "express-validator";
 import {
   requireAuth,
   validateRequest,
   BadRequestError,
   ResourceStatus,
-} from '@movers/common';
-import { Resource, ResourceAttrs } from '../models/resource';
-import { ResourceType } from '../models/resource-type';
-import { Document, DocumentAttrs } from '../models/document';
-import { checkupQueue } from '../queues/checkup-queue';
-import { natsClient } from '../nats';
-import { ResourceCreatedPublisher } from '../events/publishers/resource-created-publisher';
-import QRCode from 'qrcode';
+} from "@movers/common";
+import { Resource, ResourceAttrs } from "../models/resource";
+import { ResourceType } from "../models/resource-type";
+import { Document, DocumentAttrs } from "../models/document";
+import { checkupQueue } from "../queues/checkup-queue";
+import { natsClient } from "../nats";
+import { ResourceCreatedPublisher } from "../events/publishers/resource-created-publisher";
+import QRCode from "qrcode";
 
 const router = express.Router();
 
 router.post(
-  '/api/resources/load-resources',
+  "/api/resources/load-resources",
   requireAuth(),
   [
-    body('resources')
+    body("resources")
       .not()
       .isEmpty()
-      .withMessage('The resources param is required'),
-    body('resources')
+      .withMessage("The resources param is required"),
+    body("resources")
       .isArray()
-      .withMessage('The resources param must be an array'),
-    body('resources.*.type')
+      .withMessage("The resources param must be an array"),
+    body("resources.*.type")
       .not()
       .isEmpty()
-      .withMessage('Resource type is required.'),
-    body('resources.*.reference')
+      .withMessage("Resource type is required."),
+    body("resources.*.reference")
       .not()
       .isEmpty()
-      .withMessage('Resource reference is required.'),
-    body('resources.*.qrCode')
+      .withMessage("Resource reference is required."),
+    body("resources.*.qrCode")
       .not()
       .isEmpty()
-      .withMessage('Resource qrCode is required.'),
-    body('resources.*.lockerPassword')
+      .withMessage("Resource qrCode is required."),
+    body("resources.*.lockerPassword")
       .not()
       .isEmpty()
-      .withMessage('Resource lockerPassword is required.'),
-    body('resources.*.client')
+      .withMessage("Resource lockerPassword is required."),
+    body("resources.*.client")
       .not()
       .isEmpty()
-      .withMessage('Resource client is required.'),
-    body('resources.*.office')
+      .withMessage("Resource client is required."),
+    body("resources.*.office")
       .not()
       .isEmpty()
-      .withMessage('Resource office is required.'),
-    body('resources.*.loanTime')
+      .withMessage("Resource office is required."),
+    body("resources.*.loanTime")
       .not()
       .isEmpty()
-      .withMessage('Resource loanTime is required.'),
+      .withMessage("Resource loanTime is required."),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -80,6 +80,7 @@ router.post(
           client: resourceAttrs.client,
           office: resourceAttrs.office,
           loanTime: resourceAttrs.loanTime,
+          clientNumber: resourceAttrs.clientNumber,
           status: ResourceStatus.Available,
         });
 
@@ -99,6 +100,7 @@ router.post(
           qrCode: resource.qrCode,
           lockerPassword: resource.lockerPassword,
           client: resource.client,
+          clientNumber: resource.clientNumber,
           office: resource.office,
           loanTime: resource.loanTime,
           status: resource.status,

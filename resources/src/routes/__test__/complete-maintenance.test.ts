@@ -1,25 +1,25 @@
-import request from 'supertest';
-import { app } from '../../app';
-import mongoose from 'mongoose';
-import { Resource } from '../../models/resource';
-import { ResourceType } from '../../models/resource-type';
-import { Component } from '../../models/component';
-import { Maintenance } from '../../models/maintenance';
-import { MaintenanceStatus, ResourceStatus } from '@movers/common';
-import { natsClient } from '../../nats';
-import { Office } from '../../models/office';
+import request from "supertest";
+import { app } from "../../app";
+import mongoose from "mongoose";
+import { Resource } from "../../models/resource";
+import { ResourceType } from "../../models/resource-type";
+import { Component } from "../../models/component";
+import { Maintenance } from "../../models/maintenance";
+import { MaintenanceStatus, ResourceStatus } from "@movers/common";
+import { natsClient } from "../../nats";
+import { Office } from "../../models/office";
 const getMaintenance = async () => {
   const office = Office.build({
     id: new mongoose.Types.ObjectId().toHexString(),
-    name: 'Sede principal',
-    client: 'Claro',
+    name: "Sede principal",
+    client: "Claro",
     repairAdmin: new mongoose.Types.ObjectId().toHexString(),
     maintenanceAdmin: new mongoose.Types.ObjectId().toHexString(),
     inventoryAdmin: new mongoose.Types.ObjectId().toHexString(),
   });
   await office.save();
   const maintenance = Maintenance.build({
-    resourceRef: '0001',
+    resourceRef: "0001",
     createdAt: new Date(),
     status: MaintenanceStatus.Pending,
     assignee: new mongoose.Types.ObjectId().toHexString(),
@@ -29,34 +29,35 @@ const getMaintenance = async () => {
 };
 const getResource = async () => {
   const resourceType = ResourceType.build({
-    resourceTypeBrand: 'Marca',
-    resourceTypeModel: 'Modelo',
+    resourceTypeBrand: "Marca",
+    resourceTypeModel: "Modelo",
     checkupTime: 20,
     kmToMaintenance: 20,
-    photo: 'Photo',
-    type: 'Bicicleta',
+    photo: "Photo",
+    type: "Bicicleta",
     measureIndicators: true,
   });
   await resourceType.save();
   const resource = Resource.build({
-    type: 'Bicicleta',
-    reference: '0001',
-    qrCode: 'https://meb.moversapp.co',
+    type: "Bicicleta",
+    reference: "0001",
+    qrCode: "https://meb.moversapp.co",
     lockerPassword: 123456,
-    client: 'Claro',
-    office: 'Sede principal',
+    client: "Claro",
+    office: "Sede principal",
     loanTime: 24,
     status: ResourceStatus.Available,
+    clientNumber: "123",
   });
   await resource.save();
   return resource;
 };
 const getComponent = async () => {
   const component = Component.build({
-    name: 'Frenos',
-    resourceType: 'Bicicleta',
-    componentBrand: 'Marca',
-    componentModel: 'Modelo',
+    name: "Frenos",
+    resourceType: "Bicicleta",
+    componentBrand: "Marca",
+    componentModel: "Modelo",
     regularCondition: {
       disables: false,
       ticket: false,
@@ -69,7 +70,7 @@ const getComponent = async () => {
   await component.save();
   return component;
 };
-it('has a PUT route handler for /api/resources/:id/maintenances ', async () => {
+it("has a PUT route handler for /api/resources/:id/maintenances ", async () => {
   const resource = await getResource();
   const response = await request(app)
     .put(`/api/resources/${resource.id}/maintenances`)
@@ -77,7 +78,7 @@ it('has a PUT route handler for /api/resources/:id/maintenances ', async () => {
   expect(response.status).not.toEqual(404);
 });
 
-it('can only be accessed by logged users', async () => {
+it("can only be accessed by logged users", async () => {
   const resource = await getResource();
   const response = await request(app)
     .put(`/api/resources/${resource.id}/maintenances`)
@@ -85,146 +86,146 @@ it('can only be accessed by logged users', async () => {
   expect(response.status).toEqual(401);
 });
 
-it('returns status other than 401 if the user is logged in', async () => {
+it("returns status other than 401 if the user is logged in", async () => {
   const cookie = global.signin();
   const resource = await getResource();
   const response = await request(app)
     .put(`/api/resources/${resource.id}/maintenances`)
-    .set('Cookie', cookie)
+    .set("Cookie", cookie)
     .send({});
   expect(response.status).not.toEqual(401);
 });
 
-it('returns an error when the resource does not exists', async () => {
+it("returns an error when the resource does not exists", async () => {
   const cookie = global.signin();
   const id = mongoose.Types.ObjectId().toHexString();
   const response = await request(app)
     .put(`/api/resources/${id}/maintenances`)
-    .set('Cookie', cookie)
+    .set("Cookie", cookie)
     .send({});
   expect(response.status).toEqual(400);
 });
 
-it('returns an error when the components param is not provided', async () => {
+it("returns an error when the components param is not provided", async () => {
   const cookie = global.signin();
   const resource = await getResource();
   const maintenance = await getMaintenance();
   const response = await request(app)
     .put(`/api/resources/${resource.id}/maintenances`)
-    .set('Cookie', cookie)
+    .set("Cookie", cookie)
     .send({
       maintenanceId: maintenance.id,
     });
   expect(response.status).toEqual(400);
 });
 
-it('returns an error when the components param is invalid', async () => {
+it("returns an error when the components param is invalid", async () => {
   const cookie = global.signin();
   const resource = await getResource();
   const maintenance = await getMaintenance();
   const response = await request(app)
     .put(`/api/resources/${resource.id}/maintenances`)
-    .set('Cookie', cookie)
+    .set("Cookie", cookie)
     .send({
       maintenanceId: maintenance.id,
-      components: 'invalid',
+      components: "invalid",
     });
   expect(response.status).toEqual(400);
 });
 
-it('returns an error when the components param does not includes component id', async () => {
+it("returns an error when the components param does not includes component id", async () => {
   const cookie = global.signin();
   const resource = await getResource();
   const maintenance = await getMaintenance();
   const response = await request(app)
     .put(`/api/resources/${resource.id}/maintenances`)
-    .set('Cookie', cookie)
+    .set("Cookie", cookie)
     .send({
       maintenanceId: maintenance.id,
       components: [
         {
-          status: 'Bueno',
-          componentName: 'Frenos',
+          status: "Bueno",
+          componentName: "Frenos",
         },
       ],
     });
   expect(response.status).toEqual(400);
 });
 
-it('returns an error when the components param does not includes status', async () => {
+it("returns an error when the components param does not includes status", async () => {
   const cookie = global.signin();
   const resource = await getResource();
   const component = await getComponent();
   const maintenance = await getMaintenance();
   const response = await request(app)
     .put(`/api/resources/${resource.id}/maintenances`)
-    .set('Cookie', cookie)
+    .set("Cookie", cookie)
     .send({
       maintenanceId: maintenance.id,
       components: [
         {
           componentId: component.id,
-          componentName: 'Frenos',
+          componentName: "Frenos",
         },
       ],
     });
   expect(response.status).toEqual(400);
 });
 
-it('returns an error when the components param does not includes component name', async () => {
+it("returns an error when the components param does not includes component name", async () => {
   const cookie = global.signin();
   const resource = await getResource();
   const component = await getComponent();
   const maintenance = await getMaintenance();
   const response = await request(app)
     .put(`/api/resources/${resource.id}/maintenances`)
-    .set('Cookie', cookie)
+    .set("Cookie", cookie)
     .send({
       maintenanceId: maintenance.id,
       components: [
         {
           componentId: component.id,
-          status: 'Bueno',
+          status: "Bueno",
         },
       ],
     });
   expect(response.status).toEqual(400);
 });
 
-it('returns an error when the component does not exists', async () => {
+it("returns an error when the component does not exists", async () => {
   const cookie = global.signin();
   const resource = await getResource();
   const maintenance = await getMaintenance();
   const id = mongoose.Types.ObjectId().toHexString();
   const response = await request(app)
     .put(`/api/resources/${resource.id}/maintenances`)
-    .set('Cookie', cookie)
+    .set("Cookie", cookie)
     .send({
       maintenanceId: maintenance.id,
       components: [
         {
           componentId: id,
-          status: 'Bueno',
-          componentName: 'Frenos',
+          status: "Bueno",
+          componentName: "Frenos",
         },
       ],
     });
   expect(response.status).toEqual(400);
 });
 
-it('returns an error when the maintenanceId param is not provide', async () => {
+it("returns an error when the maintenanceId param is not provide", async () => {
   const cookie = global.signin();
   const resource = await getResource();
   const component = await getComponent();
   const response = await request(app)
     .put(`/api/resources/${resource.id}/maintenances`)
-    .set('Cookie', cookie)
+    .set("Cookie", cookie)
     .send({
       components: [
         {
           componentId: component.id,
-          status: 'Bueno',
-          componentName: 'Frenos',
+          status: "Bueno",
+          componentName: "Frenos",
         },
       ],
     });
@@ -232,7 +233,7 @@ it('returns an error when the maintenanceId param is not provide', async () => {
   expect(response.status).toEqual(400);
 });
 
-it('returns status 201 and creates maintenance when given valid params', async () => {
+it("returns status 201 and creates maintenance when given valid params", async () => {
   let maintenances = await Maintenance.find({});
   expect(maintenances.length).toEqual(0);
   const maintenance = await getMaintenance();
@@ -241,14 +242,14 @@ it('returns status 201 and creates maintenance when given valid params', async (
   const component = await getComponent();
   const response = await request(app)
     .put(`/api/resources/${resource.id}/maintenances`)
-    .set('Cookie', cookie)
+    .set("Cookie", cookie)
     .send({
       maintenanceId: maintenance.id,
       components: [
         {
           componentId: component.id,
-          status: 'Bueno',
-          componentName: 'Frenos',
+          status: "Bueno",
+          componentName: "Frenos",
         },
       ],
     });
