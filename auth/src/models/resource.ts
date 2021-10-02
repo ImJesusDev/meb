@@ -1,6 +1,6 @@
-import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
-import mongoose from 'mongoose';
-import { ResourceStatus } from '@movers/common';
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
+import mongoose from "mongoose";
+import { ResourceStatus } from "@movers/common";
 
 /*
  *   Interface that describes the properties
@@ -16,6 +16,7 @@ interface ResourceAttrs {
   office: string;
   loanTime: number;
   status: ResourceStatus;
+  clientNumber?: string;
 }
 
 /*
@@ -32,6 +33,7 @@ interface ResourceDoc extends mongoose.Document {
   loanTime: number;
   status: ResourceStatus;
   version: number;
+  clientNumber?: string;
 }
 
 /*
@@ -59,6 +61,10 @@ const resourceSchema = new mongoose.Schema(
     qrCode: {
       type: String,
       required: true,
+    },
+    clientNumber: {
+      type: String,
+      required: false,
     },
     lockerPassword: {
       type: Number,
@@ -94,7 +100,7 @@ const resourceSchema = new mongoose.Schema(
     },
   }
 );
-resourceSchema.set('versionKey', 'version');
+resourceSchema.set("versionKey", "version");
 resourceSchema.plugin(updateIfCurrentPlugin);
 
 resourceSchema.statics.build = (attrs: ResourceAttrs) => {
@@ -120,7 +126,7 @@ resourceSchema.statics.findByEvent = (event: {
   });
 };
 const Resource = mongoose.model<ResourceDoc, ResourceModel>(
-  'Resource',
+  "Resource",
   resourceSchema
 );
 
