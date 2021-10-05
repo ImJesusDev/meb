@@ -1,41 +1,41 @@
-import express, { Request, Response } from 'express';
-import { body } from 'express-validator';
+import express, { Request, Response } from "express";
+import { body } from "express-validator";
 import {
   requireAuth,
   validateRequest,
   BadRequestError,
   ResourceStatus,
-} from '@movers/common';
-import { Resource } from '../models/resource';
-import { ResourceType } from '../models/resource-type';
-import { Document, DocumentAttrs } from '../models/document';
-import { checkupQueue } from '../queues/checkup-queue';
-import { natsClient } from '../nats';
-import QRCode from 'qrcode';
-import { ResourceUpdatedPublisher } from '../events/publishers/resource-updated-publisher';
+} from "@movers/common";
+import { Resource } from "../models/resource";
+import { ResourceType } from "../models/resource-type";
+import { Document, DocumentAttrs } from "../models/document";
+import { checkupQueue } from "../queues/checkup-queue";
+import { natsClient } from "../nats";
+import QRCode from "qrcode";
+import { ResourceUpdatedPublisher } from "../events/publishers/resource-updated-publisher";
 
 const router = express.Router();
 
 router.put(
-  '/api/resources/:id',
+  "/api/resources/:id",
   requireAuth(),
   [
-    body('type').not().isEmpty().withMessage('Resource type is required.'),
-    body('reference')
+    body("type").not().isEmpty().withMessage("Resource type is required."),
+    body("reference")
       .not()
       .isEmpty()
-      .withMessage('Resource reference is required.'),
-    body('qrCode').not().isEmpty().withMessage('Resource qrCode is required.'),
-    body('lockerPassword')
+      .withMessage("Resource reference is required."),
+    body("qrCode").not().isEmpty().withMessage("Resource qrCode is required."),
+    body("lockerPassword")
       .not()
       .isEmpty()
-      .withMessage('Resource lockerPassword is required.'),
-    body('client').not().isEmpty().withMessage('Resource client is required.'),
-    body('office').not().isEmpty().withMessage('Resource office is required.'),
-    body('loanTime')
+      .withMessage("Resource lockerPassword is required."),
+    body("client").not().isEmpty().withMessage("Resource client is required."),
+    body("office").not().isEmpty().withMessage("Resource office is required."),
+    body("loanTime")
       .not()
       .isEmpty()
-      .withMessage('Resource loanTime is required.'),
+      .withMessage("Resource loanTime is required."),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -49,27 +49,35 @@ router.put(
       loanTime,
     } = req.body;
     const id = req.params.id;
+    let updatePassword = false;
     const existingResource = await Resource.findById(id);
     if (!existingResource) {
-      throw new BadRequestError('Resource not found');
+      throw new BadRequestError("Resource not found");
     }
     const existingResources = await Resource.find({ reference });
     if (existingResources.length > 1) {
-      throw new BadRequestError('The reference already exists');
+      throw new BadRequestError("The reference already exists");
     }
 
     const existingType = await ResourceType.findOne({ type }).populate([
-      'documentTypes',
+      "documentTypes",
     ]);
 
     if (!existingType) {
-      throw new BadRequestError('The resource type does not exists');
+      throw new BadRequestError("The resource type does not exists");
+    }
+    if (lockerPassword && existingResource.lockerPassword !== lockerPassword) {
+      updatePassword = true;
     }
     existingResource.set({
       type,
       reference,
       qrCode,
       lockerPassword,
+      previousPassword: updatePassword
+        ? existingResource.lockerPassword
+        : existingResource.previousPassword,
+      passwordDate: updatePassword ? new Date() : existingResource.passwordDate,
       client,
       office,
       loanTime,
