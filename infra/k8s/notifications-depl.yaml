@@ -46,6 +46,13 @@ spec:
                   fieldPath: metadata.name
             - name: MONGO_URI
               value: 'mongodb://notifications-mongo-srv:27017/notifications'
+            - name: EMAIL_USERNAME
+              value: 'calidad@mejorenbici.com'
+            - name: EMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: email-password
+                  key: EMAIL_PASSWORD
 ---
 apiVersion: v1
 kind: Service

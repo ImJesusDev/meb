@@ -1,6 +1,6 @@
-import hbs from 'nodemailer-express-handlebars';
-import nodemailer, { Transporter } from 'nodemailer';
-import path from 'path';
+import hbs from "nodemailer-express-handlebars";
+import nodemailer, { Transporter } from "nodemailer";
+import path from "path";
 
 export interface Mail {
   from: string;
@@ -15,23 +15,23 @@ class Mailer {
   hbsOptions: hbs.NodemailerExpressHandlebarsOptions;
   constructor() {
     this.transporter = nodemailer.createTransport({
-      host: 'smtp.mailtrap.io',
-      port: 2525,
+      host: "smtp.gmail.com",
+      port: 465,
       secure: false,
       auth: {
-        user: '7372da48597711',
-        pass: '5915ab00d5ceb9',
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
     this.hbsOptions = {
       viewEngine: {
-        extname: '.hbs',
-        defaultLayout: '',
+        extname: ".hbs",
+        defaultLayout: "",
       },
-      viewPath: path.resolve('./src/templates'),
-      extName: '.hbs',
+      viewPath: path.resolve("./src/templates"),
+      extName: ".hbs",
     };
-    this.transporter.use('compile', hbs(this.hbsOptions));
+    this.transporter.use("compile", hbs(this.hbsOptions));
   }
 
   async sendEmail(mail: Mail) {
