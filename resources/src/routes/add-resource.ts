@@ -75,6 +75,7 @@ router.post(
       reference,
       qrCode,
       lockerPassword,
+      passwordDate: new Date(),
       client,
       office,
       loanTime,

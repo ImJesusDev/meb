@@ -1,31 +1,31 @@
-import express, { Request, Response } from 'express';
-import { body } from 'express-validator';
-import { requireAuth, validateRequest } from '@movers/common';
-import { Resource, ResourceAttrs } from '../models/resource';
-import { natsClient } from '../nats';
-import { ResourceUpdatedPublisher } from '../events/publishers/resource-updated-publisher';
+import express, { Request, Response } from "express";
+import { body } from "express-validator";
+import { requireAuth, validateRequest } from "@movers/common";
+import { Resource, ResourceAttrs } from "../models/resource";
+import { natsClient } from "../nats";
+import { ResourceUpdatedPublisher } from "../events/publishers/resource-updated-publisher";
 
 const router = express.Router();
 
 router.post(
-  '/api/resources/update-lockers',
+  "/api/resources/update-lockers",
   requireAuth(),
   [
-    body('resources')
+    body("resources")
       .not()
       .isEmpty()
-      .withMessage('The resources param is required'),
-    body('resources')
+      .withMessage("The resources param is required"),
+    body("resources")
       .isArray()
-      .withMessage('The resources param must be an array'),
-    body('resources.*.reference')
+      .withMessage("The resources param must be an array"),
+    body("resources.*.reference")
       .not()
       .isEmpty()
-      .withMessage('Resource reference is required.'),
-    body('resources.*.lockerPassword')
+      .withMessage("Resource reference is required."),
+    body("resources.*.lockerPassword")
       .not()
       .isEmpty()
-      .withMessage('Resource lockerPassword is required.'),
+      .withMessage("Resource lockerPassword is required."),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -37,6 +37,8 @@ router.post(
       });
       if (existingResource) {
         existingResource.set({
+          previousPassword: existingResource.lockerPassword,
+          passwordDate: new Date(),
           lockerPassword: resourceAttrs.lockerPassword,
         });
 

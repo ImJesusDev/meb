@@ -11,6 +11,8 @@ export interface ResourceAttrs {
   reference: string;
   qrCode: string;
   lockerPassword: number;
+  previousPassword?: number;
+  passwordDate?: Date;
   client: string;
   office: string;
   loanTime: number;
@@ -35,6 +37,8 @@ export interface ResourceDoc extends mongoose.Document {
   kmSinceMaintenance: number;
   clientNumber?: string;
   deletedAt: null | Date;
+  previousPassword?: number;
+  passwordDate?: Date;
   createdAt: Date;
 }
 
@@ -68,6 +72,10 @@ const resourceSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    previousPassword: {
+      type: Number,
+      required: false,
+    },
     loanTime: {
       type: Number,
       required: true,
@@ -99,7 +107,11 @@ const resourceSchema = new mongoose.Schema(
     createdAt: {
       type: mongoose.Schema.Types.Date,
       required: false,
-      default: new Date(),
+      default: Date.now(),
+    },
+    passwordDate: {
+      type: mongoose.Schema.Types.Date,
+      required: false,
     },
   },
   {

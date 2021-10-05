@@ -77,6 +77,7 @@ router.post(
           reference: resourceAttrs.reference,
           qrCode: resourceAttrs.qrCode,
           lockerPassword: resourceAttrs.lockerPassword,
+          passwordDate: new Date(),
           client: resourceAttrs.client,
           office: resourceAttrs.office,
           loanTime: resourceAttrs.loanTime,
