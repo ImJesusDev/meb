@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import { ReservationStatus } from '@movers/common';
+import mongoose from "mongoose";
+import { ReservationStatus, TravelIndicators } from "@movers/common";
 /*
  *   Interface that describes the properties
  *   that are required to create a new Reservation
@@ -13,6 +13,7 @@ export interface ReservationAttrs {
   status: ReservationStatus;
   userId: string;
   typeRent?: number;
+  indicators?: TravelIndicators;
 }
 
 /*
@@ -28,6 +29,7 @@ interface ReservationDoc extends mongoose.Document {
   status: ReservationStatus;
   userId: string;
   typeRent?: number;
+  indicators?: TravelIndicators;
 }
 
 /*
@@ -55,6 +57,13 @@ const reservationSchema = new mongoose.Schema(
     comments: {
       type: String,
       required: false,
+    },
+    indicators: {
+      energyFootprint: { type: Number, required: false },
+      environmentalFootprint: { type: Number, required: false },
+      economicFootprint: { type: Number, required: false },
+      calories: { type: Number, required: false },
+      km: { type: Number, required: false },
     },
     reply: {
       type: String,
@@ -92,14 +101,14 @@ reservationSchema.statics.build = (attrs: ReservationAttrs) => {
 };
 
 const Reservation = mongoose.model<ReservationDoc, ReservationModel>(
-  'Reservation',
+  "Reservation",
   reservationSchema
 );
 // Add virtuals to populate
-reservationSchema.virtual('travels', {
-  ref: 'Travel',
-  localField: '_id',
-  foreignField: 'reservationId',
+reservationSchema.virtual("travels", {
+  ref: "Travel",
+  localField: "_id",
+  foreignField: "reservationId",
   justOne: false, // Set to false to return many
   options: { sort: { name: -1 } },
 });
