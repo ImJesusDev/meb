@@ -14,10 +14,16 @@ class Mailer {
   private transporter: Transporter;
   hbsOptions: hbs.NodemailerExpressHandlebarsOptions;
   constructor() {
+    console.log("mailer config", {
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
     this.transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
-      secure: false,
+      secure: true,
       auth: {
         user: process.env.EMAIL_USERNAME,
         pass: process.env.EMAIL_PASSWORD,
