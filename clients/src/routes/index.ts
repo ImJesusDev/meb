@@ -10,7 +10,19 @@ router.get("/api/clients", currentUser, async (req: Request, res: Response) => {
   if (!user) {
     clients = await Client.find({
       deletedAt: null,
-    });
+    })
+      .populate([
+        "meb_admin",
+        "super_admin_client",
+        "offices",
+        "domains",
+        "emails",
+        "users",
+      ])
+      .populate({
+        path: "offices",
+        populate: ["emails"],
+      });
   } else {
     query = {};
     query["deletedAt"] = null;
