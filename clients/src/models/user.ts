@@ -1,10 +1,10 @@
-import mongoose from 'mongoose';
-import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
-import { UserEps } from '@movers/common';
+import mongoose from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
+import { UserEps } from "@movers/common";
 
 export enum UserGender {
-  Male = 'male',
-  Female = 'female',
+  Male = "male",
+  Female = "female",
 }
 /*
  *   Interface that describes the properties
@@ -58,6 +58,7 @@ interface UserDoc extends mongoose.Document {
   gender?: UserGender;
   eps?: UserEps;
   deletedAt?: Date | null;
+  createdAt?: Date;
 }
 
 const userSchema = new mongoose.Schema(
@@ -125,6 +126,11 @@ const userSchema = new mongoose.Schema(
       required: false,
       default: null,
     },
+    createdAt: {
+      type: mongoose.Schema.Types.Date,
+      required: false,
+      default: Date.now(),
+    },
   },
   {
     toJSON: {
@@ -137,7 +143,7 @@ const userSchema = new mongoose.Schema(
     },
   }
 );
-userSchema.set('versionKey', 'version');
+userSchema.set("versionKey", "version");
 userSchema.plugin(updateIfCurrentPlugin);
 userSchema.statics.build = (attrs: UserAttrs) => {
   return new User({
@@ -165,6 +171,6 @@ userSchema.statics.findByEvent = (event: { id: string; version: number }) => {
   });
 };
 
-const User = mongoose.model<UserDoc, UserModel>('User', userSchema);
+const User = mongoose.model<UserDoc, UserModel>("User", userSchema);
 
 export { User };
