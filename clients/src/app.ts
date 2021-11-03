@@ -13,8 +13,13 @@ import { deleteClientRouter } from './routes/delete';
 import { indexClientRouter } from './routes/index';
 import { updateClientRouter } from './routes/update';
 import { addOfficeRouter } from './routes/new-office';
+import { updateOfficeRouter } from './routes/update-office';
 import { deleteOfficeRouter } from './routes/delete-office';
 import { availableResourcesRouter } from './routes/available-resources';
+import { disableClientsRouter } from './routes/archive-clients';
+import { disableOfficesRouter } from './routes/archive-offices';
+import { enableClientsRouter } from './routes/enable-clients';
+import { enableOfficesRouter } from './routes/enable-offices';
 
 /* Cors configuration */
 const corsOptions = {
@@ -52,6 +57,11 @@ app.use(updateClientRouter);
 app.use(availableResourcesRouter);
 /* Add office */
 app.use(addOfficeRouter);
+app.use(updateOfficeRouter);
+app.use(disableClientsRouter);
+app.use(disableOfficesRouter);
+app.use(enableClientsRouter);
+app.use(enableOfficesRouter);
 /* k8s Liveness / Readiness probes */
 app.get('/api/clients/healthz', (req, res) => {
   res.status(200).send({

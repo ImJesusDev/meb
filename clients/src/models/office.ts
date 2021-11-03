@@ -24,6 +24,7 @@ interface OfficeDoc extends mongoose.Document {
   inventoryAdmin: string;
   maintenanceAdmin: string;
   location: { lat: number; lng: number };
+  deletedAt: Date | null;
 }
 interface OfficeModel extends mongoose.Model<OfficeDoc> {
   build(attrs: OfficeAttrs): OfficeDoc;

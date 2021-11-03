@@ -56,7 +56,7 @@ const emailSchema = new mongoose.Schema({
   },
   createdAt: {
     type: mongoose.Schema.Types.Date,
-    default: new Date(),
+    default: Date.now(),
   },
 });
 
