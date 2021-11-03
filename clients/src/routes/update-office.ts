@@ -13,11 +13,10 @@ import { OfficeCreatedPublisher } from '../events/publishers/office-created-publ
 
 const router = express.Router();
 
-router.post(
-  '/api/clients/:id/offices',
+router.put(
+  '/api/clients/:id/offices/:officeId',
   requireAuth(),
   [
-    body('name').not().isEmpty().withMessage('Name is required'),
     body('city').not().isEmpty().withMessage('City is required'),
     body('country').not().isEmpty().withMessage('Country is required'),
     body('mebAdmin').not().isEmpty().withMessage('MEB admin is required'),
@@ -43,9 +42,9 @@ router.post(
   validateRequest,
   async (req: Request, res: Response) => {
     const clientId = req.params.id;
+    const officeId = req.params.officeId;
 
     const {
-      name,
       city,
       country,
       mebAdmin,
@@ -80,9 +79,11 @@ router.post(
     if (!existingInventoryAdmin) {
       throw new BadRequestError('El administrador de inventario no existe');
     }
-
-    const office = Office.build({
-      name,
+    const existingOffice = await Office.findById(officeId);
+    if (!existingOffice) {
+      throw new BadRequestError('La Oficina no existe');
+    }
+    existingOffice.set({
       country,
       city,
       mebAdmin,
@@ -94,19 +95,10 @@ router.post(
       inventoryAdmin,
     });
 
-    await office.save();
-    await new OfficeCreatedPublisher(natsClient.client).publish({
-      id: office.id,
-      name: office.name,
-      repairAdmin: office.repairAdmin,
-      inventoryAdmin: office.inventoryAdmin,
-      maintenanceAdmin: office.maintenanceAdmin,
-      client: office.client,
-      mebAdmin: office.mebAdmin,
-      clientAdmin: office.clientAdmin,
-    });
-    res.status(201).send(office);
+    await existingOffice.save();
+
+    res.status(200).send(existingOffice);
   }
 );
 
-export { router as addOfficeRouter };
+export { router as updateOfficeRouter };

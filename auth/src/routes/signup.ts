@@ -1,49 +1,49 @@
-import express, { Request, Response } from "express";
-import { body } from "express-validator";
+import express, { Request, Response } from 'express';
+import { body } from 'express-validator';
 /* Commons */
 import {
   validateRequest,
   UserStatus,
   UserRole,
   BadRequestError,
-} from "@movers/common";
+} from '@movers/common';
 /* Models */
-import { User, UserEps } from "../models/user";
-import { Email } from "../models/email";
-import { Domain } from "../models/domain";
+import { User, UserEps } from '../models/user';
+import { Email } from '../models/email';
+import { Domain } from '../models/domain';
 /* Publishers */
-import { UserCreatedPublisher } from "../events/publishers/user-created-publisher";
+import { UserCreatedPublisher } from '../events/publishers/user-created-publisher';
 /* NATS Client */
-import { natsClient } from "../nats";
+import { natsClient } from '../nats';
 
 const router = express.Router();
 
 router.post(
-  "/api/users/signup",
+  '/api/users/signup',
   [
-    body("email").isEmail().withMessage("Email inválido"),
-    body("firstName").not().isEmpty().withMessage("El nombre es requerido"),
-    body("client").not().isEmpty().withMessage("El cliente es requerido"),
-    body("office").not().isEmpty().withMessage("La sede es requerida"),
-    body("lastName").not().isEmpty().withMessage("El apellido es requerido"),
-    body("termsDate")
+    body('email').isEmail().withMessage('Email inválido'),
+    body('firstName').not().isEmpty().withMessage('El nombre es requerido'),
+    body('client').not().isEmpty().withMessage('El cliente es requerido'),
+    body('office').not().isEmpty().withMessage('La sede es requerida'),
+    body('lastName').not().isEmpty().withMessage('El apellido es requerido'),
+    body('termsDate')
       .isBoolean()
-      .withMessage("Debe aceptar términos y condiciones"),
-    body("comodatoDate")
+      .withMessage('Debe aceptar términos y condiciones'),
+    body('comodatoDate')
       .isBoolean()
-      .withMessage("Debe aceptar el contrato Comodato"),
-    body("mainTransportationMethod")
+      .withMessage('Debe aceptar el contrato Comodato'),
+    body('mainTransportationMethod')
       .not()
       .isEmpty()
-      .withMessage("El medio de transporte principal es requerido"),
-    body("secondaryTransportationMethod")
+      .withMessage('El medio de transporte principal es requerido'),
+    body('secondaryTransportationMethod')
       .not()
       .isEmpty()
-      .withMessage("El medio de transporte secundario es requerido"),
-    body("password")
+      .withMessage('El medio de transporte secundario es requerido'),
+    body('password')
       .trim()
       .isLength({ min: 4, max: 20 })
-      .withMessage("La contraseña debe de tener entre 4 y 20 caracteres"),
+      .withMessage('La contraseña debe de tener entre 4 y 20 caracteres'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -68,22 +68,22 @@ router.post(
     } = req.body;
     const eps = req.body.eps as UserEps;
     if (!termsDate) {
-      throw new BadRequestError("Debe aceptar términos y condiciones");
+      throw new BadRequestError('Debe aceptar términos y condiciones');
     }
     if (!comodatoDate) {
-      throw new BadRequestError("Debe aceptar el contrato Comodato");
+      throw new BadRequestError('Debe aceptar el contrato Comodato');
     }
 
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      throw new BadRequestError("El correo se encuentra en uso");
+      throw new BadRequestError('El correo se encuentra en uso');
     }
     const activationCode = User.generateActivationCode();
 
-    const domain = email.split("@")[1];
+    const domain = email.split('@')[1];
     if (!domain) {
-      throw new BadRequestError("No se pudo extraer el dominio del email");
+      throw new BadRequestError('No se pudo extraer el dominio del email');
     }
     const existingDomain = await Domain.findOne({
       domain,
@@ -98,7 +98,7 @@ router.post(
         active: true,
       });
       if (!whitelistedEmail) {
-        throw new BadRequestError("Dominio / Email no autorizado");
+        throw new BadRequestError('Dominio / Email no autorizado');
       }
     }
     const user = User.build({

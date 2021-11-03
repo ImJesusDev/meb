@@ -141,11 +141,11 @@ const userSchema = new mongoose.Schema(
     },
     termsDate: {
       type: mongoose.Schema.Types.Date,
-      default: new Date(),
+      default: Date.now(),
     },
     comodatoDate: {
       type: mongoose.Schema.Types.Date,
-      default: new Date(),
+      default: Date.now(),
     },
     email: {
       type: String,
