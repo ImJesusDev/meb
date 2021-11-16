@@ -21,7 +21,7 @@ router.put(
   async (req: Request, res: Response) => {
     console.log('finish travel');
 
-    const { tracking } = req.body;
+    const { tracking, origin, destination } = req.body;
     console.log('tracking: ', tracking);
     const indicators = req.body.indicators as TravelIndicators;
     const id = req.params.id;
@@ -43,6 +43,8 @@ router.put(
       indicators: indicators ? indicators : {},
       tracking: tracking ? tracking : [],
       completedAt: new Date(),
+      origin: origin ? origin : travel.origin,
+      destination: destination ? destination : travel.destination,
       originPoint,
       destinationPoint,
     });
