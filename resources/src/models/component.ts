@@ -37,6 +37,7 @@ export interface ComponentDoc extends mongoose.Document {
     disables: boolean;
     ticket: boolean;
   };
+  deletedAt: null | Date;
 }
 
 /*
@@ -80,6 +81,11 @@ const componentSchema = new mongoose.Schema(
       ticket: {
         type: Boolean,
       },
+    },
+    deletedAt: {
+      type: mongoose.Schema.Types.Date,
+      required: false,
+      default: null,
     },
   },
   {
