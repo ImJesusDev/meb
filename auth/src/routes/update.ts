@@ -16,7 +16,8 @@ import {
 import { User } from '../models/user';
 import { UserUpdatedPublisher } from '../events/publishers/user-updated-publisher';
 import { natsClient } from '../nats';
-
+/* S3 Client */
+import { s3Client } from '../s3';
 const router = express.Router();
 
 router.put(
@@ -50,13 +51,33 @@ router.put(
     } = req.body;
     const eps = req.body.eps as UserEps;
     const currentUser = req.currentUser;
-
+    let userPhoto = '';
     const user = await User.findOne({ email: currentUser?.email });
 
     if (!user) {
       throw new NotFoundError();
     }
-
+    if (photo) {
+      // Create Buffer
+      const buffer = Buffer.from(
+        photo.replace(/^data:image\/\w+;base64,/, ''),
+        'base64'
+      );
+      // Get MimeType
+      const mimeType = photo.match(/[^:]\w+\/[\w-+\d.]+(?=;|,)/)[0];
+      const imageKey = `images/users/${Date.now()}`;
+      // Params to upload file
+      const uploadParams = {
+        Bucket: 'meb-images',
+        Key: imageKey,
+        Body: buffer,
+        ContentEncoding: 'base64',
+        ContentType: mimeType,
+        ACL: 'public-read',
+      };
+      await s3Client.client.upload(uploadParams).promise();
+      userPhoto = `https://meb-images.${process.env.SPACES_ENDPOINT}/${imageKey}`;
+    }
     user.set({
       firstName,
       lastName,
@@ -69,7 +90,7 @@ router.put(
         ? secondaryTransportationMethod
         : user.secondaryTransportationMethod,
       phone: phone ? phone : user.phone,
-      photo: photo ? photo : user.photo,
+      photo: userPhoto ? userPhoto : user.photo,
       password: password ? password : user.password,
       weight: weight ? weight : user.weight,
       documentNumber: documentNumber ? documentNumber : user.documentNumber,
