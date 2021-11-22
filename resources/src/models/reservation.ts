@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { ReservationStatus, TravelIndicators } from "@movers/common";
+import mongoose from 'mongoose';
+import { ReservationStatus, TravelIndicators } from '@movers/common';
 /*
  *   Interface that describes the properties
  *   that are required to create a new Reservation
@@ -101,15 +101,22 @@ reservationSchema.statics.build = (attrs: ReservationAttrs) => {
 };
 
 const Reservation = mongoose.model<ReservationDoc, ReservationModel>(
-  "Reservation",
+  'Reservation',
   reservationSchema
 );
 // Add virtuals to populate
-reservationSchema.virtual("travels", {
-  ref: "Travel",
-  localField: "_id",
-  foreignField: "reservationId",
+reservationSchema.virtual('travels', {
+  ref: 'Travel',
+  localField: '_id',
+  foreignField: 'reservationId',
   justOne: false, // Set to false to return many
   options: { sort: { name: -1 } },
+});
+
+reservationSchema.virtual('user', {
+  ref: 'User',
+  localField: 'userId',
+  foreignField: '_id',
+  justOne: true,
 });
 export { Reservation };

@@ -48,7 +48,7 @@ router.get(
     const reservations = await Reservation.find(query)
       .skip(Number(skip))
       .limit(Number(perPage))
-      .populate(['travels']);
+      .populate(['travels', 'user']);
 
     res.status(200).send({
       reservations,
