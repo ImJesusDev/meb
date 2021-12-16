@@ -9,10 +9,10 @@ export class UserUpdatedListener extends Listener<UserUpdatedEvent> {
 
   async onMessage(data: UserUpdatedEvent["data"], msg: Message) {
     const user = await User.findByEvent(data);
-    console.log("user updated event");
+    console.log(`[Clients] UserUpdatedEvent`);
     console.log(JSON.stringify(data, null, 2));
     if (!user) {
-      return console.log(`User not found id: ${data.id}`);
+      return console.log(`User not found id: ${data.id} version: ${data.version}`);
     }
 
     const {

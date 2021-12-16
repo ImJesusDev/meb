@@ -5,6 +5,10 @@ import { User } from '../../models/user';
 import { UserPoints, PointsType } from '../../models/user-points';
 import { UserRanking } from '../../models/user-ranking';
 import { Resource } from '../../models/resource';
+import { UserUpdatedPublisher } from "../publishers/user-updated-publisher";
+import { natsClient } from "../../nats";
+
+
 export class TravelCreatedListener extends Listener<TravelCreatedEvent> {
   subject: Subjects.TravelCreated = Subjects.TravelCreated;
   queueGroupName = queueGroupName;
@@ -74,6 +78,13 @@ export class TravelCreatedListener extends Listener<TravelCreatedEvent> {
       });
 
       await user.save();
+      console.log(`[TravelCreatedListener ] USER ${user.email} to version ${user.version}`);
+      await new UserUpdatedPublisher(natsClient.client).publish({
+        id: user.id,
+        email: user.email,
+        version: user.version,
+        documentNumber: user.documentNumber,
+      });
     } catch (e) {
       console.log(`Error @TravelCreatedListener`);
       console.log(e);

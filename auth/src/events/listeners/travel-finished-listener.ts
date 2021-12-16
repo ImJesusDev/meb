@@ -6,6 +6,8 @@ import { UserPoints, PointsType } from '../../models/user-points';
 import { Resource } from '../../models/resource';
 import { UserRanking } from '../../models/user-ranking';
 import { UserIndicators } from '../../models/user-indicators';
+import { UserUpdatedPublisher } from "../publishers/user-updated-publisher";
+import { natsClient } from "../../nats";
 
 export class TravelFinishedListener extends Listener<TravelFinishedEvent> {
   subject: Subjects.TravelFinished = Subjects.TravelFinished;
@@ -96,6 +98,13 @@ export class TravelFinishedListener extends Listener<TravelFinishedEvent> {
           points: totalPoints,
         });
         await user.save();
+        console.log(`[TravelFinishedListener ] USER ${user.email} to version ${user.version}`);
+        await new UserUpdatedPublisher(natsClient.client).publish({
+          id: user.id,
+          email: user.email,
+          version: user.version,
+          documentNumber: user.documentNumber,
+        });
       }
     } catch (e) {
       console.log(`Error @TravelCreatedListener`);

@@ -17,6 +17,7 @@ router.put('/api/users/:id/archive', async (req, res) => {
   });
 
   await user.save();
+  console.log(`[Archive Update] USER ${user.email} to version ${user.version}`);
   await new UserUpdatedPublisher(natsClient.client).publish({
     id: user.id,
     email: user.email,

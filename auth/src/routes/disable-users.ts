@@ -37,6 +37,7 @@ router.post(
         });
         await existingUser.save();
         success.push(existingUser);
+        console.log(`[Disable Users] USER ${existingUser.email} to version ${existingUser.version}`);
         await new UserUpdatedPublisher(natsClient.client).publish({
           id: existingUser.id,
           email: existingUser.email,

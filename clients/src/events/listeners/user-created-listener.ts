@@ -8,7 +8,7 @@ export class UserCreatedListener extends Listener<UserCreatedEvent> {
   queueGroupName = queueGroupName;
 
   async onMessage(data: UserCreatedEvent['data'], msg: Message) {
-    console.log(`UserCreatedEvent`);
+    console.log(`[Clients] UserCreatedEvent`);
     console.log(JSON.stringify(data, null, 2));
     const {
       id,
