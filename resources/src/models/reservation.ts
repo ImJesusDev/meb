@@ -6,6 +6,7 @@ import { ReservationStatus, TravelIndicators } from '@movers/common';
  */
 export interface ReservationAttrs {
   createdAt: Date;
+  returnedAt?: Date;
   resourceRef: string;
   rating?: number;
   comments?: string;
@@ -22,6 +23,7 @@ export interface ReservationAttrs {
  */
 interface ReservationDoc extends mongoose.Document {
   createdAt: Date;
+  returnedAt: Date;
   resourceRef: string;
   rating?: number;
   comments?: string;
@@ -45,6 +47,10 @@ const reservationSchema = new mongoose.Schema(
     createdAt: {
       type: mongoose.Schema.Types.Date,
       required: true,
+    },
+    returnedAt: {
+      type: mongoose.Schema.Types.Date,
+      required: false,
     },
     resourceRef: {
       type: String,
@@ -117,6 +123,12 @@ reservationSchema.virtual('user', {
   ref: 'User',
   localField: 'userId',
   foreignField: '_id',
+  justOne: true,
+});
+reservationSchema.virtual('resource', {
+  ref: 'Resource',
+  localField: 'resourceRef',
+  foreignField: 'reference',
   justOne: true,
 });
 export { Reservation };
