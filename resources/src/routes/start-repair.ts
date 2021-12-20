@@ -3,11 +3,14 @@ import {
   requireAuth,
   validateRequest,
   RepairStatus,
+  ResourceStatus,
 } from '@movers/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Resource } from '../models/resource';
 import { Repair } from '../models/repair';
+import { ResourceUpdatedPublisher } from '../events/publishers/resource-updated-publisher';
+import { natsClient } from '../nats';
 
 const router = express.Router();
 
@@ -32,6 +35,16 @@ router.post(
     });
 
     await existingRepair.save();
+    resource.set({
+      status: ResourceStatus.Repair,
+    });
+
+    await resource.save();
+    await new ResourceUpdatedPublisher(natsClient.client).publish({
+      id: resource.id,
+      status: resource.status,
+      version: resource.version,
+    });
 
     res.status(200).send(existingRepair);
   }

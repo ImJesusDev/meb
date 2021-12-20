@@ -54,8 +54,9 @@ router.post(
   async (req: Request, res: Response) => {
     const role = req.body.role as UserRole;
     const users = req.body.users as UserAttrs[];
-
+    console.log("[Users] load users")
     const success = [];
+    const errors = [];
     for (const userAttrs of users) {
       const existingUser = await User.findOne({ email: userAttrs.email });
       if (!existingUser) {
@@ -65,6 +66,10 @@ router.post(
             "No se pudo extraer el dominio del email",
             userAttrs.email
           );
+          errors.push({
+            user: userAttrs,
+            reason: 'No se pudo extraer el dominio del email'
+          });
           continue;
         }
         const existingDomain = await Domain.findOne({
@@ -81,6 +86,10 @@ router.post(
           });
           if (!whitelistedEmail) {
             console.log("Dominio / Email no autorizado");
+            errors.push({
+              user: userAttrs,
+              reason: 'Dominio / Email no autorizado'
+            });
             continue;
           }
         }
@@ -100,6 +109,8 @@ router.post(
             userAttrs.secondaryTransportationMethod,
         });
         await user.save();
+        console.log("[Users] LoadUsers - usuario creado");
+        console.log(JSON.stringify(user, null, 2));
         success.push(user);
         await new UserCreatedPublisher(natsClient.client).publish({
           id: user.id,
@@ -113,7 +124,7 @@ router.post(
         });
       }
     }
-    res.status(201).send(success);
+    res.status(201).send({success, errors});
   }
 );
 

@@ -41,6 +41,7 @@ router.post(
     reservation.set({
       status: ReservationStatus.Finished,
       indicators: indicators ? indicators : null,
+      returnedAt: new Date()
     });
     await reservation.save();
     res.status(200).send({ resource: existingResource, reservation });
