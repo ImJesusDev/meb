@@ -35,7 +35,7 @@ router.get(
     const to = req.query.to;
     const user = req.currentUser;
 
-    if (status) query['status'] = status;
+    // if (status) query['status'] = status;
     if (client) query['client'] = client;
     if (office) query['office'] = office;
     if (type) query['type'] = type;
@@ -58,13 +58,13 @@ router.get(
       };
     }
     let orClause = [];
-    if(status === ResourceStatus.PendingCheckup) {
+    if(status && status === ResourceStatus.PendingCheckup) {
       orClause.push({ status: ResourceStatus.Checkup })
     }
-    if(status === ResourceStatus.PendingMaintenance) {
+    if(status && status === ResourceStatus.PendingMaintenance) {
       orClause.push({ status: ResourceStatus.Maintenance })
     }
-    if(status === ResourceStatus.PendingRepair) {
+    if(status && status === ResourceStatus.PendingRepair) {
       orClause.push({ status: ResourceStatus.Repair })
     }
     if(orClause.length) {
