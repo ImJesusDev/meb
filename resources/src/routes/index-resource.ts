@@ -67,7 +67,9 @@ router.get(
     if(status === ResourceStatus.PendingRepair) {
       orClause.push({ status: ResourceStatus.Repair })
     }
-    query['$or'] = orClause;
+    if(orClause.length) {
+      query['$or'] = orClause;
+    }
     // Here we validate the role of the current user
     // if (user) {
     //   switch (user.role) {
