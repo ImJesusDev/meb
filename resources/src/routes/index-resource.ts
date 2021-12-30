@@ -58,17 +58,25 @@ router.get(
       };
     }
     let orClause = [];
-    if(status && status === ResourceStatus.PendingCheckup) {
-      orClause.push({ status: ResourceStatus.PendingCheckup })
-      orClause.push({ status: ResourceStatus.Checkup })
-    }
-    if(status && status === ResourceStatus.PendingMaintenance) {
-      orClause.push({ status: ResourceStatus.PendingMaintenance })
-      orClause.push({ status: ResourceStatus.Maintenance })
-    }
-    if(status && status === ResourceStatus.PendingRepair) {
-      orClause.push({ status: ResourceStatus.PendingRepair })
-      orClause.push({ status: ResourceStatus.Repair })
+
+    if(status) {
+      switch (status) {
+        case ResourceStatus.PendingCheckup:
+          orClause.push({ status: ResourceStatus.PendingCheckup })
+          orClause.push({ status: ResourceStatus.Checkup })
+          break;
+        case ResourceStatus.PendingMaintenance:
+          orClause.push({ status: ResourceStatus.PendingMaintenance })
+          orClause.push({ status: ResourceStatus.Maintenance })
+          break;
+        case ResourceStatus.PendingRepair:
+          orClause.push({ status: ResourceStatus.PendingRepair })
+          orClause.push({ status: ResourceStatus.Repair })
+          break;
+        default:
+          query['status'] = status;
+          break;
+      }
     }
     if(orClause.length) {
       query['$or'] = orClause;
