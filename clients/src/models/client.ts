@@ -4,18 +4,18 @@ interface ClientAttrs {
   name: string;
   nit: string;
   logo: string;
-  mebAdmin: string;
+  mebAdmin?: string;
   mebSuperAdmin?: string;
-  superAdminClient: string;
+  superAdminClient?: string;
 }
 
 interface ClientDoc extends mongoose.Document {
   name: string;
   nit: string;
   logo: string;
-  mebAdmin: string;
+  mebAdmin?: string;
   mebSuperAdmin?: string;
-  superAdminClient: string;
+  superAdminClient?: string;
   deletedAt: Date | null;
 }
 interface ClientModel extends mongoose.Model<ClientDoc> {
@@ -43,7 +43,7 @@ const clientSchema = new mongoose.Schema(
     },
     mebAdmin: {
       type: String,
-      required: true,
+      required: false,
     },
     mebSuperAdmin: {
       type: String,
@@ -51,7 +51,7 @@ const clientSchema = new mongoose.Schema(
     },
     superAdminClient: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   {

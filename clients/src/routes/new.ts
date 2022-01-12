@@ -6,6 +6,8 @@ import { requireAuth, validateRequest, BadRequestError } from '@movers/common';
 import { Client } from '../models/client';
 import { User } from '../models/user';
 import { s3Client } from '../s3';
+import { natsClient } from '../nats';
+import { ClientCreatedPublisher } from '../events/publishers/client-created-publisher';
 const router = express.Router();
 
 router.post(
@@ -15,24 +17,25 @@ router.post(
     body('name').not().isEmpty().withMessage('Name is required'),
     body('nit').not().isEmpty().withMessage('Nit is required'),
     body('logo').not().isEmpty().withMessage('Logo is required'),
-    body('mebAdmin').not().isEmpty().withMessage('MEB admin is required'),
-    body('superAdminClient')
-      .not()
-      .isEmpty()
-      .withMessage('Super admin client is required'),
+    // body('mebAdmin').not().isEmpty().withMessage('MEB admin is required'),
+    // body('superAdminClient')
+    //   .not()
+    //   .isEmpty()
+    //   .withMessage('Super admin client is required'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { name, nit, logo, mebAdmin, superAdminClient } = req.body;
+    const { name, nit, logo, mebAdmin, superAdminClient, mebSuperAdmin } =
+      req.body;
     let clientLogo = '';
-    const existingMebAdmin = await User.findById(mebAdmin);
-    if (!existingMebAdmin) {
-      throw new BadRequestError('El administrador Mejor en Bici no existe');
-    }
-    const existingSuperAdminClient = await User.findById(superAdminClient);
-    if (!existingSuperAdminClient) {
-      throw new BadRequestError('El super administrador del cliente no existe');
-    }
+    // const existingMebAdmin = await User.findById(mebAdmin);
+    // if (!existingMebAdmin) {
+    //   throw new BadRequestError('El administrador Mejor en Bici no existe');
+    // }
+    // const existingSuperAdminClient = await User.findById(superAdminClient);
+    // if (!existingSuperAdminClient) {
+    //   throw new BadRequestError('El super administrador del cliente no existe');
+    // }
     if (logo && logo.includes('data:image')) {
       // Create Buffer
       const buffer = Buffer.from(
@@ -61,17 +64,27 @@ router.post(
       name,
       nit,
       logo: clientLogo,
-      mebAdmin,
-      superAdminClient,
+      // mebAdmin,
+      // superAdminClient,
+      // mebSuperAdmin,
     });
     await client.save();
+    await new ClientCreatedPublisher(natsClient.client).publish({
+      id: client.id,
+      name: client.name,
+      nit: client.nit,
+      logo: client.logo,
+      // mebAdmin: client.mebAdmin,
+      // superAdminClient: client.superAdminClient,
+      // mebSuperAdmin: client.mebSuperAdmin,
+    });
 
-    const populatedClient = await Client.findById(client.id).populate([
-      'meb_admin',
-      'super_admin_client',
-    ]);
+    // const populatedClient = await Client.findById(client.id).populate([
+    //   'meb_admin',
+    //   'super_admin_client',
+    // ]);
 
-    res.status(201).send(populatedClient);
+    res.status(201).send(client);
   }
 );
 
