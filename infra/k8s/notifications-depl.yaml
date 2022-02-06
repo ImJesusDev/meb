@@ -49,7 +49,10 @@ spec:
             - name: EMAIL_USERNAME
               value: 'servicioalcliente@mejorenbici.com'
             - name: EMAIL_PASSWORD
-              value: 'hhvactwjqllfapxj'
+              valueFrom:
+                secretKeyRef:
+                  name: email-password
+                  key: EMAIL_PASSWORD
 ---
 apiVersion: v1
 kind: Service
