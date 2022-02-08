@@ -16,8 +16,8 @@ class Mailer {
   constructor() {
     console.log("[Notifications] mailer config", {
       auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD,
+        user: process.env.NEW_EMAIL_USERNAME,
+        pass: process.env.NEW_EMAIL_PASSWORD,
       },
     });
     this.transporter = nodemailer.createTransport({
@@ -25,8 +25,8 @@ class Mailer {
       port: 465,
       secure: true,
       auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD,
+        user: process.env.NEW_EMAIL_USERNAME,
+        pass: process.env.NEW_EMAIL_PASSWORD,
       },
     });
     this.hbsOptions = {

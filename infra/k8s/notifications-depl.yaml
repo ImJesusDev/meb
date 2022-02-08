@@ -46,9 +46,9 @@ spec:
                   fieldPath: metadata.name
             - name: MONGO_URI
               value: 'mongodb://notifications-mongo-srv:27017/notifications'
-            - name: EMAIL_USERNAME
+            - name: NEW_EMAIL_USERNAME
               value: 'servicioalcliente@mejorenbici.com'
-            - name: EMAIL_PASSWORD
+            - name: NEW_EMAIL_PASSWORD
               value: 'rzyguitqxusguajq'
 ---
 apiVersion: v1
