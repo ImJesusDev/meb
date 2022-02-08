@@ -16,11 +16,11 @@ const start = async () => {
   if (!process.env.NATS_URL) {
     throw new Error("NATS_URL must be defined");
   }
-  if (!process.env.EMAIL_USERNAME) {
-    throw new Error("EMAIL_USERNAME must be defined");
+  if (!process.env.NEW_EMAIL_USERNAME) {
+    throw new Error("NEW_EMAIL_USERNAME must be defined");
   }
-  if (!process.env.EMAIL_PASSWORD) {
-    throw new Error("EMAIL_PASSWORD must be defined");
+  if (!process.env.NEW_EMAIL_PASSWORD) {
+    throw new Error("NEW_EMAIL_PASSWORD must be defined");
   }
 
   try {
