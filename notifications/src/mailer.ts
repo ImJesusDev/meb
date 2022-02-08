@@ -14,7 +14,7 @@ class Mailer {
   private transporter: Transporter;
   hbsOptions: hbs.NodemailerExpressHandlebarsOptions;
   constructor() {
-    console.log("mailer config", {
+    console.log("[Notifications] mailer config", {
       auth: {
         user: process.env.EMAIL_USERNAME,
         pass: process.env.EMAIL_PASSWORD,
