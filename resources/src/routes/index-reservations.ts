@@ -44,7 +44,12 @@ router.get(
 
     const client = req.query.client;
     if (client) {
-        query["resource.client"] = client;
+      const resources = await Resource.find({ client: client });
+      let orClause: any = [];
+      for (const resource of resources) {
+        orClause.push({ resourceRef: resource.reference });
+      }
+      query["$or"] = orClause;
     }
 
     let perPage = req.query.perPage ? req.query.perPage : 50;
