@@ -19,13 +19,11 @@ router.get(
     const resources = await Resource.find({
       client,
       office,
-      status: {
-        $in: [
-          ResourceStatus.Available,
-          ResourceStatus.PendingRepair,
-          ResourceStatus.PendingCheckup,
-        ],
-      },
+      $or: [
+        { status: ResourceStatus.Available },
+        { status: ResourceStatus.PendingRepair },
+        { status: ResourceStatus.PendingCheckup },
+      ],
     });
 
     res.send(resources);
