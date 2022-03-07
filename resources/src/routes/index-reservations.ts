@@ -44,10 +44,7 @@ router.get(
 
     const client = req.query.client;
     if (client) {
-      const clientRefs = await Resource.find({ client });
-      if (clientRefs.countDocuments()) {
-        query["resourceRef"] = { $in: clientRefs };
-      }
+        query["resource.client"] = client;
     }
 
     let perPage = req.query.perPage ? req.query.perPage : 50;
