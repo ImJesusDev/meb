@@ -5,7 +5,6 @@ import cookieSession from 'cookie-session';
 const cors = require('cors');
 /* Commons */
 import { errorHandler, NotFoundError, currentUser } from '@movers/common';
-
 /* Routers */
 import { newClientRouter } from './routes/new';
 import { showClientRouter } from './routes/show';
