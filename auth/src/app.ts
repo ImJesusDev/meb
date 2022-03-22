@@ -12,7 +12,6 @@ const routePath = path.join(__dirname, 'routes');
 
 /* Commons */
 import { errorHandler, NotFoundError } from '@movers/common';
-
 /* Cors configuration */
 const corsOptions = {
   origin: [
