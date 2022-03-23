@@ -19,7 +19,6 @@ import { disableClientsRouter } from './routes/archive-clients';
 import { disableOfficesRouter } from './routes/archive-offices';
 import { enableClientsRouter } from './routes/enable-clients';
 import { enableOfficesRouter } from './routes/enable-offices';
-
 /* Cors configuration */
 const corsOptions = {
   origin: [
