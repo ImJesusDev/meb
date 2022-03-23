@@ -9,7 +9,6 @@ import { swaggerSpec, cssOptions } from './docs/swagger-spec';
 const cors = require('cors');
 /* Specify directory with route files */
 const routePath = path.join(__dirname, 'routes');
-
 /* Commons */
 import { errorHandler, NotFoundError } from '@movers/common';
 /* Cors configuration */
