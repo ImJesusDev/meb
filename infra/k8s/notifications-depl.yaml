@@ -49,7 +49,7 @@ spec:
             - name: NEW_EMAIL_USERNAME
               value: 'servicioalcliente@mejorenbici.com'
             - name: NEW_EMAIL_PASSWORD
-              value: 'rzyguitqxusguajq'
+              value: 'nfcuaduptdcanxnm'
 ---
 apiVersion: v1
 kind: Service
